@@ -10,4 +10,4 @@ The Licensor retains the right to license the Software under different terms, in
 
 | N   | Software                                | GitHub repository                               |
 |-----|-----------------------------------------|-------------------------------------------------|
-| 1   | W3XSHARE UI production client | https://github.com/immu3-io/w3xshare-dapp         |
+| 1   | W3XSHARE UI production client | https://github.com/immu3-io/w3xshare.com         |
