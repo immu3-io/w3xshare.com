@@ -93,6 +93,6 @@ Any amendments of these Terms can be made by the Company at any time at its sole
  
 10. Contact Information 
  
-If you have any queries as regards these Terms, please contact u
+If you have any queries as regards these Terms, please contact us.
 
 
