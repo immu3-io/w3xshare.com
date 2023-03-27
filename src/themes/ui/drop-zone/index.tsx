@@ -62,7 +62,7 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
     <>
       <div style={{ height: 212 }}>
         {!hideUpload && (
-          <div className="dropArea" {...getRootProps({ style })}>
+          <div className='dropArea' {...getRootProps({ style })}>
             <div className='mb-24'>DROP THE LOAD</div>
             <input {...getInputProps()} />
             <img src='/img/dropzone/dropzone.png' alt='' width={80} />

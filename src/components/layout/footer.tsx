@@ -21,7 +21,12 @@ const Footer = () => {
               </div>
               <div className='fb_right'>
                 <ul>
-                  <li>Live Beta on Goerli (Görli) Testnet</li>
+                  <li>Live Beta on Goerli (Görli) Testnet </li>
+                  <li>
+                    <a target='_blank' href='https://wiki.w3xshare.com/' rel='noreferrer noopener'>
+                      Wiki
+                    </a>
+                  </li>
                   <li>
                     <FontAwesomeIcon icon={faCopyright} className='fg-white mr-8' /> {moment().format('YYYY')} W3XShare
                   </li>

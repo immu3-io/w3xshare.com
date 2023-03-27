@@ -1,8 +1,9 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import Transfer from '../transfer'
 import Files from '../files'
+import ConnectWalletDialog from '../../themes/components/feedback/connect-wallet.dialog'
 import { useAccount } from 'wagmi'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import { Web3Button } from '@web3modal/react'
 import { fetchSigner, Signer } from '@wagmi/core'
 
@@ -34,6 +35,7 @@ const TabPanel = (props: TabPanelProps) => {
 }
 
 const Header = () => {
+  const [open, setOpen] = useState(false)
   const [toggle, setToggle] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<number>(0)
   const { address, isConnected } = useAccount()
@@ -48,6 +50,7 @@ const Header = () => {
 
   useEffect(() => {
     handleSigner()
+    isConnected || setOpen(false)
   }, [isConnected])
 
   return (
@@ -56,7 +59,16 @@ const Header = () => {
       <div className={`w3xshare_fn_nav ${toggle ? 'go' : ''}`}>
         <div className='trigger is-active'>
           <div className='trigger_in' style={{ width: '50%', float: 'left' }}>
-            <Web3Button />
+            {isConnected ? (
+              <Web3Button />
+            ) : (
+              <>
+                <Button variant='outlined' onClick={() => setOpen(true)}>
+                  Connect Wallet
+                </Button>
+                <ConnectWalletDialog open={open} onClose={() => setOpen(false)} />
+              </>
+            )}
           </div>
           <div className='trigger_in' style={{ width: '50%', float: 'right', marginTop: 22 }} onClick={() => setToggle(false)}>
             <span className='text nav_close_text'>Close</span>
@@ -98,7 +110,7 @@ const Header = () => {
             </div>
             <div className='trigger'>
               <div className='trigger_in' onClick={() => setToggle(!toggle)}>
-                <span className='text'>Send your files</span>
+                <span className='text'>Send / receive your files</span>
               </div>
             </div>
           </div>

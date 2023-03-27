@@ -715,7 +715,7 @@ a.full_link {
 .w3xshare_fn_footer .fb_right a {
   display: block;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 13px;
   color: var(--bc);
   font-family: var(--hff);
 }
@@ -1196,6 +1196,9 @@ a.full_link {
 }
 .mt-24 {
   margin-top: 24px;
+}
+.mx-4 {
+  margin: 0 4px;
 }
 .font-bold {
   font-weight: bold;

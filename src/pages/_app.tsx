@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
-import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { goerli, polygon } from 'wagmi/chains'
 import 'react-toastify/dist/ReactToastify.css'
 
 const chains = [goerli, polygon]
-const { provider, webSocketProvider } = configureChains(chains, [walletConnectProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
+const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 const client = createClient({
-  connectors: modalConnectors({
-    projectId: process.env.WALLET_CONNECT_PROJECT_ID,
-    version: '2',
-    appName: 'web3Modal',
-    chains
+  connectors: w3mConnectors({
+    chains,
+    version: 2,
+    projectId: process.env.WALLET_CONNECT_PROJECT_ID
   }),
   provider,
   webSocketProvider
