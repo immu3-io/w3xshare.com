@@ -20,7 +20,6 @@ interface TabPanelProps {
   value: number
 }
 
-
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props
 
