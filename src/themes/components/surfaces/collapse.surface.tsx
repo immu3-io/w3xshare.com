@@ -10,7 +10,7 @@ import { networkOptions, pollinationXConfig } from '../../../config'
 import { signer } from '../../../components/layout/header'
 import FileSaver from 'file-saver'
 import moment from 'moment'
-import { pollinationX } from 'pollinationx-dev'
+// import { pollinationX } from 'pollinationx-dev'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 
@@ -58,19 +58,16 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(true)
 
+    await initialize()
     const buffer = await mail.downloadAttachment(envelope.content.attachments[index] as RemoteFileInfo)
-    const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
+    // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
     FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
-    FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
+    // FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
 
     downloadingFileState[index] = { downloading: false, downloaded: true }
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(false)
   }
-
-  useEffect(() => {
-    initialize()
-  }, [])
 
   useEffect(() => {
     setExpanded(isActive)
