@@ -38,7 +38,7 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
 
   const initialize = async () => {
     const aes = new AesEncryption()
-    await aes.importSecretKey(process.env.ENCRYPTION_SECRET_KEY)
+    await aes.importSecretKey(pollinationXConfig.secret)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })

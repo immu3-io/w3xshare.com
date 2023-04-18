@@ -11,7 +11,8 @@ export const networkOptions = {
 
 export const pollinationXConfig = {
   url: process.env.POLLINATIONX_URL,
-  token: process.env.POLLINATIONX_TOKEN
+  token: process.env.POLLINATIONX_TOKEN,
+  secret: 'testtesttest'
 }
 
 export const receivedFileOptions: IReceivedFileOptions = {

@@ -36,7 +36,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   const initialize = async () => {
     if (mail) return
     const aes = new AesEncryption()
-    await aes.importSecretKey(process.env.ENCRYPTION_SECRET_KEY)
+    await aes.importSecretKey(pollinationXConfig.secret)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })
