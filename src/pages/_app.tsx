@@ -3,10 +3,10 @@ import { ToastContainer } from 'react-toastify'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import { goerli, polygon } from 'wagmi/chains'
+import { sepolia } from 'wagmi/chains'
 import 'react-toastify/dist/ReactToastify.css'
 
-const chains = [goerli, polygon]
+const chains = [sepolia]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 const client = createClient({
   connectors: w3mConnectors({
