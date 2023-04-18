@@ -6,7 +6,7 @@ import TextField from '../themes/components/inputs/text-field.input'
 import TextareaField from '../themes/components/inputs/textarea-field.input'
 import { imgToSVG, isAddress, truncateAddress } from '../utils'
 import { notify } from '../utils/notify'
-import { localhost, Mail } from '@4thtech-sdk/ethereum'
+import { sepolia, Mail } from '@4thtech-sdk/ethereum'
 import { Envelope, MailReadyChain } from '@4thtech-sdk/types'
 import { signer } from './layout/header'
 import { PollinationX } from '@4thtech-sdk/storage'
@@ -39,7 +39,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
     console.log(encryptionHandler, 'encryptionHandler')
     mail = new Mail({
       signer,
-      chain: localhost as MailReadyChain,
+      chain: sepolia as MailReadyChain,
       remoteStorageProvider,
       encryptionHandler
     })

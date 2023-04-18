@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useCollapse from 'react-collapsed'
 import { Attachment, MailReadyChain, RemoteFileInfo } from '@4thtech-sdk/types'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
-import { localhost, Mail } from '@4thtech-sdk/ethereum'
+import { sepolia, Mail } from '@4thtech-sdk/ethereum'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faDownload, faEnvelope, faEnvelopeOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
@@ -45,7 +45,7 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
 
     mail = new Mail({
       signer,
-      chain: localhost as MailReadyChain,
+      chain: sepolia as MailReadyChain,
       remoteStorageProvider,
       encryptionHandler
     })

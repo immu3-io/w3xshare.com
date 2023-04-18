@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { localhost, Mail } from '@4thtech-sdk/ethereum'
+import { sepolia, Mail } from '@4thtech-sdk/ethereum'
 import { pollinationXConfig, receivedFileOptions } from '../config'
 import { BeatLoader } from 'react-spinners'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
@@ -43,7 +43,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
 
     mail = new Mail({
       signer,
-      chain: localhost as MailReadyChain,
+      chain: sepolia as MailReadyChain,
       remoteStorageProvider,
       encryptionHandler
     })
@@ -52,7 +52,14 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   }
 
   const handleFetchAllMails = async () => {
+    // console.log(address, 'address 0x1f09b61292c9287d4969eae73503cf9a5c799ea7e10ee4004d8edcbfd91af1ea')
+    // console.log(mail, 'mail')
+    // // const envelope = await mail.fetchByTransactionHash('0x1f09b61292c9287d4969eae73503cf9a5c799ea7e10ee4004d8edcbfd91af1ea');
+    // const envelope = await mail.fetchByTransactionHash('0xf18b749a68c7c6f22a20d4f0aac29cf83b3000c9467fa40c349e2039b6b387a9');
+    //
+    // console.log(envelope);
     const envelopes = await mail.fetchAll(address)
+    console.log(envelopes, 'envelopes')
     setFetching(false)
     setFetchingText('No files')
     setEnvelopes(envelopes)
