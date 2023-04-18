@@ -1,5 +1,5 @@
 {
-  "name": "W3XShare",
+  "name": "w3xshare",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@4thtech-sdk/ethereum": "^0.0.7",
-    "@4thtech-sdk/storage": "^0.0.6",
-    "@4thtech-sdk/types": "^0.0.6",
+    "@4thtech-sdk/encryption": "^0.0.1",
+    "@4thtech-sdk/encryptor": "^0.0.1",
+    "@4thtech-sdk/ethereum": "^0.1.1",
+    "@4thtech-sdk/storage": "^0.1.0",
+    "@4thtech-sdk/types": "^0.1.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import useCollapse from 'react-collapsed'
-import { Attachment, RemoteFileInfo } from '@4thtech-sdk/types'
+import { Attachment, MailReadyChain, RemoteFileInfo } from '@4thtech-sdk/types'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
-import { Mail } from '@4thtech-sdk/ethereum'
+import { localhost, Mail } from '@4thtech-sdk/ethereum'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faDownload, faEnvelope, faEnvelopeOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
-import { networkOptions, remoteStorageOptions } from '../../../config'
+import { networkOptions, pollinationXConfig } from '../../../config'
 import { signer } from '../../../components/layout/header'
 import FileSaver from 'file-saver'
 import moment from 'moment'
 import { pollinationX } from 'pollinationx-dev'
-
-pollinationX.init({
-  url: process.env.POLLINATIONX_URL,
-  token: process.env.POLLINATIONX_TOKEN
-})
+import { PollinationX } from '@4thtech-sdk/storage'
+import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 
 interface ICollapseProps {
   envelope: ReceivedEnvelope
@@ -27,6 +24,9 @@ interface IDownloadingFileState {
   downloaded?: boolean
 }
 
+let mail: Mail
+const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
+
 const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
   const [isExpanded, setExpanded] = useState<boolean>(isActive)
   const [downloading, setDownloading] = useState<boolean>(false)
@@ -36,6 +36,21 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
     isExpanded
   })
 
+  const initialize = async () => {
+    const aes = new AesEncryption()
+    await aes.importSecretKey(process.env.ENCRYPTION_SECRET_KEY)
+    const encryptionHandler = new EncryptionHandler({
+      defaultEncryption: aes
+    })
+
+    mail = new Mail({
+      signer,
+      chain: localhost as MailReadyChain,
+      remoteStorageProvider,
+      encryptionHandler
+    })
+  }
+
   const handleDownload = async (index: number) => {
     if (downloading) return
 
@@ -43,7 +58,6 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(true)
 
-    const mail = new Mail(signer, remoteStorageOptions, networkOptions)
     const buffer = await mail.downloadAttachment(envelope.content.attachments[index] as RemoteFileInfo)
     const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
     FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
@@ -53,6 +67,10 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(false)
   }
+
+  useEffect(() => {
+    initialize()
+  }, [])
 
   useEffect(() => {
     setExpanded(isActive)

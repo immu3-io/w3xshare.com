@@ -4,22 +4,46 @@ import axios from 'axios'
 import Dropzone from '../themes/ui/drop-zone'
 import TextField from '../themes/components/inputs/text-field.input'
 import TextareaField from '../themes/components/inputs/textarea-field.input'
-import { getBlob, imgToSVG, isAddress, truncateAddress } from '../utils'
+import { imgToSVG, isAddress, truncateAddress } from '../utils'
 import { notify } from '../utils/notify'
-import { Mail } from '@4thtech-sdk/ethereum'
-import { Envelope } from '@4thtech-sdk/types'
-import { networkOptions, remoteStorageOptions } from '../config'
+import { localhost, Mail } from '@4thtech-sdk/ethereum'
+import { Envelope, MailReadyChain } from '@4thtech-sdk/types'
 import { signer } from './layout/header'
+import { PollinationX } from '@4thtech-sdk/storage'
+import { pollinationXConfig } from '../config'
+import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 
 interface ITransferProps {
   address: string
 }
 
+let mail: Mail
+const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
+const encoder = new TextEncoder()
 const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
   const [percentage, setPercentage] = useState<number>(0)
   const [showPercentage, setShowPercentage] = useState<boolean>(false)
   const formRef = useRef(null)
+
+  const initialize = async () => {
+    if (mail) return
+    const aes = new AesEncryption()
+    await aes.importSecretKey(process.env.ENCRYPTION_SECRET_KEY)
+    const encryptionHandler = new EncryptionHandler({
+      defaultEncryption: aes
+    })
+
+    console.log(signer, 'signer')
+    console.log(remoteStorageProvider, 'remoteStorageProvider')
+    console.log(encryptionHandler, 'encryptionHandler')
+    mail = new Mail({
+      signer,
+      chain: localhost as MailReadyChain,
+      remoteStorageProvider,
+      encryptionHandler
+    })
+  }
 
   const handleUpload = useCallback(
     async event => {
@@ -45,6 +69,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
         return
       }
 
+      await initialize()
       const sender = await signer.getAddress()
       const uploadProgress = document.querySelector('.upload_progress')
       const strokeSolid: any = uploadProgress.querySelector('.stroke-solid')
@@ -66,14 +91,21 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
         }
 
         for (const file of files.values()) {
-          const blob = await getBlob(file)
+          const attachmentData = encoder.encode(file)
+
+          // const blob = await getBlob(file)
           envelope.content.attachments.push({
             name: file.name,
-            path: blob
+            content: new Blob([attachmentData])
           })
+          // const blob = await getBlob(file)
+          // envelope.content.attachments.push({
+          //   name: file.name,
+          //   path: blob
+          // })
         }
 
-        const mail = new Mail(signer, remoteStorageOptions, networkOptions)
+        // const mail = new Mail(signer, remoteStorageOptions, networkOptions)
         const response = await mail.send(envelope)
         await response.wait(1)
 

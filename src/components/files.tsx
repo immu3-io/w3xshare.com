@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Mail } from '@4thtech-sdk/ethereum'
-import { networkOptions, receivedFileOptions, remoteStorageOptions } from '../config'
+import { localhost, Mail } from '@4thtech-sdk/ethereum'
+import { pollinationXConfig, receivedFileOptions } from '../config'
 import { BeatLoader } from 'react-spinners'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
 import { signer } from './layout/header'
 import Collapse from '../themes/components/surfaces/collapse.surface'
+import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
+import { MailReadyChain } from '@4thtech-sdk/types'
+import { PollinationX } from '@4thtech-sdk/storage'
 
 interface IFilesProps {
   address?: string
 }
+
+let mail: Mail
+const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
 
 const Files: React.FC<IFilesProps> = ({ address }) => {
   const [envelopes, setEnvelopes] = useState<ReceivedEnvelope[]>([])
@@ -27,8 +33,25 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       )
   )
 
+  const initialize = async () => {
+    if (mail) return
+    const aes = new AesEncryption()
+    await aes.importSecretKey(process.env.ENCRYPTION_SECRET_KEY)
+    const encryptionHandler = new EncryptionHandler({
+      defaultEncryption: aes
+    })
+
+    mail = new Mail({
+      signer,
+      chain: localhost as MailReadyChain,
+      remoteStorageProvider,
+      encryptionHandler
+    })
+
+    await handleFetchAllMails()
+  }
+
   const handleFetchAllMails = async () => {
-    const mail = new Mail(signer, remoteStorageOptions, networkOptions)
     const envelopes = await mail.fetchAll(address)
     setFetching(false)
     setFetchingText('No files')
@@ -41,7 +64,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   }
 
   useEffect(() => {
-    handleFetchAllMails()
+    initialize()
   }, [])
 
   return (
