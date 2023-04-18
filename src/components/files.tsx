@@ -59,9 +59,9 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
     // console.log(envelope);
     console.log(address, 'address')
     const envelopes = await mail.fetchAll(address)
-    const envelope = await mail.fetchByTransactionHash('0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
+    // const envelope = await mail.fetchByTransactionHash('0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
     console.log(envelopes, 'envelopes')
-    console.log(envelope, 'envelope 0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
+    // console.log(envelope, 'envelope 0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
     setFetching(false)
     setFetchingText('No files')
     setEnvelopes(envelopes)
