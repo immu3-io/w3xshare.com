@@ -19,6 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   const template = await getTemplate('/templates/emails/template.html')
   const currentTime = moment().format('DD MMM YYYY hh:mm A')
   const sendHtml = template
+    .replace('%HASH%', req.body.hash)
     .replace('%EMAIL%', req.body.email)
     .replace('%ACCOUNT%', req.body.recipientAccount)
     .replace('%TITLE%', req.body.title)
