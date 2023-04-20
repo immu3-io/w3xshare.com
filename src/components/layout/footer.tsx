@@ -21,7 +21,11 @@ const Footer = () => {
               </div>
               <div className='fb_right'>
                 <ul>
-                  <li> <a target="_blank" href="https://sepolia-faucet.pk910.de/">Live Beta on Sepolia Testnet | <u>Get Some Testnet Tokens</u></a> </li>
+                  <li>
+                    <a target='_blank' href='https://sepolia-faucet.pk910.de/'>
+                      Live Beta on Sepolia Testnet | <u>Get Some Testnet Tokens</u>
+                    </a>
+                  </li>
                   <li>
                     <a target='_blank' href='https://wiki.w3xshare.com/' rel='noreferrer noopener'>
                       Wiki

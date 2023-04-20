@@ -23,32 +23,32 @@ const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinati
 const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
   const [percentage, setPercentage] = useState<number>(0)
-  const [secret, setSecret] = useState<string>("")
+  const [secret, setSecret] = useState<string>('')
   const [canTransfer, setCanTransfer] = useState<boolean>(false)
-  const [copy, setCopy] = useState<string>("Click To Copy!")
+  const [copy, setCopy] = useState<string>('Click To Copy!')
   const [showPercentage, setShowPercentage] = useState<boolean>(false)
-    const formRef = useRef(null)
+  const formRef = useRef(null)
 
-    const generateSecretKey = async () => {
-      if(secret.length == 0){
-          await aes.generateSecretKey();
-          setSecret(await aes.exportSecretKey());
-      }
+  const generateSecretKey = async () => {
+    if (secret.length == 0) {
+      await aes.generateSecretKey()
+      setSecret(await aes.exportSecretKey())
     }
-    generateSecretKey();
+  }
+  generateSecretKey()
 
-    const copyToClipBoard = async copyMe => {
-        try {
-            await navigator.clipboard.writeText(copyMe);
-            setCopy("Copied!");
-            setCanTransfer(true);
-        } catch (err) {
-            setCopy("Failed to copy!");
-            setCanTransfer(false);
-        }
-    };
+  const copyToClipBoard = async copyMe => {
+    try {
+      await navigator.clipboard.writeText(copyMe)
+      setCopy('Copied!')
+      setCanTransfer(true)
+    } catch (err) {
+      setCopy('Failed to copy!')
+      setCanTransfer(false)
+    }
+  }
 
-    const initialize = async () => {
+  const initialize = async () => {
     if (mail) return
     await aes.importSecretKey(pollinationXConfig.secret)
     const encryptionHandler = new EncryptionHandler({
@@ -203,7 +203,6 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                   <li>
                     <TextField label='Recipient Email' name='recipientEmail' required />
                   </li>
-
                 </ul>
               </div>
             </div>
@@ -215,26 +214,34 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                 <li>
                   <TextareaField label='Message' name='message' />
                 </li>
-                  <li>
-                      <TextField label='Secret Key' value={secret} name='secretKey' disabled required />
-                      {canTransfer ? (
-                          <label style={{width:"100%", color: "#f23032", fontWeight: "bold", textAlign:"left", marginTop:"5px", fontSize: "12px"}}>
-                              {copy}</label>
-                      ):(
-                          <div style={{width:"100%", color: "#f23032", fontWeight: "bold", textAlign:"center", marginTop:"10px", fontSize: "12px"}}>
-                            <label> Note!<br/>Secret key needs to be shared with recipient, to be able decrypt message. Copy it!</label>
-                            <label style={{margin: "0 auto", marginTop: "20px", cursor: "pointer"}} className="w3xshare_fn_button only_text" onClick={() => copyToClipBoard(secret)}>{copy}</label>
-                          </div>
-                        )
-                      }
+                <li>
+                  <TextField label='Secret Key' value={secret} name='secretKey' disabled required />
+                  {canTransfer ? (
+                    <label style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'left', marginTop: '5px', fontSize: '12px' }}>{copy}</label>
+                  ) : (
+                    <div style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'center', marginTop: '10px', fontSize: '12px' }}>
+                      <label>
+                        Note!
+                        <br />
+                        Secret key needs to be shared with recipient, to be able decrypt message. Copy it!
+                      </label>
+                      <label
+                        style={{ margin: '0 auto', marginTop: '20px', cursor: 'pointer' }}
+                        className='w3xshare_fn_button only_text'
+                        onClick={() => copyToClipBoard(secret)}
+                      >
+                        {copy}
+                      </label>
+                    </div>
+                  )}
+                </li>
+                {canTransfer && (
+                  <li className='mt-16 float-right'>
+                    <a id='send_message' className='w3xshare_fn_button only_text' onClick={handleUpload}>
+                      <span className='text'>Transfer</span>
+                    </a>
                   </li>
-                  {canTransfer &&
-                      <li className='mt-16 float-right'>
-                          <a id='send_message' className='w3xshare_fn_button only_text' onClick={handleUpload}>
-                              <span className='text'>Transfer</span>
-                          </a>
-                      </li>
-                  }
+                )}
               </ul>
             </div>
           </form>
