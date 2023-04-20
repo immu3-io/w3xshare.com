@@ -19,7 +19,6 @@ interface ITransferProps {
 
 let mail: Mail
 const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
-const encoder = new TextEncoder()
 const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
   const [percentage, setPercentage] = useState<number>(0)
@@ -91,12 +90,12 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
         }
 
         for (const file of files.values()) {
-          const attachmentData = encoder.encode(file)
-
           // const blob = await getBlob(file)
+          // const attachment = encoder.encode(file)
+
           envelope.content.attachments.push({
             name: file.name,
-            content: new Blob([attachmentData])
+            content: new Blob([file])
           })
           // const blob = await getBlob(file)
           // envelope.content.attachments.push({

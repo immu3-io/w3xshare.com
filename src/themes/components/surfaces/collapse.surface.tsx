@@ -60,8 +60,8 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
 
     await initialize()
     const buffer = await mail.downloadAttachment(envelope.content.attachments[index] as RemoteFileInfo)
-    // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
     FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
+    // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
     // FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
 
     downloadingFileState[index] = { downloading: false, downloaded: true }
