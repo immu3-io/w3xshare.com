@@ -153,6 +153,8 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
             formRef.current.title.value = ''
             formRef.current.message.value = ''
             setFiles([])
+            setCanTransfer(false)
+            setSecret('')
             notify('Files have been successfully transferred')
           })
           .catch(() => {
