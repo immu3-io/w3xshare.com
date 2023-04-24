@@ -23,14 +23,14 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   const [numOfEnvelopes, setNumOfEnvelopes] = useState<number>(receivedFileOptions.numOfFilesDisplayed)
   const [showAllToggle, setShowAllToggle] = useState<boolean>(false)
   const [isExpanded] = useState<boolean>(false)
-  const [txHash, setTxHash] = useState<string>("")
+  const [txHash, setTxHash] = useState<string>('')
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     if (txHash.length == 0) {
       const searchParams = new URLSearchParams(document.location.search)
       if (searchParams && (searchParams.has('tx') || searchParams.get('tx'))) {
-        const tx = searchParams.get('tx');
-        setTxHash(tx);
+        const tx = searchParams.get('tx')
+        setTxHash(tx)
       }
     }
   }
@@ -59,9 +59,8 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       encryptionHandler
     })
     if (txHash.length > 0) {
-      await handlefetchMailByTxHash();
-    }
-    else{
+      await handlefetchMailByTxHash()
+    } else {
       await handleFetchAllMails()
     }
   }
@@ -80,19 +79,19 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
     setFetching(false)
     setFetchingText('No files')
     setEnvelopes(envelopes)
-    console.log("fetch multiple");
-    console.log(envelopes);
+    console.log('fetch multiple')
+    console.log(envelopes)
   }
 
   const handlefetchMailByTxHash = async () => {
-      const envelopes = await mail.fetchByTransactionHash(txHash);
+    const envelopes = await mail.fetchByTransactionHash(txHash)
 
-      setFetching(false)
-      setFetchingText('No files')
-      // setEnvelopes(envelopes)
+    setFetching(false)
+    setFetchingText('No files')
+    // setEnvelopes(envelopes)
 
-      console.log("fetch single");
-      console.log(envelopes);
+    console.log('fetch single')
+    console.log(envelopes)
   }
 
   const handleShowAllToggle = () => {
