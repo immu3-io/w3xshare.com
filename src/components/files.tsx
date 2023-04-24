@@ -88,7 +88,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
 
     setFetching(false)
     setFetchingText('No files')
-    // setEnvelopes(envelopes)
+    setEnvelopes([envelopes])
 
     console.log('fetch single')
     console.log(envelopes)
