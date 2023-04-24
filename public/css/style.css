@@ -1206,3 +1206,57 @@ a.full_link {
 .dropArea{
   cursor: pointer;
 }
+.spinner {
+  animation: rotate 2s linear infinite;
+  z-index: 102;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  width: 50px;
+  height: 50px;
+}
+.spinnerText {
+  z-index: 102;
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  margin: -24px 0 0 -31px;
+  width: 73px;
+  height: 50px;
+}
+.spinner .path {
+  stroke: #ffffff;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+.loaderOverlay{
+  position: fixed;
+  width: 100%;
+  z-index: 101;
+  background-color: rgba(0, 0, 0, 0.8);
+  top: 0;
+  left: 0;
+  transition: all 0.3s 0.3s cubic-bezier(0.02, 0.19, 0, 0.96);
+  height: 100vh;
+}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}

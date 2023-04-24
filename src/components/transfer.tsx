@@ -22,7 +22,7 @@ let mail: Mail
 const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
 const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
-  const [percentage, setPercentage] = useState<number>(0)
+  // const [percentage, setPercentage] = useState<number>(0)
   const [secret, setSecret] = useState<string>('')
   const [canTransfer, setCanTransfer] = useState<boolean>(false)
   const [copy, setCopy] = useState<string>('Click To Copy!')
@@ -54,8 +54,6 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })
-
-    console.log(secret)
 
     mail = new Mail({
       signer,
@@ -91,12 +89,12 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
 
       await initialize()
       const sender = await signer.getAddress()
-      const uploadProgress = document.querySelector('.upload_progress')
-      const strokeSolid: any = uploadProgress.querySelector('.stroke-solid')
+      // const uploadProgress = document.querySelector('.upload_progress')
+      // const strokeSolid: any = uploadProgress.querySelector('.stroke-solid')
 
-      uploadProgress.classList.add('active')
-      strokeSolid.style.strokeDashoffset = 300
-      setPercentage(0)
+      // uploadProgress.classList.add('active')
+      // strokeSolid.style.strokeDashoffset = 300
+      // setPercentage(0)
       setShowPercentage(true)
 
       try {
@@ -129,8 +127,8 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
         const response = await mail.send(envelope)
         await response.wait(1)
 
-        strokeSolid.style.strokeDashoffset = 300 - 300
-        setPercentage(100)
+        // strokeSolid.style.strokeDashoffset = 300 - 300
+        // setPercentage(100)
 
         await axios({
           method: 'POST',
@@ -160,15 +158,15 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
             notify('An error occurred. Try again later', 'error')
           })
           .finally(() => {
-            strokeSolid.style.strokeDashoffset = 300
-            uploadProgress.classList.remove('active')
+            // strokeSolid.style.strokeDashoffset = 300
+            // uploadProgress.classList.remove('active')
             setShowPercentage(false)
           })
       } catch (error) {
         notify('Some error occurred during upload. Try again later', 'error')
 
-        strokeSolid.style.strokeDashoffset = 300
-        uploadProgress.classList.remove('active')
+        // strokeSolid.style.strokeDashoffset = 300
+        // uploadProgress.classList.remove('active')
         setShowPercentage(false)
       }
     },
@@ -245,15 +243,18 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                 )}
               </ul>
             </div>
+            {showPercentage && (
+              <div>
+                <div className='loaderOverlay'></div>
+                <svg className='spinner' viewBox='0 0 50 50'>
+                  <circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='5'></circle>
+                </svg>
+                <p className='spinnerText'>Sending...</p>
+              </div>
+            )}
           </form>
         </div>
       )}
-      <a className='w3xshare_fn_totop upload_progress'>
-        {showPercentage && <span className='arrow'>{percentage}%</span>}
-        <span className='circle'>
-          <img src='/svg/circle.svg' alt='' className='fn__svg' />
-        </span>
-      </a>
     </>
   )
 }

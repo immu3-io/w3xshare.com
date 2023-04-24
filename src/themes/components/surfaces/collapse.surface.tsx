@@ -118,7 +118,7 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive, secretKey }) =
                 <FontAwesomeIcon icon={faDownload} onClick={() => handleDownload(index)} />
               </div>
             )}
-            <div style={thumbTitle}>{attachment.name}</div>
+            <div onClick={() => handleDownload(index)} style={thumbTitle}>{attachment.name}</div>
             {downloadingFileState[index]?.downloaded && (
               <div style={{ ...thumbStatusDownloadIcon }}>
                 <FontAwesomeIcon icon={faCheck} />
