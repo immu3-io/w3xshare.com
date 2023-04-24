@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { sepolia, Mail } from '@4thtech-sdk/ethereum'
 import { pollinationXConfig, receivedFileOptions } from '../config'
 import { BeatLoader } from 'react-spinners'
@@ -8,6 +8,8 @@ import Collapse from '../themes/components/surfaces/collapse.surface'
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 import { MailReadyChain } from '@4thtech-sdk/types'
 import { PollinationX } from '@4thtech-sdk/storage'
+import TextareaField from '../themes/components/inputs/textarea-field.input'
+import { notify } from '../utils/notify'
 
 interface IFilesProps {
   address?: string
@@ -24,6 +26,9 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   const [showAllToggle, setShowAllToggle] = useState<boolean>(false)
   const [isExpanded] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
+  const [secretKeyInput, setSecretKeyInput] = useState<boolean>(true)
+  const [secret, setSecret] = useState<string>('')
+  const formRef = useRef(null)
 
   if (typeof window !== 'undefined') {
     if (txHash.length == 0) {
@@ -39,15 +44,52 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
     (envelope: ReceivedEnvelope, index: number) =>
       (numOfEnvelopes === 0 || index < numOfEnvelopes) && (
         <div style={infoContainer} key={index}>
-          <Collapse envelope={envelope} isActive={isExpanded} />
+          <Collapse envelope={envelope} isActive={isExpanded} secretKey={secret} />
         </div>
       )
   )
 
-  const initialize = async () => {
+  const handleFetchAllMails = async () => {
+    const envelopes = await mail.fetchAll(address)
+    setFetching(false)
+    setFetchingText('No files')
+    setEnvelopes(envelopes)
+  }
+
+  const handleFetchMailByTxHash = async () => {
+    const envelopes = await mail.fetchByTransactionHash(txHash)
+
+    setFetching(false)
+    setFetchingText('No files')
+    setEnvelopes([envelopes])
+  }
+
+  const handleShowAllToggle = () => {
+    setNumOfEnvelopes(showAllToggle ? receivedFileOptions.numOfFilesDisplayed : 0)
+    setShowAllToggle(toggle => !toggle)
+  }
+
+  const handleFetch = useCallback(async event => {
+    event.preventDefault()
+
+    if (!formRef.current.checkValidity()) {
+      formRef.current.reportValidity()
+      return
+    }
+    const secretKey = formRef.current.secretKey.value.replace(/\s/g, '')
+    if (secretKey.length !== 64) {
+      notify(
+        'Invalid secret key. Secret key length should be 64 characters. Your is ' + formRef.current.secretKey.value.length + ' characters long.',
+        'warning'
+      )
+      return
+    }
+    setSecret(secretKey)
+    setSecretKeyInput(false)
+
     if (mail) return
     const aes = new AesEncryption()
-    await aes.importSecretKey(pollinationXConfig.secret)
+    await aes.importSecretKey(secretKey)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })
@@ -59,48 +101,14 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       encryptionHandler
     })
     if (txHash.length > 0) {
-      await handlefetchMailByTxHash()
+      await handleFetchMailByTxHash()
     } else {
       await handleFetchAllMails()
     }
-  }
-
-  const handleFetchAllMails = async () => {
-    // console.log(address, 'address 0x1f09b61292c9287d4969eae73503cf9a5c799ea7e10ee4004d8edcbfd91af1ea')
-    // console.log(mail, 'mail')
-    // const envelope = await mail.fetchByTransactionHash('0xf18b749a68c7c6f22a20d4f0aac29cf83b3000c9467fa40c349e2039b6b387a9');
-    //
-    // console.log(envelope);
-    console.log(address, 'address')
-    const envelopes = await mail.fetchAll(address)
-    // const envelope = await mail.fetchByTransactionHash('0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
-    console.log(envelopes, 'envelopes')
-    // console.log(envelope, 'envelope 0x14f973ad71065a90a2a1559ef12ed4874d5392e77d89e8f388acf0748ecf1a74')
-    setFetching(false)
-    setFetchingText('No files')
-    setEnvelopes(envelopes)
-    console.log('fetch multiple')
-    console.log(envelopes)
-  }
-
-  const handlefetchMailByTxHash = async () => {
-    const envelopes = await mail.fetchByTransactionHash(txHash)
-
-    setFetching(false)
-    setFetchingText('No files')
-    setEnvelopes([envelopes])
-
-    console.log('fetch single')
-    console.log(envelopes)
-  }
-
-  const handleShowAllToggle = () => {
-    setNumOfEnvelopes(showAllToggle ? receivedFileOptions.numOfFilesDisplayed : 0)
-    setShowAllToggle(toggle => !toggle)
-  }
+  }, [])
 
   useEffect(() => {
-    initialize()
+    // initialize()
   }, [])
 
   return (
@@ -116,10 +124,38 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
         </div>
       ) : (
         <div style={thumbsContainer}>
-          <div>{fetchingText}</div>
-          <div style={{ marginLeft: 4 }}>
-            <BeatLoader color='#1976d2' loading={fetching} size={5} />
-          </div>
+          <form ref={formRef}>
+            <div className='nav_menu_form input_list mt-8'>
+              <ul>
+                {secretKeyInput ? (
+                  <li>
+                    <TextareaField label='Secret Key' name='secretKey' required />
+                    <div style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'center', marginTop: '10px', fontSize: '12px' }}>
+                      <label>
+                        Note!
+                        <br />
+                        Please enter secret key received by the sender. Only with secret key you will be able download files.
+                      </label>
+                    </div>
+                  </li>
+                ) : (
+                  <li>
+                    <div>{fetchingText}</div>
+                    <div style={{ marginLeft: 4 }}>
+                      <BeatLoader color='#1976d2' loading={fetching} size={5} />
+                    </div>
+                  </li>
+                )}
+                {secretKeyInput && (
+                  <li className='mt-16 float-right'>
+                    <a id='send_message' className='w3xshare_fn_button only_text' onClick={handleFetch}>
+                      <span className='text'>Get files</span>
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </form>
         </div>
       )}
     </div>

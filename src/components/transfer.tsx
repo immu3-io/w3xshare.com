@@ -50,14 +50,13 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
 
   const initialize = async () => {
     if (mail) return
-    await aes.importSecretKey(pollinationXConfig.secret)
+    await aes.importSecretKey(secret)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })
 
-    console.log(signer, 'signer')
-    console.log(remoteStorageProvider, 'remoteStorageProvider')
-    console.log(encryptionHandler, 'encryptionHandler')
+    console.log(secret)
+
     mail = new Mail({
       signer,
       chain: sepolia as MailReadyChain,

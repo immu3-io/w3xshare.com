@@ -16,7 +16,8 @@ import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 
 interface ICollapseProps {
   envelope: ReceivedEnvelope
-  isActive?: boolean
+  isActive?: boolean,
+  secretKey: string
 }
 
 interface IDownloadingFileState {
@@ -27,8 +28,9 @@ interface IDownloadingFileState {
 let mail: Mail
 const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
 
-const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
+const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive, secretKey }) => {
   const [isExpanded, setExpanded] = useState<boolean>(isActive)
+  const [secret] = useState<string>(secretKey)
   const [downloading, setDownloading] = useState<boolean>(false)
   const [detailsIconOpen, setDetailsIconOpen] = useState<boolean>(false)
   const [downloadingFileState, setDownloadingFileState] = useState<IDownloadingFileState[]>([])
@@ -38,7 +40,7 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive }) => {
 
   const initialize = async () => {
     const aes = new AesEncryption()
-    await aes.importSecretKey(pollinationXConfig.secret)
+    await aes.importSecretKey(secret)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
     })
