@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { sepolia, Mail } from '@4thtech-sdk/ethereum'
 import { pollinationXConfig, receivedFileOptions } from '../config'
 import { BeatLoader } from 'react-spinners'
@@ -35,6 +35,9 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       const searchParams = new URLSearchParams(document.location.search)
       if (searchParams && (searchParams.has('tx') || searchParams.get('tx'))) {
         const tx = searchParams.get('tx')
+        console.log('tx')
+        console.log(tx)
+        console.log('.tx')
         setTxHash(tx)
       }
     }
@@ -50,6 +53,10 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   )
 
   const handleFetchAllMails = async () => {
+    console.log('address, handleFetchAllMails')
+    console.log(address)
+    console.log('.address, handleFetchAllMails')
+
     const envelopes = await mail.fetchAll(address)
     setFetching(false)
     setFetchingText('No files')
@@ -57,6 +64,9 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   }
 
   const handleFetchMailByTxHash = async () => {
+    console.log('txHash, handleFetchMailByTxHash')
+    console.log(txHash)
+    console.log('.txHash, handleFetchMailByTxHash')
     const envelopes = await mail.fetchByTransactionHash(txHash)
 
     setFetching(false)
@@ -69,13 +79,14 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
     setShowAllToggle(toggle => !toggle)
   }
 
-  const handleFetch = useCallback(async event => {
-    event.preventDefault()
+  const handleFetch = async e => {
+    e.preventDefault()
 
     if (!formRef.current.checkValidity()) {
       formRef.current.reportValidity()
       return
     }
+
     const secretKey = formRef.current.secretKey.value.replace(/\s/g, '')
     if (secretKey.length !== 64) {
       notify(
@@ -84,11 +95,14 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       )
       return
     }
+
     setSecret(secretKey)
     setSecretKeyInput(false)
 
-    if (mail) return
     const aes = new AesEncryption()
+    console.log('secretKey')
+    console.log(secretKey)
+    console.log('.secretKey')
     await aes.importSecretKey(secretKey)
     const encryptionHandler = new EncryptionHandler({
       defaultEncryption: aes
@@ -100,16 +114,15 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
       remoteStorageProvider,
       encryptionHandler
     })
+    console.log('txHash, handleFetch')
+    console.log(txHash)
+    console.log('.txHash, handleFetch')
     if (txHash.length > 0) {
       await handleFetchMailByTxHash()
     } else {
       await handleFetchAllMails()
     }
-  }, [])
-
-  useEffect(() => {
-    // initialize()
-  }, [])
+  }
 
   return (
     <div>
@@ -148,7 +161,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
                 )}
                 {secretKeyInput && (
                   <li className='mt-16 float-right'>
-                    <a id='send_message' className='w3xshare_fn_button only_text' onClick={handleFetch}>
+                    <a className='w3xshare_fn_button only_text' onClick={handleFetch}>
                       <span className='text'>Get files</span>
                     </a>
                   </li>
