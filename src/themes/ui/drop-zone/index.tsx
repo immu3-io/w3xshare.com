@@ -5,6 +5,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { faFile } from '@fortawesome/free-regular-svg-icons'
 import { formatBytes } from '../../../utils'
 import * as _ from 'lodash'
+import {notify} from "../../../utils/notify";
 
 interface IDropzoneProps extends DropzoneInputProps {
   uploadedFiles?: any[]
@@ -13,21 +14,43 @@ interface IDropzoneProps extends DropzoneInputProps {
   hideUpload?: boolean
 }
 
+const MAX_SIZE = 100 * 1024 * 1024; // 100 MB in bytes
+
 const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFiles, onChangeFiles, hideUpload = false }) => {
   const [files, setFiles] = useState<any[]>([])
+  const [totalSize, setTotalSize] = useState(0);
+
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, isDragActive } = useDropzone({
     onDrop: async acceptedFiles => {
-      setFiles(acceptedFiles)
-      onDropFiles(acceptedFiles)
-    },
-    multiple: !!multiple
-  })
+      let size = totalSize;
+      const updatedFiles = [];
+      acceptedFiles.forEach(file => {
+        if (size + file.size <= MAX_SIZE) {
+          updatedFiles.push(file)
+          size += file.size
+        }
+        else{
+          notify(`File "${file.name}" is too large (Max ${MAX_SIZE / (1024 * 1024)} MB)`, 'error')
+        }
+      });
 
+      setFiles(updatedFiles)
+      onDropFiles(updatedFiles)
+
+      setTotalSize(size)
+
+    },
+    multiple: !!multiple,
+    maxSize: MAX_SIZE
+  })
   const handleOnRemove = index => {
     files.splice(index, 1)
-
     setFiles(_.cloneDeep(files))
     onChangeFiles(_.cloneDeep(files))
+
+    const size = _.cloneDeep(files).reduce((total, file) => total + file.size, 0)
+    setTotalSize(size)
+
   }
 
   const style: any = useMemo(
@@ -63,10 +86,11 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
       <div style={{ height: 212 }}>
         {!hideUpload && (
           <div className='dropArea' {...getRootProps({ style })}>
-            <div className='mb-24'>DROP THE LOAD</div>
+            <div className='mb-24'>DROP THE LOAD (Up to {MAX_SIZE / (1024 * 1024)} MB)</div>
             <input {...getInputProps()} />
             <img src='/img/dropzone/dropzone.png' alt='' width={80} />
             <div className='mt-24'>{isDragActive ? 'Drop the files here ...' : "the only drop you'll ever like"}</div>
+            {totalSize > 0 && <p>Total size of dropped files: {(totalSize / (1024 * 1024)).toFixed(2)} MB</p>}
           </div>
         )}
       </div>
