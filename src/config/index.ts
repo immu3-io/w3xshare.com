@@ -4,8 +4,7 @@ import { IReceivedFileOptions } from './interface/index.interface'
 export const networkOptions = {
   network: {
     type: NetworkType.TEST_NET,
-    endpoint: 'wss://eth-goerli.g.alchemy.com/v2/1dElcULFyNAXaEQo5jxRtq3UfCWcfzgT',
-    etherscan: 'https://goerli.etherscan.io/tx/'
+    etherscan: 'https://sepolia.etherscan.io/tx/'
   }
 }
 
