@@ -23,7 +23,7 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, isDragActive } = useDropzone({
     onDrop: async acceptedFiles => {
       let size = totalSize;
-      const updatedFiles = files;
+      const updatedFiles = [...files];
       acceptedFiles.forEach(file => {
         if (size + file.size <= MAX_SIZE) {
           updatedFiles.push(file)
@@ -34,20 +34,48 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
         }
       });
 
-    if(updatedFiles.length > 0){
-      setFiles(updatedFiles)
-      onDropFiles(updatedFiles)
-      setTotalSize(size)
-    }
-    else{
-      notify(`File is too large`, 'error')
-    }
-
+      if(updatedFiles.length > 0){
+        setFiles(updatedFiles)
+        onDropFiles(updatedFiles)
+        setTotalSize(size)
+      }
+      else{
+        notify(`File is too large`, 'error')
+      }
 
     },
     multiple: !!multiple,
     maxSize: MAX_SIZE
   })
+
+  // const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, isDragActive } = useDropzone({
+  //   onDrop: async acceptedFiles => {
+  //     let size = totalSize;
+  //     const updatedFiles = files;
+  //     acceptedFiles.forEach(file => {
+  //       if (size + file.size <= MAX_SIZE) {
+  //         updatedFiles.push(file)
+  //         size += file.size
+  //       }
+  //       else{
+  //         notify(`File "${file.name}" is too large (Max ${MAX_SIZE / (1024 * 1024)} MB)`, 'error')
+  //       }
+  //     });
+  //
+  //   if(updatedFiles.length > 0){
+  //     setFiles(updatedFiles)
+  //     onDropFiles(updatedFiles)
+  //     setTotalSize(size)
+  //   }
+  //   else{
+  //     notify(`File is too large`, 'error')
+  //   }
+  //
+  //
+  //   },
+  //   multiple: !!multiple,
+  //   maxSize: MAX_SIZE
+  // })
   const handleOnRemove = index => {
     files.splice(index, 1)
     setFiles(_.cloneDeep(files))
