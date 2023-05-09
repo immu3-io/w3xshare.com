@@ -23,7 +23,7 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, isDragActive } = useDropzone({
     onDrop: async acceptedFiles => {
       let size = totalSize;
-      const updatedFiles = [];
+      const updatedFiles = files;
       acceptedFiles.forEach(file => {
         if (size + file.size <= MAX_SIZE) {
           updatedFiles.push(file)
@@ -34,10 +34,15 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
         }
       });
 
+    if(updatedFiles.length > 0){
       setFiles(updatedFiles)
       onDropFiles(updatedFiles)
-
       setTotalSize(size)
+    }
+    else{
+      notify(`File is too large`, 'error')
+    }
+
 
     },
     multiple: !!multiple,
@@ -47,7 +52,6 @@ const Dropzone: React.FC<IDropzoneProps> = ({ multiple, uploadedFiles, onDropFil
     files.splice(index, 1)
     setFiles(_.cloneDeep(files))
     onChangeFiles(_.cloneDeep(files))
-
     const size = _.cloneDeep(files).reduce((total, file) => total + file.size, 0)
     setTotalSize(size)
 
