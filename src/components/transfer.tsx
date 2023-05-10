@@ -12,6 +12,8 @@ import { signer } from './layout/header'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { pollinationXConfig } from '../config'
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
 
 interface ITransferProps {
   address: string
@@ -296,7 +298,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                 {tx != 0 && (
                   <p className='spinnerTxHash'>
                     <a target='_blank' href={`https://sepolia.etherscan.io/tx/${tx}`}>
-                      <u>View on block explorer</u>
+                      <u>View transaction on block explorer</u>  <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </a>
                   </p>
                 )}
