@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment/moment'
 
 const mailConfig = {
-  host: 'mail.datavallis.com',
+  host: process.env.NEXT_PUBLIC_MAIL_HOST,
   port: 465,
   secure: true,
   auth: {
-    user: process.env.NEXT_PUBLIC_GMAIL_USER,
-    pass: process.env.NEXT_PUBLIC_GMAIL_PASS
+    user: process.env.NEXT_PUBLIC_MAIL_USER,
+    pass: process.env.NEXT_PUBLIC_MAIL_PASS
   }
 }
 
@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   await nodemailer
     .createTransport(mailConfig)
     .sendMail({
-      from: 'W3XShare <' + process.env.NEXT_PUBLIC_GMAIL_USER + '>',
+      from: 'W3XShare <' + process.env.NEXT_PUBLIC_MAIL_USER + '>',
       to: req.body.recipientEmail,
       replyTo: req.body.email,
       subject: req.body.senderWallet + ' sent you files at [' + currentTime + ']',

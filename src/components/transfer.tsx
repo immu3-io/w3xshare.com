@@ -24,6 +24,8 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
   // const [percentage, setPercentage] = useState<number>(0)
   const [secret, setSecret] = useState<string>('')
+  const [tx, setTx] = useState<any>(0)
+  const [progressLabel, setProgressLabel] = useState<string>('')
   const [canTransfer, setCanTransfer] = useState<boolean>(false)
   const [copy, setCopy] = useState<string>('Click To Copy!')
   const [showPercentage, setShowPercentage] = useState<boolean>(false)
@@ -96,7 +98,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
       // strokeSolid.style.strokeDashoffset = 300
       // setPercentage(0)
       setShowPercentage(true)
-
+      setProgressLabel('Uploading files...')
       try {
         const envelope: Envelope = {
           content: {
@@ -125,6 +127,8 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
 
         // const mail = new Mail(signer, remoteStorageOptions, networkOptions)
         const response = await mail.send(envelope)
+        setProgressLabel('Sending...')
+        setTx(response.hash)
         await response.wait(1)
 
         // strokeSolid.style.strokeDashoffset = 300 - 300
@@ -161,10 +165,11 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
             // strokeSolid.style.strokeDashoffset = 300
             // uploadProgress.classList.remove('active')
             setShowPercentage(false)
+            setTx(0)
           })
       } catch (error) {
         notify('Some error occurred during upload. Try again later', 'error')
-
+        setTx(0)
         // strokeSolid.style.strokeDashoffset = 300
         // uploadProgress.classList.remove('active')
         setShowPercentage(false)
@@ -249,7 +254,14 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                 <svg className='spinner' viewBox='0 0 50 50'>
                   <circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='5'></circle>
                 </svg>
-                <p className='spinnerText'>Sending...</p>
+                <p className='spinnerText'>{progressLabel}</p>
+                {tx != 0 && (
+                  <p className='spinnerTxHash'>
+                    <a target='_blank' href={`https://sepolia.etherscan.io/tx/${tx}`}>
+                      <u>View on block explorer</u>
+                    </a>
+                  </p>
+                )}
               </div>
             )}
           </form>
