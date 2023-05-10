@@ -24,7 +24,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
   const [fetchingText, setFetchingText] = useState<string>('Fetching files')
   const [numOfEnvelopes, setNumOfEnvelopes] = useState<number>(receivedFileOptions.numOfFilesDisplayed)
   const [showAllToggle, setShowAllToggle] = useState<boolean>(false)
-  const [isExpanded] = useState<boolean>(false)
+  const [isExpanded] = useState<boolean>(true)
   const [txHash, setTxHash] = useState<string>('')
   const [secretKeyInput, setSecretKeyInput] = useState<boolean>(true)
   const [secret, setSecret] = useState<string>('')
@@ -39,6 +39,9 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
         console.log(tx)
         console.log('.tx')
         setTxHash(tx)
+      }
+      if (searchParams && (searchParams.has('s') || searchParams.get('s'))) {
+        setSecret(searchParams.get('s'))
       }
     }
   }
@@ -142,7 +145,7 @@ const Files: React.FC<IFilesProps> = ({ address }) => {
               <ul>
                 {secretKeyInput ? (
                   <li>
-                    <TextareaField label='Secret Key' name='secretKey' required />
+                    <TextareaField label='Secret Key' value={secret} name='secretKey' required />
                     <div style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'center', marginTop: '10px', fontSize: '12px' }}>
                       <label>
                         Note!
@@ -184,8 +187,7 @@ const infoContainer: any = {
   border: '1px solid white',
   padding: 5,
   borderRadius: 5,
-  marginBottom: 10,
-  cursor: 'pointer'
+  marginBottom: 10
 }
 
 const showAllContainer: any = {

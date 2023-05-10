@@ -32,7 +32,7 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive, secretKey }) =
   const [isExpanded, setExpanded] = useState<boolean>(isActive)
   const [secret] = useState<string>(secretKey)
   const [downloading, setDownloading] = useState<boolean>(false)
-  const [detailsIconOpen, setDetailsIconOpen] = useState<boolean>(false)
+  const [detailsIconOpen, setDetailsIconOpen] = useState<boolean>(isActive)
   const [downloadingFileState, setDownloadingFileState] = useState<IDownloadingFileState[]>([])
   const { getToggleProps, getCollapseProps } = useCollapse({
     isExpanded
@@ -80,23 +80,46 @@ const Collapse: React.FC<ICollapseProps> = ({ envelope, isActive, secretKey }) =
     <>
       <div
         {...getToggleProps({
-          style: { display: 'flex' },
+          style: { display: 'flex',  flexDirection: 'column' },
           onClick: () => {
             setExpanded(expanded => !expanded)
             setDetailsIconOpen(detailsIconOpen => !detailsIconOpen)
           }
         })}
       >
-        <FontAwesomeIcon style={envelopeIcon} icon={detailsIconOpen ? faEnvelopeOpen : faEnvelope} />
-        <Tooltip title={envelope.content.subject}>
-          <b style={{ ...thumbTitle, width: 176 }}>{envelope.content.subject}</b>
-        </Tooltip>
-        - {moment(envelope.sentAt, 'X').format('DD MMM YYYY hh:mm A')} (Files: <b>{envelope.content.attachments.length}</b>)
-        <a style={detailsTitleLink} target='_blank' href={networkOptions.network.etherscan + envelope.metadata.transactionHash}>
-          TX <FontAwesomeIcon icon={faExternalLinkAlt} />
-        </a>
+        <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%'
+            }}
+        >
+          <label>
+            <Tooltip title={envelope.content.subject}>
+              <b style={{ ...thumbTitle, width: 176 }}> <FontAwesomeIcon style={envelopeIcon} icon={detailsIconOpen ? faEnvelopeOpen : faEnvelope} /> {envelope.content.subject}</b>
+            </Tooltip>
+          </label>
+          <label
+              style={{
+                fontSize: '12px',
+                marginTop: 4,
+                cursor: 'pointer'
+              }}
+          >
+            {moment(envelope.sentAt, 'X').format('DD MMM YYYY hh:mm A')} (Files: <b>{envelope.content.attachments.length}</b>)
+          </label>
+        </div>
+
+
+
+
       </div>
       <div {...getCollapseProps()}>
+        <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 15 }}>
+          <a style={detailsTitleLink} target='_blank' href={networkOptions.network.etherscan + envelope.metadata.transactionHash}>
+            <u>View transaction on block explorer</u>   <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </a>
+        </div>
         <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 5 }}>
           <label style={detailsTitle}> Sender:</label>
           <p>{envelope.sender || '/'}</p>
@@ -172,8 +195,9 @@ const detailsTitleLink: any = {
   cursor: 'pointer',
   marginLeft: 10,
   float: 'right',
-  marginTop: 4,
-  marginRight: 3
+  marginTop: 3,
+  marginRight: 3,
+  fontSize: '12px'
 }
 
 const thumbTitle: any = {
@@ -181,7 +205,8 @@ const thumbTitle: any = {
   display: 'block',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
-  textOverflow: 'ellipsis'
+  textOverflow: 'ellipsis',
+  cursor: 'pointer'
 }
 
 const envelopeIcon: any = {
