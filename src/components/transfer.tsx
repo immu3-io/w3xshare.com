@@ -24,10 +24,11 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
   const [files, setFiles] = useState<any[]>([])
   // const [percentage, setPercentage] = useState<number>(0)
   const [secret, setSecret] = useState<string>('')
+  const [sendSecret, setSendSecret] = useState<boolean>(false)
   const [tx, setTx] = useState<any>(0)
   const [progressLabel, setProgressLabel] = useState<string>('')
   const [canTransfer, setCanTransfer] = useState<boolean>(false)
-  const [copy, setCopy] = useState<string>('Click To Copy!')
+  const [copy, setCopy] = useState<string>('Click To Copy')
   const [showPercentage, setShowPercentage] = useState<boolean>(false)
   const formRef = useRef(null)
 
@@ -39,13 +40,20 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
   }
   generateSecretKey()
 
-  const copyToClipBoard = async copyMe => {
+  const copyToClipBoard = async (copyMe, sSecret) => {
     try {
       await navigator.clipboard.writeText(copyMe)
-      setCopy('Copied!')
+      if (!sSecret) {
+        setCopy('Copied!')
+        setSendSecret(false)
+      } else {
+        setCopy('The secret will be sent to the recipient. Is also copied to the clipboard.')
+        setSendSecret(true)
+      }
+
       setCanTransfer(true)
     } catch (err) {
-      setCopy('Failed to copy!')
+      setCopy('Failed')
       setCanTransfer(false)
     }
   }
@@ -91,6 +99,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
 
       await initialize()
       const sender = await signer.getAddress()
+
       // const uploadProgress = document.querySelector('.upload_progress')
       // const strokeSolid: any = uploadProgress.querySelector('.stroke-solid')
 
@@ -140,6 +149,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
           data: {
             email: formRef.current.email.value,
             hash: response.hash,
+            secret: sendSecret ? secret : false,
             recipientEmail: formRef.current.recipientEmail.value,
             recipientAccount: formRef.current.recipientAccount.value,
             senderWallet: sender,
@@ -155,6 +165,7 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
             formRef.current.message.value = ''
             setFiles([])
             setCanTransfer(false)
+            setSendSecret(false)
             setSecret('')
             notify('Files have been successfully transferred')
           })
@@ -168,14 +179,14 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
             setTx(0)
           })
       } catch (error) {
-        notify('Some error occurred during upload. Try again later', 'error')
+        notify(error.message, 'error')
         setTx(0)
         // strokeSolid.style.strokeDashoffset = 300
         // uploadProgress.classList.remove('active')
         setShowPercentage(false)
       }
     },
-    [files]
+    [files, sendSecret]
   )
 
   useEffect(() => {
@@ -223,19 +234,46 @@ const Transfer: React.FC<ITransferProps> = ({ address }) => {
                   {canTransfer ? (
                     <label style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'left', marginTop: '5px', fontSize: '12px' }}>{copy}</label>
                   ) : (
-                    <div style={{ width: '100%', color: '#f23032', fontWeight: 'bold', textAlign: 'center', marginTop: '10px', fontSize: '12px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        width: '100%',
+                        color: '#f23032',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        marginTop: '10px',
+                        fontSize: '12px'
+                      }}
+                    >
                       <label>
                         Note!
                         <br />
-                        Secret key needs to be shared with recipient, to be able decrypt message. Copy it!
+                        Secret key needs to be shared with recipient, to be able decrypt message. You can copy it or send to recipient email automatically.
                       </label>
-                      <label
-                        style={{ margin: '0 auto', marginTop: '20px', cursor: 'pointer' }}
-                        className='w3xshare_fn_button only_text'
-                        onClick={() => copyToClipBoard(secret)}
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          width: '100%'
+                        }}
                       >
-                        {copy}
-                      </label>
+                        <label
+                          style={{ margin: '0 auto', marginTop: '20px', cursor: 'pointer' }}
+                          className='w3xshare_fn_button only_text'
+                          onClick={() => copyToClipBoard(secret, 0)}
+                        >
+                          {copy}
+                        </label>
+                        <label
+                          style={{ margin: '0 auto', marginTop: '20px', cursor: 'pointer' }}
+                          className='w3xshare_fn_button only_text'
+                          onClick={() => copyToClipBoard(secret, 1)}
+                        >
+                          Send to Recipient
+                        </label>
+                      </div>
                     </div>
                   )}
                 </li>

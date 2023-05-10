@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 
 interface ITextFieldProps {
   name?: string
@@ -9,6 +9,10 @@ interface ITextFieldProps {
 
 const TextField: React.FC<ITextFieldProps> = ({ name, label, value = '', ...props }) => {
   const [state, setState] = useState<string>(value)
+
+  useEffect(() => {
+    setState(value)
+  }, [value]);
 
   return (
     <>

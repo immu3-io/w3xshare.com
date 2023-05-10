@@ -51,7 +51,7 @@ const Header = () => {
   useEffect(() => {
     handleSigner()
     isConnected || setOpen(false)
-  }, [isConnected])
+  }, [isConnected, address])
 
   return (
     <Fragment>
