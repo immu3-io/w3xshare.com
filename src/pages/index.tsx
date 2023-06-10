@@ -1,20 +1,19 @@
-import Layout from '../components/layout/layout'
+import type { NextPage } from 'next'
+import Index from '@/components/index'
+import Head from 'next/head'
 
-const Index = () => {
+const IndexPage: NextPage = () => {
   return (
-    <Layout pageName={'W3XShare'}>
-      <div className='w3xshare_fn_hero'>
-        <div className='bg_overlay'>
-          <div className='bg_color' />
-          <div className='bg_image' data-bg-img='/img/hero/bg_3.png' />
-        </div>
-        <div className='hero_content'>
-          <div className='container'>
-            <div className='content'></div>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <>
+      <Head>
+        <title>PXdrive</title>
+        <meta name='description' content='PollinationX Decentralized Drive' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta http-equiv='Content-Security-Policy' content='upgrade-insecure-requests' />
+      </Head>
+      <Index />
+    </>
   )
 }
-export default Index
+
+export default IndexPage

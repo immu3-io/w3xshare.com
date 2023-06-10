@@ -1,43 +1,37 @@
-import { useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { Web3Modal } from '@web3modal/react'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
+import '@/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
+import type { AppProps } from 'next/app'
+import IndexedDBProvider from '@/contexts/indexed-db'
+import RouteGuard from '@/guards/route.guard'
+import { useEffect, useState } from 'react'
+import { WagmiConfig } from 'wagmi'
+import { Web3Modal } from '@web3modal/react'
+import { client, ethereumClient } from '@/utils/client'
+import { themeConfig } from '@/config'
+import { ToastContainer } from 'react-toastify'
 
-const chains = [sepolia]
-const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
-const client = createClient({
-  connectors: w3mConnectors({
-    chains,
-    version: 2,
-    projectId: process.env.WALLET_CONNECT_PROJECT_ID
-  }),
-  provider,
-  webSocketProvider
-})
-const ethereumClient = new EthereumClient(client, chains)
-
-function MyApp({ Component, pageProps }) {
-  const [showChild, setShowChild] = useState<boolean>(false)
+const App = ({ Component, pageProps }: AppProps) => {
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    setShowChild(true)
+    setReady(true)
   }, [])
-
-  if (!showChild) return null
-  if (typeof window === 'undefined') return <></>
 
   return (
     <>
-      <WagmiConfig client={client}>
-        <Component {...pageProps} />
-        <ToastContainer />
-      </WagmiConfig>
-      <Web3Modal projectId={process.env.WALLET_CONNECT_PROJECT_ID} ethereumClient={ethereumClient} />
+      {ready ? (
+        <IndexedDBProvider>
+          <WagmiConfig client={client}>
+            <RouteGuard>
+              <Component {...pageProps} />
+              <ToastContainer />
+            </RouteGuard>
+          </WagmiConfig>
+        </IndexedDBProvider>
+      ) : null}
+      <Web3Modal projectId={process.env.WALLET_CONNECT_PROJECT_ID} ethereumClient={ethereumClient} {...themeConfig} />
     </>
   )
 }
 
-export default MyApp
+export default App
