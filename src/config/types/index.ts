@@ -1,5 +1,3 @@
-import { ITableSort, TTableSortingSequence } from '@/types'
-
 export interface IAppConfig {
   locale: string
 }
@@ -14,6 +12,7 @@ interface IPollinationXAuthOptions {
 
 export interface IPollinationXConfig {
   url: string
+  token: string
   auth: IPollinationXAuthOptions
   newNft: IPollinationXAuthOptions
 }
@@ -22,14 +21,6 @@ export interface INftConfig {
   contract: string
 }
 
-export interface ITableSortingDefaultValues {
-  files: ITableSort[]
-}
-
-export interface ITableSortingConfig {
-  default: string
-  asc: string
-  desc: string
-  sequence: TTableSortingSequence[]
-  defaultValues: ITableSortingDefaultValues
+export interface IBtfsConfig {
+  url: string
 }

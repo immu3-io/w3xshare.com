@@ -15,12 +15,10 @@ const AccountProvider: FC<IAccountProviderProps> = ({ children }) => {
   const { address } = useAccount()
   const [account, setAccount] = useState({
     address: null,
-    password: null,
     loggedIn: false,
     locale: appConfig.locale,
     defaultNftIndex: 0,
-    nfts: [],
-    table: { sorting: null }
+    nfts: []
   })
 
   useEffect(() => {

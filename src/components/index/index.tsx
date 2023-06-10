@@ -3,6 +3,8 @@ import useTranslation from 'next-translate/useTranslation'
 import { FC, useState } from 'react'
 import { useAccountContext } from '@/contexts/account/provider'
 import { useRouter } from 'next/router'
+import { setSigner } from '@/utils/mail'
+import ReceivedFilesModal from '@/ui/modals/received-files.modal'
 
 const Index: FC = () => {
   const router = useRouter()
@@ -10,9 +12,16 @@ const Index: FC = () => {
   const { push } = useRouter()
   const { account } = useAccountContext()
   const [showConnectWallet, setShowConnectWallet] = useState<boolean>(false)
+  const [showReceivedFiles, setShowReceivedFiles] = useState<boolean>(false)
+  const [txHash, setTxHash] = useState<string>('')
+  const [secretKey, setSecretKey] = useState<string>('')
 
   const handleRedirect = async (redirect?: boolean): Promise<void> => {
+    setShowConnectWallet(false)
+    console.log(redirect)
     if (redirect) {
+      await setSigner()
+      // _handleUrlParams()
       account.loggedIn = true
       await push(
         {
@@ -21,6 +30,15 @@ const Index: FC = () => {
         null,
         { locale: account.locale !== router.defaultLocale ? account.locale : false }
       )
+    }
+  }
+
+  const _handleUrlParams = (): void => {
+    const { tx, s } = router.query
+    if (tx) {
+      setTxHash(tx as string)
+      setSecretKey((s as string) || undefined)
+      setShowReceivedFiles(true)
     }
   }
 
@@ -141,6 +159,7 @@ const Index: FC = () => {
         </div>
       </section>
       <ConnectWallet show={showConnectWallet} onClose={handleRedirect} />
+      <ReceivedFilesModal show={showReceivedFiles} onClose={setShowReceivedFiles} txHash={txHash} secretKey={secretKey} />
     </>
   )
 }

@@ -2,7 +2,7 @@ import abiPX from '@/abi/PX.json'
 import { IDoWriteContract, ISignAuth } from '@/types'
 import { Address } from 'wagmi'
 import { prepareWriteContract, readContract, writeContract } from '@wagmi/core'
-import * as ethers from 'ethers'
+import { ethers } from 'ethers'
 
 export const doSignMessage = async (message: string): Promise<ISignAuth> => ({
   chain: await window.ethereum.request({ method: 'eth_chainId' }),

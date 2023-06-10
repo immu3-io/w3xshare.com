@@ -9,7 +9,7 @@ import { Web3Button } from '@web3modal/react'
 import { useAccountContext } from '@/contexts/account/provider'
 import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
 import { useAccount } from 'wagmi'
-import { getNumbersFromString, mergeNfts } from '@/utils/helper'
+import { getNumbersFromString } from '@/utils/helper'
 import { getNfts } from '@/utils/btfs'
 import { getNftMetadata } from '@/utils/alchemy'
 import { Dropdown, Spinner, Tooltip } from 'flowbite-react'
@@ -31,8 +31,9 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
 
   const handleSelectedNftOnClick = async (index: number): Promise<void> => {
     setSelectedNftIndex(index)
-    if (!account.nfts[index].secret) {
-    } else await _handleGetSelectedNftContent(index)
+    account.defaultNftIndex = index !== undefined ? index : selectedNftIndex
+    await indexedDB.put(account)
+    setAccount(_.cloneDeep(account))
   }
 
   const handleGetNfts = async (closeBuyNftModal?: boolean, syncNfts?: boolean): Promise<void> => {
@@ -40,7 +41,7 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
     if (syncNfts) {
       const nftsRes = await getNfts(address)
       if (!nftsRes?.error) {
-        account.nfts = mergeNfts(account.nfts, nftsRes.nfts)
+        account.nfts = nftsRes.nfts
         const nftMetadataRes = await getNftMetadata(Number(account.nfts[account.defaultNftIndex].id.tokenId))
         if (!nftMetadataRes?.error) {
           account.nfts[account.defaultNftIndex].media = nftMetadataRes.media
@@ -64,12 +65,6 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
       setAccount(_.cloneDeep(account))
     }
     setRefreshMetadataProgress(false)
-  }
-
-  const _handleGetSelectedNftContent = async (index?: number): Promise<void> => {
-    account.defaultNftIndex = index !== undefined ? index : selectedNftIndex
-    await indexedDB.put(account)
-    setAccount(_.cloneDeep(account))
   }
 
   const _handleGetNftSizes = (): void => {

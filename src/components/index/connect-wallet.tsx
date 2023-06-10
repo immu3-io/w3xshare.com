@@ -2,7 +2,6 @@ import useTranslation from 'next-translate/useTranslation'
 import { FC, useEffect, useState } from 'react'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
-import { mergeNfts } from '@/utils/helper'
 import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
 import { useAccountContext } from '@/contexts/account/provider'
 import { getNfts } from '@/utils/btfs'
@@ -38,7 +37,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
         }
         const nftsRes = await getNfts(address)
         if (!nftsRes?.error) {
-          account.nfts = mergeNfts(account.nfts, nftsRes.nfts)
+          account.nfts = nftsRes.nfts
           await indexedDB.put(account)
           onClose(true)
         }

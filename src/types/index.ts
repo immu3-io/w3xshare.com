@@ -1,9 +1,4 @@
-import { IFile } from '@/components/drive/types'
 import { TransactionReceipt } from '@ethersproject/abstract-provider/src.ts'
-
-export type TType = 'folder' | 'file'
-export type TStatus = 'pending' | 'uploading' | 'uploaded'
-export type TTableSortingSequence = 'default' | 'asc' | 'desc'
 
 export interface IError {
   error?: any
@@ -91,10 +86,6 @@ export interface INft {
   timeLastUpdated: string
   title: string
   tokenUri: ITokenUri
-  secret?: string
-  cid?: string
-  synced?: boolean
-  files?: IFile[]
 }
 
 export interface IAccount {

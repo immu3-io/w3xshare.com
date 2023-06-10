@@ -1,11 +1,11 @@
 import axios, { AxiosInstance } from 'axios'
-import { pollinationXConfig } from '@/config'
-import { polygonMumbai } from 'wagmi/chains'
+import { btfsConfig } from '@/config'
+import { sepolia } from 'wagmi/chains'
 import { configureChains, createClient } from 'wagmi'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
-const chains = [polygonMumbai]
+const chains = [sepolia]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
 export const client = createClient({
@@ -21,5 +21,5 @@ export const client = createClient({
 export const ethereumClient: EthereumClient = new EthereumClient(client, chains)
 
 export const httpClient: AxiosInstance = axios.create({
-  baseURL: pollinationXConfig.url
+  baseURL: btfsConfig.url
 })

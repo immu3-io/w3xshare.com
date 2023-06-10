@@ -10,14 +10,10 @@ export interface IAccountContext {
 const AccountContext = createContext<IAccountContext>({
   account: {
     address: null,
-    password: null,
     loggedIn: false,
     locale: appConfig.locale,
     defaultNftIndex: 0,
-    nfts: [],
-    table: {
-      sorting: null
-    }
+    nfts: []
   },
   setAccount: () => ({})
 })
