@@ -145,7 +145,7 @@ const Index: FC = () => {
                   </div>
                   <div
                     className='flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none'
-                    style={{ background: 'linear-gradient(to right, #222222, #42298F' }}
+                    style={{ background: 'linear-gradient(to right, #222222, #286FA4' }}
                   >
                     <div className='px-4 py-6 text-white md:mx-6 md:p-12'>
                       <h4 className='mb-6 text-xl font-semibold'>{t('decentralizedDrive')}</h4>

@@ -13,10 +13,8 @@ module.exports = {
         pollinationx: {
           "black":"#222222",
           "grey":"#888888",
-          "honey":"#FAB432",
-          "purple":"#42298F",
-          "honey-500":"#F3B563",
-          "honey-900":"#FFD08E",
+          "honey":"#286FA4",
+          "purple":"#4F9D76",
         }
       },
       fontFamily: {
