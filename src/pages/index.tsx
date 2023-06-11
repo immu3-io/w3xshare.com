@@ -6,8 +6,8 @@ const IndexPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>PXdrive</title>
-        <meta name='description' content='PollinationX Decentralized Drive' />
+        <title>W3XShare</title>
+        <meta name='description' content='Enabling decentralized, private & safe file transfer.' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <meta http-equiv='Content-Security-Policy' content='upgrade-insecure-requests' />
       </Head>
