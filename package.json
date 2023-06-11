@@ -11,11 +11,11 @@
     "pretty-quick": "pretty-quick"
   },
   "dependencies": {
-    "@4thtech-sdk/encryption": "0.0.1",
-    "@4thtech-sdk/encryptor": "0.0.1",
-    "@4thtech-sdk/ethereum": "0.1.1",
-    "@4thtech-sdk/storage": "0.1.0",
-    "@4thtech-sdk/types": "0.1.0",
+    "@4thtech-sdk/encryption": "0.0.6",
+    "@4thtech-sdk/encryptor": "0.0.2",
+    "@4thtech-sdk/ethereum": "0.1.9",
+    "@4thtech-sdk/storage": "0.1.6",
+    "@4thtech-sdk/types": "0.1.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.12.1",
