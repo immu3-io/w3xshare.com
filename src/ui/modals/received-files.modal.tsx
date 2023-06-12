@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation'
 import { FC, useEffect } from 'react'
 import { Modal } from 'flowbite-react'
-import { initMail } from '@/utils/mail'
+import { initMail, mail } from '@/utils/mail'
 
 interface IReceivedFilesModalProps {
   show: boolean
@@ -15,11 +15,12 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
 
   const _handleFetchFiles = async (): Promise<void> => {
     try {
-      // console.log(txHash, secretKey)
+      console.log(txHash, secretKey)
       await initMail(secretKey)
-      // console.log('FETCHING FILES')
-      // const envelopes = await mail.fetchByTransactionHash(txHash)
-      // console.log(envelopes, 'ENVELOPES')
+      console.log('FETCHING FILES')
+      console.log(mail, 'MAIL')
+      const envelopes = await mail.fetchByTransactionHash(txHash)
+      console.log(envelopes, 'ENVELOPES')
       // setFetching(false)
       // setFetchingText('No files')
       // setEnvelopes([envelopes])

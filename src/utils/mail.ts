@@ -4,14 +4,12 @@ import { Mail } from '@4thtech-sdk/ethereum'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { MailReadyChain, NetworkType, Chain } from '@4thtech-sdk/types'
 import { fetchSigner, Signer } from '@wagmi/core'
+
 export const aes = new AesEncryption()
 export let signer: Signer
 export let mail: Mail
-const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
 
-export const setSigner = async (): Promise<void> => {
-  signer = await fetchSigner()
-}
+const remoteStorageProvider = new PollinationX(pollinationXConfig.url, pollinationXConfig.token)
 const polygonMumbai: Chain = {
   id: 80001,
   name: 'Polygon Mumbai',
@@ -30,6 +28,11 @@ const polygonMumbai: Chain = {
     }
   }
 }
+
+export const setSigner = async (): Promise<void> => {
+  signer = await fetchSigner()
+}
+
 export const initMail = async (secretKey: string): Promise<void> => {
   try {
     await aes.importSecretKey(secretKey)
