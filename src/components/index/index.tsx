@@ -53,8 +53,8 @@ const Index: FC = () => {
                   <div className='px-4 md:px-0 lg:w-6/12'>
                     <div className='md:mx-6 md:p-12'>
                       <div className='text-center'>
-                        <img className='mx-auto w-80 block dark:hidden' src='/img/w3xshare-logo-colour.svg' alt='W3XShare Logo' />
-                        <img className='mx-auto w-80 hidden dark:block' src='/img/w3xshare-logo-colour.svg' alt='W3XShare Logo' />
+                        <img className='mx-auto w-80 block dark:hidden' src='/img/w3xshare_logo_white_landscape.svg' alt='W3XShare Logo' />
+                        <img className='mx-auto w-80 hidden dark:block' src='/img/w3xshare_logo_white_landscape.svg' alt='W3XShare Logo' />
                       </div>
                       <form>
                         <ul className='max-w-md space-y-2 text-gray-500 list-inside dark:text-gray-400 text-sm pt-14 pb-6'>

@@ -100,8 +100,8 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
                 </svg>
               </button>
               <a href='/' className='flex ml-2 md:mr-24'>
-                <img className='h-12 mr-3 block dark:hidden' src='/img/w3xshare-logo-colour.svg' alt='W3XShare Logo' />
-                <img className='h-12 mr-3 hidden dark:block' src='/img/w3xshare-logo-colour.svg' alt='W3XShare Logo' />
+                <img className='h-12 mr-3 block dark:hidden' src='/img/w3xshare_logo_white_landscape.svg' alt='W3XShare Logo' />
+                <img className='h-12 mr-3 hidden dark:block' src='/img/w3xshare_logo_white_landscape.svg' alt='W3XShare Logo' />
               </a>
             </div>
             <div className='flex items-center'>
