@@ -15,10 +15,11 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
 
   const _handleFetchFiles = async (): Promise<void> => {
     try {
-      console.log(txHash, secretKey)
       await initMail(secretKey)
       console.log('FETCHING FILES')
       console.log(mail, 'MAIL')
+      // console.log('MAIL PROVIDER')
+      // console.log(mail.provider)
       const envelopes = await mail.fetchByTransactionHash(txHash)
       console.log(envelopes, 'ENVELOPES')
       // setFetching(false)

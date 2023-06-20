@@ -15,7 +15,7 @@ const polygonMumbai: Chain = {
   name: 'Polygon Mumbai',
   network: 'maticmum',
   type: NetworkType.TEST_NET,
-  networkEndpoint: 'https://matic-mumbai.chainstacklabs.com',
+  networkEndpoint: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
   contracts: {
     appFeeManager: {
       address: '0x4b668B2D21d1a245b9cE9190cBCDc52611d31aE6'

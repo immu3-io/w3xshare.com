@@ -20,16 +20,16 @@ const Index: FC = () => {
     setShowConnectWallet(false)
     console.log(redirect)
     if (redirect) {
-      // await setSigner()
-      // _handleUrlParams()
-      account.loggedIn = true
-      await push(
-        {
-          pathname: `/drive`
-        },
-        null,
-        { locale: account.locale !== router.defaultLocale ? account.locale : false }
-      )
+      await setSigner()
+      _handleUrlParams()
+      // account.loggedIn = true
+      // await push(
+      //   {
+      //     pathname: `/drive`
+      //   },
+      //   null,
+      //   { locale: account.locale !== router.defaultLocale ? account.locale : false }
+      // )
     }
   }
 
