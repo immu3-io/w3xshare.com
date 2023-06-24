@@ -2,6 +2,7 @@ import useTranslation from 'next-translate/useTranslation'
 import { FC, useEffect } from 'react'
 import { Modal } from 'flowbite-react'
 import { initMail, mail } from '@/utils/mail'
+import { useAccountContext } from '@/contexts/account/provider';
 
 interface IReceivedFilesModalProps {
   show: boolean
@@ -12,10 +13,11 @@ interface IReceivedFilesModalProps {
 
 const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHash, secretKey }) => {
   const { t } = useTranslation()
+  const { account } = useAccountContext()
 
   const _handleFetchFiles = async (): Promise<void> => {
     try {
-      await initMail(secretKey)
+      await initMail(secretKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
       console.log('FETCHING FILES')
       console.log(mail, 'MAIL')
       // console.log('MAIL PROVIDER')

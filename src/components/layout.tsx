@@ -1,4 +1,4 @@
-import Sidebar from '@/components/drive/sidebar'
+import Sidebar from '@/components/share/sidebar'
 import { FC, ReactNode } from 'react'
 import { INft } from '@/types'
 

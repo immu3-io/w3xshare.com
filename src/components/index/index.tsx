@@ -21,15 +21,15 @@ const Index: FC = () => {
     console.log(redirect)
     if (redirect) {
       await setSigner()
-      _handleUrlParams()
-      // account.loggedIn = true
-      // await push(
-      //   {
-      //     pathname: `/drive`
-      //   },
-      //   null,
-      //   { locale: account.locale !== router.defaultLocale ? account.locale : false }
-      // )
+      // _handleUrlParams()
+      account.loggedIn = true
+      await push(
+        {
+          pathname: `/share`
+        },
+        null,
+        { locale: account.locale !== router.defaultLocale ? account.locale : false }
+      )
     }
   }
 

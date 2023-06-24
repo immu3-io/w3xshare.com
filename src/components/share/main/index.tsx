@@ -97,9 +97,9 @@ const Main: FC = () => {
       // setPercentage(0)
       setShowPercentage(true)
       setProgressLabel(t('uploadingFiles'))
-      await initMail(formRef.current.secretKey.value)
-      const sender = await signer.getAddress()
       try {
+        await initMail(formRef.current.secretKey.value, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+        const sender = await signer.getAddress()
         const envelope: Envelope = {
           content: {
             subject: formRef.current.title.value,
@@ -109,18 +109,23 @@ const Main: FC = () => {
           receiver: formRef.current.recipientWallet.value,
           sender
         }
+        console.log(files, 'files')
         for (const file of files) {
+          console.log('KOLIKOKRAT???')
           envelope.content.attachments.push({
             name: file.name,
             content: new Blob([file])
           })
         }
+        console.log(envelope, 'ENVELOPE')
         const response = await mail.send(envelope)
-        await response.wait(1)
+        // await response.wait(1)
+        console.log(response, 'response')
         setProgressLabel(t('sending'))
         setTx(response.hash)
         // strokeSolid.style.strokeDashoffset = 300 - 300
         // setPercentage(100)
+
         await axios({
           method: 'POST',
           url: '/api/mailer',

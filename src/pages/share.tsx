@@ -1,9 +1,9 @@
 import Layout from '@/components/layout'
-import Main from '@/components/drive/main'
+import Main from '@/components/share/main'
 import AccountProvider, { useAccountContext } from '@/contexts/account/provider'
 import { NextPage } from 'next'
 
-const DrivePage: NextPage = () => {
+const SharePage: NextPage = () => {
   const { account } = useAccountContext()
 
   return (
@@ -15,4 +15,4 @@ const DrivePage: NextPage = () => {
   )
 }
 
-export default DrivePage
+export default SharePage
