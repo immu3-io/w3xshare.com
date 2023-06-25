@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import useCollapse from 'react-collapsed'
 import { Attachment, MailReadyChain, RemoteFileInfo } from '@4thtech-sdk/types'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
 import { sepolia, Mail } from '@4thtech-sdk/ethereum'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faDownload, faEnvelope, faEnvelopeOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faCheck, faDownload, faEnvelope, faEnvelopeOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
 import FileSaver from 'file-saver'
 import moment from 'moment'
 // import { pollinationX } from 'pollinationx-dev'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
+import { useCollapse } from 'react-collapsed'
+import { HiExternalLink, HiMail } from 'react-icons/hi';
+import useTranslation from 'next-translate/useTranslation';
 
 interface ICollapseProps {
   receivedEnvelope: ReceivedEnvelope
@@ -22,29 +24,29 @@ interface IDownloadingFileState {
 }
 
 const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) => {
+  const { t } = useTranslation()
   const [isExpanded, setExpanded] = useState<boolean>(false)
   const [downloading, setDownloading] = useState<boolean>(false)
-  const [detailsIconOpen, setDetailsIconOpen] = useState<boolean>(false)
   const [downloadingFileState, setDownloadingFileState] = useState<IDownloadingFileState[]>([])
   const { getToggleProps, getCollapseProps } = useCollapse({
     isExpanded
   })
 
   const handleDownload = async (index: number) => {
-    if (downloading) return
-
-    downloadingFileState[index] = { downloading: true, downloaded: false }
-    setDownloadingFileState(downloadingFileState.slice())
-    setDownloading(true)
-
-    const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
-    FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
-    // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
-    // FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
-
-    downloadingFileState[index] = { downloading: false, downloaded: true }
-    setDownloadingFileState(downloadingFileState.slice())
-    setDownloading(false)
+    //   if (downloading) return
+    //
+    //   downloadingFileState[index] = { downloading: true, downloaded: false }
+    //   setDownloadingFileState(downloadingFileState.slice())
+    //   setDownloading(true)
+    //
+    //   const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
+    //   FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
+    //   // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
+    //   // FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
+    //
+    //   downloadingFileState[index] = { downloading: false, downloaded: true }
+    //   setDownloadingFileState(downloadingFileState.slice())
+    //   setDownloading(false)
   }
 
   // useEffect(() => {
@@ -61,7 +63,6 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
           style: { display: 'flex', flexDirection: 'column' },
           onClick: () => {
             setExpanded(expanded => !expanded)
-            setDetailsIconOpen(detailsIconOpen => !detailsIconOpen)
           }
         })}
       >
@@ -75,26 +76,20 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
           <label>
             <Tooltip title={receivedEnvelope.content.subject}>
               <b style={{ ...thumbTitle, width: 176 }}>
-                {' '}
-                <FontAwesomeIcon style={envelopeIcon} icon={detailsIconOpen ? faEnvelopeOpen : faEnvelope} /> {receivedEnvelope.content.subject}
+                <HiMail className='text-2xl text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white float-left mr-2' />
+                <div>{receivedEnvelope.content.subject}</div>
               </b>
             </Tooltip>
           </label>
-          <label
-            style={{
-              fontSize: '12px',
-              marginTop: 4,
-              cursor: 'pointer'
-            }}
-          >
-            {moment(receivedEnvelope.sentAt, 'X').format('DD MMM YYYY hh:mm A')} (Files: <b>{receivedEnvelope.content.attachments.length}</b>)
+          <label className='text-xs mt-1 cursor-pointer text-white'>
+            {moment(receivedEnvelope.sentAt, 'X').format('DD MMM YYYY hh:mm A')} ({t('files')}: <b>{receivedEnvelope.content.attachments.length}</b>)
           </label>
         </div>
       </div>
       <div {...getCollapseProps()}>
         <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 15 }}>
           <a style={detailsTitleLink} target='_blank' href={networkOptions.network.etherscan + receivedEnvelope.metadata.transactionHash}>
-            <u>View transaction on block explorer</u> <FontAwesomeIcon icon={faExternalLinkAlt} />
+            <u>View transaction on block explorer</u> <HiExternalLink />
           </a>
         </div>
         <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 5 }}>
@@ -115,17 +110,13 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
               </div>
             ) : (
               <div style={!downloading ? { ...thumbDownloadIcon } : { ...thumbDownloadDisabledIcon }}>
-                <FontAwesomeIcon icon={faDownload} onClick={() => handleDownload(index)} />
+                {/*<FontAwesomeIcon icon={faDownload} onClick={() => handleDownload(index)} />*/}
               </div>
             )}
             <div onClick={() => handleDownload(index)} style={thumbTitle}>
               {attachment.name}
             </div>
-            {downloadingFileState[index]?.downloaded && (
-              <div style={{ ...thumbStatusDownloadIcon }}>
-                <FontAwesomeIcon icon={faCheck} />
-              </div>
-            )}
+            {downloadingFileState[index]?.downloaded && <div style={{ ...thumbStatusDownloadIcon }}>{/*<FontAwesomeIcon icon={faCheck} />*/}</div>}
           </div>
         ))}
       </div>

@@ -6,10 +6,9 @@ import { useAccountContext } from '@/contexts/account/provider'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
 import { Mail, sepolia } from '@4thtech-sdk/ethereum'
 import { MailReadyChain } from '@4thtech-sdk/types'
-import { receivedFilesOptions } from '@/config'
 import { BeatLoader } from 'react-spinners'
 import { delay } from '@/utils/helper'
-import ReceivedFilesCollapse from '@/ui/surfaces/received-files-collapse.surface';
+import ReceivedFilesCollapse from '@/ui/surfaces/received-files-collapse.surface'
 
 interface IReceivedFilesModalProps {
   show: boolean
@@ -20,13 +19,9 @@ interface IReceivedFilesModalProps {
 
 const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHash, secretKey }) => {
   const { t } = useTranslation()
-  const { account } = useAccountContext()
-  const [receivedEnvelope, setReceivedEnvelope] = useState<ReceivedEnvelope>(null)
+  const [receivedEnvelope, setReceivedEnvelope] = useState<any>(null)
   const [fetching, setFetching] = useState<boolean>(true)
   const [fetchingText, setFetchingText] = useState<string>('fetchingFiles')
-  const [numOfEnvelopes, setNumOfEnvelopes] = useState<number>(receivedFilesOptions.numOfFilesDisplayed)
-  const [showAllToggle, setShowAllToggle] = useState<boolean>(false)
-  const [isExpanded] = useState<boolean>(true)
   const [showSecretKeyInput, setShowSecretKeyInput] = useState<boolean>(true)
   const formRef = useRef(null)
 
@@ -51,10 +46,50 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
       // setFetching(false)
       // setFetchingText('No files')
       // setEnvelopes([receivedEnvelope])
-      await delay(4000)
+      await delay(1000)
       // setFetching(false)
       // setFetchingText('noFiles')
-      setReceivedEnvelope(receivedEnvelope)
+      setReceivedEnvelope({
+        content: {
+          subject: 'ASD',
+          body: 'DSA',
+          attachments: [
+            {
+              name: 'bs3386.jpg',
+              URL: 'https://gateway.btfs.io/btfs/QmXjPjLwfn3AzeWm5iDw9S8TQuLHubDDXQP1B126eHeZvt',
+              checksum: '4cf8dc358e90babeb909b3102d4cc0a2cbdd2e6a4a70fd5e6a48340cb20fee69',
+              metadata: '{"encryption":{"type":"4th-tech-aes-gcm"}}'
+            },
+            {
+              name: 'campaign3-png.png',
+              URL: 'https://gateway.btfs.io/btfs/QmViwiAuCYWCGbiA3aYyASwwUkqhMb8fkMPjA4wGSh8GFe',
+              checksum: '3d0d08cc337304c17cdc1d8e69228af34b7bd387eefe2362dc2ac94ab7da14af',
+              metadata: '{"encryption":{"type":"4th-tech-aes-gcm"}}'
+            },
+            {
+              name: 'dsc01396.jpg',
+              URL: 'https://gateway.btfs.io/btfs/QmTsLXxcPv5VCsFSK8tj1ZsB5Js9Bm2ri4tL5u1cAHi11v',
+              checksum: 'eaceb64d00e25a1d1d20b50cced788c41e4c6c3907b7b17171aee594c696b609',
+              metadata: '{"encryption":{"type":"4th-tech-aes-gcm"}}'
+            },
+            {
+              name: 'dsc04405-web.jpg',
+              URL: 'https://gateway.btfs.io/btfs/Qmd9w7QFCCP2Vb93jjWjpMTacHPYe93BfsgwzyWhkrZxLz',
+              checksum: '9bec8fb81774b54637f303da5ff885f176a519513435e208a55e645a842ef07e',
+              metadata: '{"encryption":{"type":"4th-tech-aes-gcm"}}'
+            }
+          ]
+        },
+        receiver: '0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C',
+        sender: '0xAAe3b0B628E1b8918a0F0C648f5FAc3cDFe61C9e',
+        sentAt: 1687660860,
+        openedAt: 0,
+        metadata: {
+          URL: 'https://gateway.btfs.io/btfs/QmPszWJZYxBtzznsRzxFt8kM3yGVfJYDxKMpNfQExeZVqe',
+          checksum: 'd7a24ebc5a78b61fb044c413f8dc2d39d4614cedac56fb174f331a2c98f23360',
+          transactionHash: '0x15899da773f9ba4ab5dccb49141e07b2631be134d5b1cd23c2effda46dd22200'
+        }
+      })
     } catch (error) {
       console.log(error.message, 'handleFetchFilesOnClick ERROR')
     }
@@ -108,7 +143,7 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
                 ) : (
                   <div className='w-full float-left'>
                     <p className='pt-1 text-white float-left'>{t(fetchingText)}</p>
-                    <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
+                    <BeatLoader size={5} loading={fetching} className='float-left mt-1.5 mr-4' color='white' />
                   </div>
                 )}
               </div>
