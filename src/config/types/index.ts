@@ -6,6 +6,14 @@ export interface IAuthGuardOptions {
   publicPaths: string[]
 }
 
+export interface IBtfsConfig {
+  url: string
+}
+
+export interface INftConfig {
+  contract: string
+}
+
 interface IPollinationXAuthOptions {
   message: string
 }
@@ -17,10 +25,6 @@ export interface IPollinationXConfig {
   newNft: IPollinationXAuthOptions
 }
 
-export interface INftConfig {
-  contract: string
-}
-
-export interface IBtfsConfig {
-  url: string
+export interface IReceivedFilesOptions {
+  numOfFilesDisplayed: number
 }

@@ -121,5 +121,11 @@
   "filesHaveBeenSuccessfullyTransferred": "Files have been successfully transferred",
   "errorOccurred": "An error occurred. Try again later",
   "sending": "Sending",
-  "receivedFiles": "Received files"
+  "receivedFiles": "Received files",
+  "showAll": "Show all",
+  "showLess": "Show less",
+  "fetchingFiles": "Fetching files",
+  "noFiles": "No files",
+  "receivedFilesSecretKeyNote": "Please enter secret key received by the sender. Only with secret key you will be able to download files.",
+  "fetchFiles": "Fetch files"
 }

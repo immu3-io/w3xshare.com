@@ -1,5 +1,20 @@
-import { IAppConfig, IAuthGuardOptions, IBtfsConfig, INftConfig, IPollinationXConfig } from '@/config/types'
+import {
+  IAppConfig,
+  IAuthGuardOptions,
+  IBtfsConfig,
+  INftConfig,
+  IPollinationXConfig,
+  IReceivedFilesOptions
+} from '@/config/types';
 import { ThemeCtrlState } from '@web3modal/core/dist/_types/src/types/controllerTypes'
+
+export const themeConfig: ThemeCtrlState = {
+  themeMode: 'dark',
+  themeVariables: {
+    '--w3m-accent-color': '#888888',
+    '--w3m-background-color': 'black'
+  }
+}
 
 export const appConfig: IAppConfig = {
   locale: 'en'
@@ -7,6 +22,14 @@ export const appConfig: IAppConfig = {
 
 export const authGuardOptions: IAuthGuardOptions = {
   publicPaths: ['/']
+}
+
+export const btfsConfig: IBtfsConfig = {
+  url: process.env.BTFS_URL
+}
+
+export const nftConfig: INftConfig = {
+  contract: process.env.NFT_COLLECTION_CONTRACT
 }
 
 export const pollinationXConfig: IPollinationXConfig = {
@@ -20,18 +43,6 @@ export const pollinationXConfig: IPollinationXConfig = {
   }
 }
 
-export const nftConfig: INftConfig = {
-  contract: process.env.NFT_COLLECTION_CONTRACT
-}
-
-export const btfsConfig: IBtfsConfig = {
-  url: process.env.BTFS_URL
-}
-
-export const themeConfig: ThemeCtrlState = {
-  themeMode: 'dark',
-  themeVariables: {
-    '--w3m-accent-color': '#888888',
-    '--w3m-background-color': 'black'
-  }
+export const receivedFilesOptions: IReceivedFilesOptions = {
+  numOfFilesDisplayed: 5
 }

@@ -1,25 +1,48 @@
 import useTranslation from 'next-translate/useTranslation'
-import { FC, useEffect } from 'react'
-import { Modal, Spinner } from 'flowbite-react'
+import React, { FC, useRef, useState } from 'react'
+import { Label, Modal, Textarea } from 'flowbite-react'
 import { initMail, mail } from '@/utils/mail'
 import { useAccountContext } from '@/contexts/account/provider'
+import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
+import { Mail, sepolia } from '@4thtech-sdk/ethereum'
+import { MailReadyChain } from '@4thtech-sdk/types'
+import { receivedFilesOptions } from '@/config'
+import { BeatLoader } from 'react-spinners'
+import { delay } from '@/utils/helper'
 
 interface IReceivedFilesModalProps {
   show: boolean
   onClose: any
   txHash: string
-  secretKey: string
+  secretKey?: string
 }
 
 const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHash, secretKey }) => {
   const { t } = useTranslation()
   const { account } = useAccountContext()
+  const [envelopes, setEnvelopes] = useState<ReceivedEnvelope[]>([])
+  const [fetching, setFetching] = useState<boolean>(true)
+  const [fetchingText, setFetchingText] = useState<string>('fetchingFiles')
+  const [numOfEnvelopes, setNumOfEnvelopes] = useState<number>(receivedFilesOptions.numOfFilesDisplayed)
+  const [showAllToggle, setShowAllToggle] = useState<boolean>(false)
+  const [isExpanded] = useState<boolean>(true)
+  const [showSecretKeyInput, setShowSecretKeyInput] = useState<boolean>(true)
+  const formRef = useRef(null)
 
-  const _handleFetchFiles = async (): Promise<void> => {
+  const handleFetchFilesOnClick = async (event): Promise<void> => {
+    event.preventDefault()
+
+    if (!formRef.current.checkValidity()) {
+      formRef.current.reportValidity()
+      return
+    }
+
+    setShowSecretKeyInput(false)
+
     try {
-      await initMail(secretKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+      // await initMail(secretKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
       console.log('FETCHING FILES')
-      console.log(mail, 'MAIL')
+      // console.log(mail, 'MAIL')
       // console.log('MAIL PROVIDER')
       // console.log(mail.provider)
       // const envelopes = await mail.fetchByTransactionHash(txHash)
@@ -27,15 +50,29 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
       // setFetching(false)
       // setFetchingText('No files')
       // setEnvelopes([envelopes])
-      onClose(true)
+      await delay(4000)
+      const envelopes = []
+      // setFetching(false)
+      // setFetchingText('noFiles')
+      setEnvelopes(envelopes)
     } catch (error) {
-      console.log(error.message, '_handleFetchFiles ERROR')
+      console.log(error.message, 'handleFetchFilesOnClick ERROR')
     }
   }
 
-  useEffect(() => {
-    !txHash || _handleFetchFiles()
-  }, [txHash])
+  const handleShowAllToggle = () => {
+    setNumOfEnvelopes(showAllToggle ? receivedFilesOptions.numOfFilesDisplayed : 0)
+    setShowAllToggle(toggle => !toggle)
+  }
+
+  const thumbs = envelopes.map(
+    (envelope: ReceivedEnvelope, index: number) =>
+      (numOfEnvelopes === 0 || index < numOfEnvelopes) && (
+        <div style={infoContainer} key={index}>
+          {/*<Collapse envelope={envelope} isActive={isExpanded} secretKey={secret} />*/}
+        </div>
+      )
+  )
 
   return (
     <>
@@ -43,7 +80,58 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
         <Modal.Header className='dark:bg-neutral-800 dark:border-gray-700 modalHeader'>{t('receivedFiles')}</Modal.Header>
         <Modal.Body className='dark:bg-neutral-800'>
           <div className='space-y-6 p-3 overflow-x-scroll '>
-            {txHash} - {secretKey}
+            {envelopes.length > 0 ? (
+              <div>
+                <aside>{thumbs}</aside>
+                {envelopes.length > receivedFilesOptions.numOfFilesDisplayed && (
+                  <div style={showAllContainer} onClick={handleShowAllToggle}>
+                    {showAllToggle ? t('showLess') : t('showAll')}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                {showSecretKeyInput ? (
+                  <form ref={formRef}>
+                    <div>
+                      <div className='w-full'>
+                        <div className='mb-2'>
+                          <Label htmlFor='secretKey' value={t('secretKey')} />
+                        </div>
+                        <Textarea id='secretKey' name='secretKey' defaultValue={secretKey} rows={2} disabled={!!secretKey} required={true} />
+                      </div>
+                      <div className='w-full font-bold text-center mt-2 text-xs text-red-600'>
+                        <label>
+                          {t('note')}!
+                          <br />
+                          {t('receivedFilesSecretKeyNote')}
+                        </label>
+                      </div>
+                    </div>
+                    <div className='w-full mt-12 text-center'>
+                      <button
+                        onClick={handleFetchFilesOnClick}
+                        type='button'
+                        className={`cursor-pointer relative inline-flex items-center justify-center p-0.5 mb-2 mr-2
+                                                    overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
+                                                    from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
+                                                    hover:text-white dark:text-white focus:outline-none focus:ring-0
+                                                    dark:focus:ring-blue-800`}
+                      >
+                        <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
+                          {t('fetchFiles')}
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className='w-full float-left'>
+                    <p className='pt-1 text-white float-left'>{t(fetchingText)}</p>
+                    <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer className='dark:bg-neutral-800 dark:border-0'>
@@ -66,6 +154,19 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
       </Modal>
     </>
   )
+}
+
+const infoContainer: any = {
+  border: '1px solid white',
+  padding: 5,
+  borderRadius: 5,
+  marginBottom: 10
+}
+
+const showAllContainer: any = {
+  textAlign: 'center',
+  marginTop: 24,
+  cursor: 'pointer'
 }
 
 export default ReceivedFilesModal
