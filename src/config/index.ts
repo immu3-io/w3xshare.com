@@ -1,10 +1,4 @@
-import {
-  IAppConfig,
-  IAuthGuardOptions,
-  IBtfsConfig,
-  INftConfig,
-  IPollinationXConfig
-} from '@/config/types';
+import { IAppConfig, IAuthGuardOptions, IBtfsConfig, INetworkOptions, INftConfig, IPollinationXConfig } from '@/config/types'
 import { ThemeCtrlState } from '@web3modal/core/dist/_types/src/types/controllerTypes'
 
 export const themeConfig: ThemeCtrlState = {
@@ -25,6 +19,10 @@ export const authGuardOptions: IAuthGuardOptions = {
 
 export const btfsConfig: IBtfsConfig = {
   url: process.env.BTFS_URL
+}
+
+export const networkOptions: INetworkOptions = {
+  explorerUrl: 'https://sepolia.etherscan.io/tx/'
 }
 
 export const nftConfig: INftConfig = {

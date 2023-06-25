@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Attachment, MailReadyChain, RemoteFileInfo } from '@4thtech-sdk/types'
+import useTranslation from 'next-translate/useTranslation'
+import React, { useState } from 'react'
+import { Attachment } from '@4thtech-sdk/types'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
-import { sepolia, Mail } from '@4thtech-sdk/ethereum'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faCheck, faDownload, faEnvelope, faEnvelopeOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { useCollapse } from 'react-collapsed'
+import { HiCheck, HiDownload, HiExternalLink, HiMail } from 'react-icons/hi'
+import { delay } from '@/utils/helper'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
+import { networkOptions } from '@/config'
 import FileSaver from 'file-saver'
 import moment from 'moment'
-// import { pollinationX } from 'pollinationx-dev'
-import { PollinationX } from '@4thtech-sdk/storage'
-import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
-import { useCollapse } from 'react-collapsed'
-import { HiExternalLink, HiMail } from 'react-icons/hi';
-import useTranslation from 'next-translate/useTranslation';
 
 interface ICollapseProps {
   receivedEnvelope: ReceivedEnvelope
@@ -25,7 +21,7 @@ interface IDownloadingFileState {
 
 const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) => {
   const { t } = useTranslation()
-  const [isExpanded, setExpanded] = useState<boolean>(false)
+  const [isExpanded, setExpanded] = useState<boolean>(true)
   const [downloading, setDownloading] = useState<boolean>(false)
   const [downloadingFileState, setDownloadingFileState] = useState<IDownloadingFileState[]>([])
   const { getToggleProps, getCollapseProps } = useCollapse({
@@ -33,20 +29,19 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
   })
 
   const handleDownload = async (index: number) => {
-    //   if (downloading) return
-    //
-    //   downloadingFileState[index] = { downloading: true, downloaded: false }
-    //   setDownloadingFileState(downloadingFileState.slice())
-    //   setDownloading(true)
-    //
-    //   const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
-    //   FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
-    //   // const buffer2 = await pollinationX.download((envelope.content.attachments[index] as RemoteFileInfo).URL)
-    //   // FileSaver.saveAs(new Blob([buffer2], { type: 'application/octet-stream' }), envelope.content.attachments[index].name)
-    //
-    //   downloadingFileState[index] = { downloading: false, downloaded: true }
-    //   setDownloadingFileState(downloadingFileState.slice())
-    //   setDownloading(false)
+    if (downloading) return
+
+    downloadingFileState[index] = { downloading: true, downloaded: false }
+    setDownloadingFileState(downloadingFileState.slice())
+    setDownloading(true)
+
+    // const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
+    // FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
+
+    await delay(3000)
+    downloadingFileState[index] = { downloading: false, downloaded: true }
+    setDownloadingFileState(downloadingFileState.slice())
+    setDownloading(false)
   }
 
   // useEffect(() => {
@@ -75,7 +70,7 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
         >
           <label>
             <Tooltip title={receivedEnvelope.content.subject}>
-              <b style={{ ...thumbTitle, width: 176 }}>
+              <b className='block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer' style={{ ...blueColor, width: 176 }}>
                 <HiMail className='text-2xl text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white float-left mr-2' />
                 <div>{receivedEnvelope.content.subject}</div>
               </b>
@@ -87,36 +82,45 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
         </div>
       </div>
       <div {...getCollapseProps()}>
-        <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 15 }}>
-          <a style={detailsTitleLink} target='_blank' href={networkOptions.network.etherscan + receivedEnvelope.metadata.transactionHash}>
-            <u>View transaction on block explorer</u> <HiExternalLink />
+        <div className='m-0 pt-2.5 pl-3.5 pb-3.5'>
+          <a
+            className='ml-3.5 mt-1.5 mr-1.5 text-xs cursor-pointer float-right'
+            style={blueColor}
+            target='_blank'
+            href={networkOptions.explorerUrl + receivedEnvelope.metadata.transactionHash}
+          >
+            <u className='float-left text-white'>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-left mt-0.5 ml-0.5' size={15} />
           </a>
         </div>
-        <div style={{ margin: 0, paddingTop: 10, paddingLeft: 15, paddingBottom: 5 }}>
-          <label style={detailsTitle}> Sender:</label>
-          <p>{receivedEnvelope.sender || '/'}</p>
+        <div className='m-0 pt-2.5 pb-1'>
+          <label style={blueColor}>{t('sender')}:</label>
+          <p className='text-white'>{receivedEnvelope.sender || '/'}</p>
         </div>
-        <div style={{ margin: 0, paddingLeft: 15, paddingBottom: 5 }}>
-          <label style={detailsTitle}> Message:</label>
-          <p>{receivedEnvelope.content.body || '/'}</p>
+        <div className='m-0 pb-1 mb-5'>
+          <label style={blueColor}>{t('message')}:</label>
+          <p className='text-white'>{receivedEnvelope.content.body || '/'}</p>
         </div>
         {receivedEnvelope.content.attachments.map((attachment: Attachment, index: number) => (
-          <div key={index} style={thumbsContainer}>
+          <div key={index} className='flex w-full'>
             {downloadingFileState[index]?.downloading ? (
-              <div style={{ ...thumbDownloadingIcon }}>
+              <div className='mr-2 w-3.5 h-4.5 box-border' style={blueColor}>
                 <Box>
                   <CircularProgress color='inherit' size={16} />
                 </Box>
               </div>
             ) : (
-              <div style={!downloading ? { ...thumbDownloadIcon } : { ...thumbDownloadDisabledIcon }}>
-                {/*<FontAwesomeIcon icon={faDownload} onClick={() => handleDownload(index)} />*/}
+              <div className='mt-0.5 mr-2 w-3.5 h-4.5 box-border' style={!downloading ? thumbDownloadIcon : blueColor}>
+                <HiDownload onClick={() => handleDownload(index)} />
               </div>
             )}
-            <div onClick={() => handleDownload(index)} style={thumbTitle}>
+            <div onClick={() => handleDownload(index)} className='block whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer' style={blueColor}>
               {attachment.name}
             </div>
-            {downloadingFileState[index]?.downloaded && <div style={{ ...thumbStatusDownloadIcon }}>{/*<FontAwesomeIcon icon={faCheck} />*/}</div>}
+            {downloadingFileState[index]?.downloaded && (
+              <div className='ml-2 mt-0.5' style={blueColor}>
+                {<HiCheck />}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -124,69 +128,13 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
   )
 }
 
-const thumbsContainer: any = {
-  display: 'flex',
-  width: '100%',
-  paddingLeft: 15
+const blueColor: any = {
+  color: '#2980b9'
 }
 
 const thumbDownloadIcon: any = {
-  marginRight: 8,
-  width: 14,
-  height: 18,
-  boxSizing: 'border-box',
   color: '#2980b9',
   cursor: 'pointer'
-}
-
-const thumbDownloadDisabledIcon: any = {
-  marginRight: 8,
-  width: 14,
-  height: 18,
-  boxSizing: 'border-box',
-  color: '#EBEBE4'
-}
-
-const thumbDownloadingIcon: any = {
-  marginRight: 8,
-  paddingTop: 2,
-  width: 14,
-  height: 18,
-  boxSizing: 'border-box',
-  color: '#2980b9'
-}
-
-const detailsTitle: any = {
-  color: '#2980b9'
-}
-
-const detailsTitleLink: any = {
-  color: '#2980b9',
-  cursor: 'pointer',
-  marginLeft: 10,
-  float: 'right',
-  marginTop: 3,
-  marginRight: 3,
-  fontSize: '12px'
-}
-
-const thumbTitle: any = {
-  color: '#2980b9',
-  display: 'block',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  cursor: 'pointer'
-}
-
-const envelopeIcon: any = {
-  marginRight: 4,
-  marginTop: 4
-}
-
-const thumbStatusDownloadIcon: any = {
-  marginLeft: 8,
-  color: '#1976d2'
 }
 
 export default ReceivedFilesCollapse

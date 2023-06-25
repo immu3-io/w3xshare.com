@@ -1,11 +1,8 @@
 import useTranslation from 'next-translate/useTranslation'
 import React, { FC, useRef, useState } from 'react'
 import { Label, Modal, Textarea } from 'flowbite-react'
-import { initMail, mail } from '@/utils/mail'
-import { useAccountContext } from '@/contexts/account/provider'
+import { initMail } from '@/utils/mail'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
-import { Mail, sepolia } from '@4thtech-sdk/ethereum'
-import { MailReadyChain } from '@4thtech-sdk/types'
 import { BeatLoader } from 'react-spinners'
 import { delay } from '@/utils/helper'
 import ReceivedFilesCollapse from '@/ui/surfaces/received-files-collapse.surface'
@@ -38,17 +35,14 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
     try {
       // await initMail(secretKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
       console.log('FETCHING FILES')
-      // console.log(mail, 'MAIL')
-      // console.log('MAIL PROVIDER')
-      // console.log(mail.provider)
       // const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
       // console.log(receivedEnvelope, 'ENVELOPES')
       // setFetching(false)
       // setFetchingText('No files')
       // setEnvelopes([receivedEnvelope])
-      await delay(1000)
-      // setFetching(false)
-      // setFetchingText('noFiles')
+      await delay(2000)
+      setFetching(false)
+      setFetchingText('noFiles')
       setReceivedEnvelope({
         content: {
           subject: 'ASD',

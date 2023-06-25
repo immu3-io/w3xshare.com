@@ -10,6 +10,10 @@ export interface IBtfsConfig {
   url: string
 }
 
+export interface INetworkOptions {
+  explorerUrl: string
+}
+
 export interface INftConfig {
   contract: string
 }

@@ -128,5 +128,6 @@
   "noFiles": "No files",
   "receivedFilesSecretKeyNote": "Please enter secret key received by the sender. Only with secret key you will be able to download files.",
   "fetchFiles": "Fetch files",
-  "files": "Files"
+  "files": "Files",
+  "sender": "Sender"
 }
