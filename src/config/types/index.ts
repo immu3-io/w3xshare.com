@@ -24,7 +24,3 @@ export interface IPollinationXConfig {
   auth: IPollinationXAuthOptions
   newNft: IPollinationXAuthOptions
 }
-
-export interface IReceivedFilesOptions {
-  numOfFilesDisplayed: number
-}

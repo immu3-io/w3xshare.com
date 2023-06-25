@@ -9,6 +9,7 @@ import { MailReadyChain } from '@4thtech-sdk/types'
 import { receivedFilesOptions } from '@/config'
 import { BeatLoader } from 'react-spinners'
 import { delay } from '@/utils/helper'
+import ReceivedFilesCollapse from '@/ui/surfaces/received-files-collapse.surface';
 
 interface IReceivedFilesModalProps {
   show: boolean
@@ -20,7 +21,7 @@ interface IReceivedFilesModalProps {
 const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHash, secretKey }) => {
   const { t } = useTranslation()
   const { account } = useAccountContext()
-  const [envelopes, setEnvelopes] = useState<ReceivedEnvelope[]>([])
+  const [receivedEnvelope, setReceivedEnvelope] = useState<ReceivedEnvelope>(null)
   const [fetching, setFetching] = useState<boolean>(true)
   const [fetchingText, setFetchingText] = useState<string>('fetchingFiles')
   const [numOfEnvelopes, setNumOfEnvelopes] = useState<number>(receivedFilesOptions.numOfFilesDisplayed)
@@ -45,34 +46,19 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
       // console.log(mail, 'MAIL')
       // console.log('MAIL PROVIDER')
       // console.log(mail.provider)
-      // const envelopes = await mail.fetchByTransactionHash(txHash)
-      // console.log(envelopes, 'ENVELOPES')
+      // const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
+      // console.log(receivedEnvelope, 'ENVELOPES')
       // setFetching(false)
       // setFetchingText('No files')
-      // setEnvelopes([envelopes])
+      // setEnvelopes([receivedEnvelope])
       await delay(4000)
-      const envelopes = []
       // setFetching(false)
       // setFetchingText('noFiles')
-      setEnvelopes(envelopes)
+      setReceivedEnvelope(receivedEnvelope)
     } catch (error) {
       console.log(error.message, 'handleFetchFilesOnClick ERROR')
     }
   }
-
-  const handleShowAllToggle = () => {
-    setNumOfEnvelopes(showAllToggle ? receivedFilesOptions.numOfFilesDisplayed : 0)
-    setShowAllToggle(toggle => !toggle)
-  }
-
-  const thumbs = envelopes.map(
-    (envelope: ReceivedEnvelope, index: number) =>
-      (numOfEnvelopes === 0 || index < numOfEnvelopes) && (
-        <div style={infoContainer} key={index}>
-          {/*<Collapse envelope={envelope} isActive={isExpanded} secretKey={secret} />*/}
-        </div>
-      )
-  )
 
   return (
     <>
@@ -80,14 +66,9 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
         <Modal.Header className='dark:bg-neutral-800 dark:border-gray-700 modalHeader'>{t('receivedFiles')}</Modal.Header>
         <Modal.Body className='dark:bg-neutral-800'>
           <div className='space-y-6 p-3 overflow-x-scroll '>
-            {envelopes.length > 0 ? (
+            {receivedEnvelope ? (
               <div>
-                <aside>{thumbs}</aside>
-                {envelopes.length > receivedFilesOptions.numOfFilesDisplayed && (
-                  <div style={showAllContainer} onClick={handleShowAllToggle}>
-                    {showAllToggle ? t('showLess') : t('showAll')}
-                  </div>
-                )}
+                <ReceivedFilesCollapse receivedEnvelope={receivedEnvelope} />
               </div>
             ) : (
               <div>
@@ -154,19 +135,6 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
       </Modal>
     </>
   )
-}
-
-const infoContainer: any = {
-  border: '1px solid white',
-  padding: 5,
-  borderRadius: 5,
-  marginBottom: 10
-}
-
-const showAllContainer: any = {
-  textAlign: 'center',
-  marginTop: 24,
-  cursor: 'pointer'
 }
 
 export default ReceivedFilesModal

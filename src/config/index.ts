@@ -3,8 +3,7 @@ import {
   IAuthGuardOptions,
   IBtfsConfig,
   INftConfig,
-  IPollinationXConfig,
-  IReceivedFilesOptions
+  IPollinationXConfig
 } from '@/config/types';
 import { ThemeCtrlState } from '@web3modal/core/dist/_types/src/types/controllerTypes'
 
@@ -41,8 +40,4 @@ export const pollinationXConfig: IPollinationXConfig = {
   newNft: {
     message: 'NEW NFT: This request will check your PollinationX storage NFT and it will not trigger a blockchain transaction or cost any gas fees.'
   }
-}
-
-export const receivedFilesOptions: IReceivedFilesOptions = {
-  numOfFilesDisplayed: 5
 }
