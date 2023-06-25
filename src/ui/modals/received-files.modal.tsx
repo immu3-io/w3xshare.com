@@ -33,13 +33,10 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
     setShowSecretKeyInput(false)
 
     try {
-      // await initMail(secretKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+      // await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
       console.log('FETCHING FILES')
       // const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
       // console.log(receivedEnvelope, 'ENVELOPES')
-      // setFetching(false)
-      // setFetchingText('No files')
-      // setEnvelopes([receivedEnvelope])
       await delay(2000)
       setFetching(false)
       setFetchingText('noFiles')
