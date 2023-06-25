@@ -1,14 +1,14 @@
 import useTranslation from 'next-translate/useTranslation'
+import ReceivedFilesModal from '@/ui/modals/received-files.modal'
 import { FC, useEffect, useState } from 'react'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
 import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
 import { useAccountContext } from '@/contexts/account/provider'
 import { getNfts } from '@/utils/btfs'
+import { setSigner } from '@/utils/mail'
+import { useRouter } from 'next/router'
 import { appConfig } from '@/config'
-import ReceivedFilesModal from '@/ui/modals/received-files.modal';
-import { setSigner } from '@/utils/mail';
-import { useRouter } from 'next/router';
 
 interface IConnectWalletProps {
   show: boolean
@@ -43,7 +43,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
           account.nfts = currentAccount.nfts
         }
         const nftsRes = await getNfts(address)
-        if (nftsRes?.error) {
+        if (!nftsRes?.error) {
           account.nfts = nftsRes.nfts
           await indexedDB.put(account)
           await setSigner()

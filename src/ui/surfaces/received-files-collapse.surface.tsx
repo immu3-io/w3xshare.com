@@ -1,14 +1,14 @@
+import FileSaver from 'file-saver'
+import moment from 'moment'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useState } from 'react'
-import { Attachment } from '@4thtech-sdk/types'
+import { Attachment, RemoteFileInfo } from '@4thtech-sdk/types'
 import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
 import { useCollapse } from 'react-collapsed'
 import { HiCheck, HiDownload, HiExternalLink, HiMail } from 'react-icons/hi'
-import { delay } from '@/utils/helper'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
 import { networkOptions } from '@/config'
-import FileSaver from 'file-saver'
-import moment from 'moment'
+import { mail } from '@/utils/mail'
 
 interface ICollapseProps {
   receivedEnvelope: ReceivedEnvelope
@@ -35,22 +35,14 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(true)
 
-    // const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
-    // FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
+    const buffer = await mail.downloadAttachment(receivedEnvelope.content.attachments[index] as RemoteFileInfo)
+    FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), receivedEnvelope.content.attachments[index].name)
 
-    await delay(3000)
     downloadingFileState[index] = { downloading: false, downloaded: true }
     setDownloadingFileState(downloadingFileState.slice())
     setDownloading(false)
   }
 
-  // useEffect(() => {
-  //   setExpanded(isActive)
-  //   downloadingFileState.length || setDownloadingFileState(Array(receivedEnvelope.content.attachments.length).fill({ downloading: false, downloaded: false }))
-  // }, [isActive, setExpanded])
-  //   <div style={showAllContainer} onClick={handleShowAllToggle}>
-  //       {showAllToggle ? t('showLess') : t('showAll')}
-  // </div>
   return (
     <>
       <div

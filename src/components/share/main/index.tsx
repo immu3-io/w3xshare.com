@@ -67,7 +67,6 @@ const Main: FC = () => {
     } catch (error) {
       setCopy(t('failed'))
       setCanTransfer(false)
-      console.log(error.message, 'handleCopyToClipBoard ERROR')
     }
   }
 
@@ -98,7 +97,7 @@ const Main: FC = () => {
       setShowPercentage(true)
       setProgressLabel(t('uploadingFiles'))
       try {
-        await initMail(formRef.current.secretKey.value, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+        await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
         const sender = await signer.getAddress()
         const envelope: Envelope = {
           content: {
@@ -109,18 +108,14 @@ const Main: FC = () => {
           receiver: formRef.current.recipientWallet.value,
           sender
         }
-        console.log(files, 'files')
         for (const file of files) {
-          console.log('KOLIKOKRAT???')
           envelope.content.attachments.push({
             name: file.name,
             content: new Blob([file])
           })
         }
-        console.log(envelope, 'ENVELOPE')
         const response = await mail.send(envelope)
-        // await response.wait(1)
-        console.log(response, 'response')
+        await response.wait(1)
         setProgressLabel(t('sending'))
         setTx(response.hash)
         // strokeSolid.style.strokeDashoffset = 300 - 300

@@ -13,7 +13,6 @@ const Index: FC = () => {
 
   const handleRedirect = async (redirect: boolean): Promise<void> => {
     setShowConnectWallet(false)
-    console.log(redirect, 'REDIRECT')
     if (redirect) {
       account.loggedIn = true
       await push(

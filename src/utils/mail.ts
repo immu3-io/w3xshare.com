@@ -2,8 +2,8 @@ import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
 import { Mail } from '@4thtech-sdk/ethereum'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { MailReadyChain, NetworkType, Chain } from '@4thtech-sdk/types'
-import { fetchSigner, Signer } from '@wagmi/core'
 import { IError } from '@/types'
+import { fetchSigner, Signer } from '@wagmi/core'
 
 export const aes = new AesEncryption()
 export let signer: Signer
@@ -34,11 +34,6 @@ export const setSigner = async (): Promise<void> => {
 
 export const initMail = async (secretKey: string, url: string, token: string): Promise<void | IError> => {
   try {
-    // url = 'https://kto-xo.pollinationx.io/api/v1'
-    // token =
-    //   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50X2lkIjoxLCJlbWFpbCI6ImluZm9AcG9sbGluYXRpb254LmlvIiwiYWNjb3VudF90eXBlX2lkIjoyLCJub2RlX2lkIjoiMTZVaXUySEFtODFpVUExODVaMXdENEZ6YU5GR2Y4cXZQelpvMmtScW5CM3gxczgyN1g2SnUiLCJ0aW1lIjoxNjcwOTU3MTgzfQ.qHD6JoDnFd0aaBwCaLR93iFVDB0Mh7HaXLIr284YIvo'
-
-    console.log(url, token)
     await aes.importSecretKey(secretKey)
     const remoteStorageProvider = new PollinationX(url, token)
     const encryptionHandler = new EncryptionHandler({
@@ -51,7 +46,6 @@ export const initMail = async (secretKey: string, url: string, token: string): P
       encryptionHandler
     })
   } catch (error) {
-    console.log(error.message, 'initMail ERROR')
     return { error }
   }
 }
