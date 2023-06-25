@@ -6,6 +6,9 @@ import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
 import { useAccountContext } from '@/contexts/account/provider'
 import { getNfts } from '@/utils/btfs'
 import { appConfig } from '@/config'
+import ReceivedFilesModal from '@/ui/modals/received-files.modal';
+import { setSigner } from '@/utils/mail';
+import { useRouter } from 'next/router';
 
 interface IConnectWalletProps {
   show: boolean
@@ -13,12 +16,16 @@ interface IConnectWalletProps {
 }
 
 const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
+  const router = useRouter()
   const { t } = useTranslation()
   const { open } = useWeb3Modal()
   const { isConnected, address } = useAccount()
   const { indexedDB } = useIndexedDBContext()
   const { account } = useAccountContext()
   const [agreeState, setAgreeState] = useState<boolean>(false)
+  const [showReceivedFiles, setShowReceivedFiles] = useState<boolean>(false)
+  const [txHash, setTxHash] = useState<string>('')
+  const [secretKey, setSecretKey] = useState<string>('')
 
   const handleConnectedAccount = async (): Promise<void> => {
     if (isConnected) {
@@ -36,13 +43,23 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
           account.nfts = currentAccount.nfts
         }
         const nftsRes = await getNfts(address)
-        if (!nftsRes?.error) {
+        if (nftsRes?.error) {
           account.nfts = nftsRes.nfts
           await indexedDB.put(account)
-          onClose(true)
+          await setSigner()
+          _handleUrlParams()
         }
       }
     } else await open()
+  }
+
+  const _handleUrlParams = (): void => {
+    const { tx, s } = router.query
+    if (tx) {
+      setTxHash(tx as string)
+      setSecretKey((s as string) || undefined)
+      setShowReceivedFiles(true)
+    } else onClose(true)
   }
 
   useEffect(() => {
@@ -146,6 +163,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
           </div>
         </div>
       </div>
+      <ReceivedFilesModal show={showReceivedFiles} onClose={onClose} txHash={txHash} secretKey={secretKey} />
     </>
   )
 }
