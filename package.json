@@ -45,7 +45,8 @@
     "tailwindcss": "^3.3.1",
     "typescript": "5.0.3",
     "validator": "^13.9.0",
-    "wagmi": "^0.12.10"
+    "wagmi": "^0.12.10",
+    "web3": "^4.0.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.3.0",

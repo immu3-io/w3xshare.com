@@ -9,7 +9,7 @@ const chains = [polygonMumbai]
 const { provider, webSocketProvider } = configureChains(chains, [alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY })])
 
 export const client = createClient({
-  autoConnect: true,
+  autoConnect: false,
   connectors: w3mConnectors({
     chains,
     version: 2,
