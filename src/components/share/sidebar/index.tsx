@@ -176,7 +176,7 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
               <p className='text-gray-400 text-xs mb-2'>{account?.nfts?.length > 0 ? account.nfts[account.defaultNftIndex]?.description : t('noNftsInfo')}</p>
               <p className='bg-neutral-600 h-[0.5px] w-full my-2'></p>
               <div className='flex items-center'>
-                <img src='/img/favicon.png' alt='PollinationX' className='h-8 w-8 rounded-full mr-2' />
+                <img src='/img/px_favicon.png' alt='PollinationX' className='h-8 w-8 rounded-full mr-2' />
                 <p className='text-gray-400 text-[12px]'>
                   {t('createdBy')}{' '}
                   <a href='https://pollinationx.io' target='_black' rel='no-opener' className='text-white font-bold'>

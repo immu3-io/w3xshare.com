@@ -44,19 +44,6 @@ const LanguageDropdown: FC = () => {
             </div>
           </Link>
         </li>
-        <li>
-          <Link
-            href='/SharePage'
-            locale='si'
-            onClick={() => handleLanguageOnClick('si')}
-            className='block py-2 px-4 text-sm text-gray-700 hover:bg-neutral-100 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-white'
-          >
-            <div className='inline-flex items-center'>
-              <img className='mr-2 h-4 w-4 rounded-full' src='/img/flag/si.svg' />
-              <span className='whitespace-nowrap'>SI</span>
-            </div>
-          </Link>
-        </li>
       </ul>
     </Dropdown>
   )

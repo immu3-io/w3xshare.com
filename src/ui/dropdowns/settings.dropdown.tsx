@@ -25,14 +25,6 @@ const SettingsDropdown: FC = () => {
       >
         <ul className='py-1' role='none'>
           <li>
-            <div className='block py-2 px-4 text-sm text-gray-700 hover:bg-neutral-100 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-white cursor-pointer'>
-              <div className='inline-flex items-center'>
-                <HiKey className='text-xl text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white  mr-2' />
-                <span className='whitespace-nowrap'>{t('resetNftSecret')}</span>
-              </div>
-            </div>
-          </li>
-          <li>
             <div
               onClick={handleLogoutOnClick}
               className='block py-2 px-4 text-sm text-gray-700 hover:bg-neutral-100 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-white cursor-pointer'
