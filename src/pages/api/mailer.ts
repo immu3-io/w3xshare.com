@@ -17,14 +17,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   const template = (await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/templates/emails/template.html`)).data
   const currentTime = moment().format('DD MMM YYYY hh:mm A')
   const sendHtml = template
-    .replace('%HASH%', req.body.hash)
-    .replace('%EMAIL%', req.body.senderEmail)
-    .replace('%ACCOUNT%', req.body.recipientWallet)
-    .replace('%TITLE%', req.body.title)
-    .replace('%MESSAGE%', req.body.message)
-    .replace('%SENDER_WALLET%', req.body.senderWallet)
-    .replace('%BASE_URL%', process.env.NEXT_PUBLIC_BASE_URL)
-    .replace('%secret%', req.body.secret ? '&s=' + req.body.secret : '')
+    .replaceAll('%HASH%', req.body.hash)
+    .replaceAll('%EMAIL%', req.body.senderEmail)
+    .replaceAll('%ACCOUNT%', req.body.recipientWallet)
+    .replaceAll('%TITLE%', req.body.title)
+    .replaceAll('%MESSAGE%', req.body.message)
+    .replaceAll('%SENDER_WALLET%', req.body.senderWallet)
+    .replaceAll('%BASE_URL%', process.env.NEXT_PUBLIC_BASE_URL)
+    .replaceAll('%secret%', req.body.secret ? '&s=' + req.body.secret : '')
   // .replace('%FILES%', req.body.files)
   await nodemailer
     .createTransport(mailConfig)
