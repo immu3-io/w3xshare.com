@@ -23,6 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     .replace('%TITLE%', req.body.title)
     .replace('%MESSAGE%', req.body.message)
     .replace('%SENDER_WALLET%', req.body.senderWallet)
+    .replace('%BASE_URL%', process.env.NEXT_PUBLIC_BASE_URL)
     .replace('%secret%', req.body.secret ? '&s=' + req.body.secret : '')
   // .replace('%FILES%', req.body.files)
   await nodemailer
