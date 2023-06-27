@@ -33,9 +33,9 @@ export const pollinationXConfig: IPollinationXConfig = {
   url: process.env.POLLINATIONX_URL,
   token: process.env.POLLINATIONX_TOKEN,
   auth: {
-    message: 'This request will check your PollinationX storage NFT and it will not trigger a blockchain transaction or cost any gas fees.'
+    message: 'This request will check your PollinationX (PX) storage NFTs and it will not trigger a blockchain transaction or cost any gas fees.'
   },
   newNft: {
-    message: 'NEW NFT: This request will check your PollinationX storage NFT and it will not trigger a blockchain transaction or cost any gas fees.'
+    message: 'This request will check your PollinationX (PX) storage NFTs and it will not trigger a blockchain transaction or cost any gas fees.'
   }
 }
