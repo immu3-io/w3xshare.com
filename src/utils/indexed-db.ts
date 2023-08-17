@@ -1,4 +1,4 @@
-import { deleteDB, IDBPDatabase, openDB } from 'idb'
+import { IDBPDatabase, openDB } from 'idb'
 import { IAccount } from '@/types'
 import { EnvironmentEnum } from '@/enums/environment.enum'
 
@@ -7,13 +7,13 @@ export default class IndexedDb {
 
   public init = async (): Promise<this | null> => {
     try {
-      process.env.ENVIRONMENT === EnvironmentEnum.PRODUCTION || (await deleteDB(process.env.INDEXED_DB_NAME))
       this._database = await openDB(process.env.INDEXED_DB_NAME, 1, {
         upgrade(database: IDBPDatabase) {
           database.objectStoreNames.contains(process.env.INDEXED_DB_STORE) ||
             database.createObjectStore(process.env.INDEXED_DB_STORE, { autoIncrement: true, keyPath: 'address' })
         }
       })
+      if (process.env.ENVIRONMENT === EnvironmentEnum.DEVELOPMENT) await this._database.clear(process.env.INDEXED_DB_STORE)
       return this
     } catch (error) {
       return null
