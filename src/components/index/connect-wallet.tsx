@@ -66,6 +66,12 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
     !isConnected || !indexedDB || handleConnectedAccount()
   }, [isConnected, indexedDB])
 
+  useEffect(() => {
+    if (!show) {
+      setAgreeState(false) // Reset the agreeState when the modal is closed
+    }
+  }, [show])
+
   if (!show) return <></>
 
   return (
