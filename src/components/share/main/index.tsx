@@ -116,8 +116,8 @@ const Main: FC = () => {
           for (const file of files) {
             zip.file(file.name, file)
           }
-          const currentDateTime = format(new Date(), 'yyyyMMdd_HHmmss')
-          const randomId = Math.floor(Math.random() * 100000)
+          const currentDateTime = format(new Date(), 'yyyy-MM-dd_HH-mm-ss')
+          const randomId = files.length
           const zipFileName = `w3xshare_${currentDateTime}_${randomId}.zip`
           const zipBlob = await zip.generateAsync({ type: 'blob' })
           envelope.content.attachments.push({
