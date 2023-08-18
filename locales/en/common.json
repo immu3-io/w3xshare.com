@@ -1,6 +1,7 @@
 {
   "permissionlessDecentralizedStorageAccess": "Self-custodial data file transfers \"1 data transfer = 1 L1 or L2 TX\"",
-  "nftAuthorization": "Powered by PollinationX (link) Decentralized Storage Service",
+  "nftAuthorization1": "Powered by",
+  "nftAuthorization2": "Decentralized Storage Service",
   "multiChainSupport": "Wallet-to-wallet end-to-end encryption",
   "auditedSmartContract": "Audited Smart Contracts",
   "connectWallet": "Connect Wallet",

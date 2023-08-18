@@ -69,7 +69,7 @@ const Index: FC = () => {
                                 clipRule='evenodd'
                               ></path>
                             </svg>
-                            {t('nftAuthorization')}
+                            {t('nftAuthorization1')}<a className='ml-1 mr-1' href="https://pollinationx.io" target="_blank"><u>PollinationX</u></a>{t('nftAuthorization2')}
                           </li>
                           <li className='flex items-center'>
                             <svg
