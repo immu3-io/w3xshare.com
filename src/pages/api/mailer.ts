@@ -1,11 +1,11 @@
-import axios from 'axios'
 import nodemailer from 'nodemailer'
-import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment/moment'
+import axios from 'axios'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 const mailConfig = {
   host: process.env.NEXT_PUBLIC_MAIL_HOST,
-  port: 465,
+  port: process.env.NEXT_PUBLIC_MAIL_PORT,
   secure: true,
   auth: {
     user: process.env.NEXT_PUBLIC_MAIL_USER,
@@ -13,27 +13,25 @@ const mailConfig = {
   }
 }
 
-const getTemplate = async (file: string): Promise<any> => (await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}${file}`)).data
-
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const template = await getTemplate('/templates/emails/template.html')
+  const template = (await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/templates/emails/template.html`)).data
   const currentTime = moment().format('DD MMM YYYY hh:mm A')
   const sendHtml = template
-    .replace('%HASH%', req.body.hash)
-    .replace('%EMAIL%', req.body.email)
-    .replace('%ACCOUNT%', req.body.recipientAccount)
-    .replace('%TITLE%', req.body.title)
-    .replace('%MESSAGE%', req.body.message)
-    .replace('%SENDER_WALLET%', req.body.senderWallet)
-    .replace('%secret%', req.body.secret ? '&s=' + req.body.secret : '')
+    .replaceAll('%HASH%', req.body.hash)
+    .replaceAll('%EMAIL%', req.body.senderEmail)
+    .replaceAll('%ACCOUNT%', req.body.recipientWallet)
+    .replaceAll('%TITLE%', req.body.title)
+    .replaceAll('%MESSAGE%', req.body.message)
+    .replaceAll('%SENDER_WALLET%', req.body.senderWallet)
+    .replaceAll('%BASE_URL%', process.env.NEXT_PUBLIC_BASE_URL)
+    .replaceAll('%secret%', req.body.secret ? '&s=' + req.body.secret : '')
   // .replace('%FILES%', req.body.files)
-
   await nodemailer
     .createTransport(mailConfig)
     .sendMail({
       from: 'W3XShare <' + process.env.NEXT_PUBLIC_MAIL_USER + '>',
       to: req.body.recipientEmail,
-      replyTo: req.body.email,
+      replyTo: req.body.senderEmail,
       subject: req.body.senderWallet + ' sent you files at [' + currentTime + ']',
       html: sendHtml
     })

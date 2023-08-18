@@ -1,18 +1,41 @@
-import { NetworkType } from '@4thtech-sdk/types'
-import { IReceivedFileOptions } from './interface/index.interface'
+import { IAppConfig, IAuthGuardOptions, IBtfsConfig, INetworkOptions, INftConfig, IPollinationXConfig } from '@/config/types'
+import { ThemeCtrlState } from '@web3modal/core/dist/_types/src/types/controllerTypes'
 
-export const networkOptions = {
-  network: {
-    type: NetworkType.TEST_NET,
-    etherscan: 'https://sepolia.etherscan.io/tx/'
+export const themeConfig: ThemeCtrlState = {
+  themeMode: 'dark',
+  themeVariables: {
+    '--w3m-accent-color': '#888888',
+    '--w3m-background-color': 'black'
   }
 }
 
-export const pollinationXConfig = {
-  url: process.env.POLLINATIONX_URL,
-  token: process.env.POLLINATIONX_TOKEN,
+export const appConfig: IAppConfig = {
+  locale: 'en'
 }
 
-export const receivedFileOptions: IReceivedFileOptions = {
-  numOfFilesDisplayed: 10
+export const authGuardOptions: IAuthGuardOptions = {
+  publicPaths: ['/']
+}
+
+export const btfsConfig: IBtfsConfig = {
+  url: process.env.BTFS_URL
+}
+
+export const networkOptions: INetworkOptions = {
+  explorerUrl: 'https://sepolia.etherscan.io/tx/'
+}
+
+export const nftConfig: INftConfig = {
+  contract: process.env.NFT_COLLECTION_CONTRACT
+}
+
+export const pollinationXConfig: IPollinationXConfig = {
+  url: process.env.POLLINATIONX_URL,
+  token: process.env.POLLINATIONX_TOKEN,
+  auth: {
+    message: 'This request will check your PollinationX (PX) storage NFTs and it will not trigger a blockchain transaction or cost any gas fees.'
+  },
+  newNft: {
+    message: 'This request will check your PollinationX (PX) storage NFTs and it will not trigger a blockchain transaction or cost any gas fees.'
+  }
 }
