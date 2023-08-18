@@ -12,6 +12,8 @@ import { toastify } from '@/utils/toastify'
 import { Label, TextInput } from 'flowbite-react'
 import { aes, initMail, mail, signer } from '@/utils/mail'
 import * as _ from 'lodash'
+import { format } from 'date-fns'
+import JSZip from 'jszip'
 
 const MAX_SIZE = 100 * 1024 * 1024 // 100 MB in bytes
 
@@ -108,11 +110,27 @@ const Main: FC = () => {
           receiver: formRef.current.recipientWallet.value,
           sender
         }
-        for (const file of files) {
+
+        if (files.length > 1) {
+          const zip = new JSZip()
+          for (const file of files) {
+            zip.file(file.name, file)
+          }
+          const currentDateTime = format(new Date(), 'yyyyMMdd_HHmmss')
+          const randomId = Math.floor(Math.random() * 100000)
+          const zipFileName = `w3xshare_${currentDateTime}_${randomId}.zip`
+          const zipBlob = await zip.generateAsync({ type: 'blob' })
           envelope.content.attachments.push({
-            name: file.name,
-            content: new Blob([file])
+            name: zipFileName,
+            content: zipBlob
           })
+        } else {
+          for (const file of files) {
+            envelope.content.attachments.push({
+              name: file.name,
+              content: new Blob([file])
+            })
+          }
         }
         const response = await mail.send(envelope)
         await response.wait(1)
