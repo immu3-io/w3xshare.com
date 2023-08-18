@@ -27,6 +27,11 @@ const Index: FC = () => {
 
   return (
     <>
+      <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-neutral-800 border-0 px-4 lg:px-6 py-2.5'>
+        <div className='px-3 lg:px-5 lg:pl-0 text-center text-white dark:text-white text-sm'>
+          W3XShare Beta is currently deployed on Polygon Mumbai Testnet for testing purposes, therefore technical disruptions may occur.
+        </div>
+      </nav>
       <section className='gradient-form bg-neutral-200 dark:bg-neutral-700 flex h-screen'>
         <div className='container h-full p-10 m-auto'>
           <div className='g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200'>
@@ -69,7 +74,11 @@ const Index: FC = () => {
                                 clipRule='evenodd'
                               ></path>
                             </svg>
-                            {t('nftAuthorization1')}<a className='ml-1 mr-1' href="https://pollinationx.io" target="_blank"><u>PollinationX</u></a>{t('nftAuthorization2')}
+                            {t('nftAuthorization1')}
+                            <a className='ml-1 mr-1' href='https://pollinationx.io' target='_blank'>
+                              <u>PollinationX</u>
+                            </a>
+                            {t('nftAuthorization2')}
                           </li>
                           <li className='flex items-center'>
                             <svg
