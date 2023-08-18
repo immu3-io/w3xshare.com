@@ -28,7 +28,7 @@ const Index: FC = () => {
   return (
     <>
       <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-neutral-800 border-0 px-4 lg:px-6 py-2.5'>
-        <div className='px-3 lg:px-5 lg:pl-0 text-center text-white dark:text-white text-sm'>
+        <div className='px-3 lg:px-5 lg:pl-0 text-center text-gray-700 dark:text-white text-sm'>
           W3XShare Beta is currently deployed on Polygon Mumbai Testnet for testing purposes, therefore technical disruptions may occur.
         </div>
       </nav>
