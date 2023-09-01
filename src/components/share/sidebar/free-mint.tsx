@@ -6,7 +6,7 @@ import { Address, useContractWrite, usePrepareContractWrite, useWaitForTransacti
 import { getWei } from '@/utils/helper'
 import { toastify } from '@/utils/toastify'
 import { Spinner } from 'flowbite-react'
-import { nftConfig } from '@/config'
+import { useAccountContext } from '@/contexts/account/provider'
 
 interface IFreeMintProps {
   onClose: any
@@ -14,16 +14,18 @@ interface IFreeMintProps {
 
 const FreeMint: FC<IFreeMintProps> = ({ onClose }) => {
   const { t } = useTranslation()
+  const { account } = useAccountContext()
+
   const {
     config,
     error: errorPrepare,
     isError: isErrorPrepare
   } = usePrepareContractWrite({
-    address: nftConfig.contract as Address,
+    address: account.contractAddress as Address,
     abi,
     functionName: 'mint',
     args: [0],
-    overrides: { value: BigNumber.from(getWei(0)), gasLimit: BigNumber.from(10000000) }
+    overrides: { value: BigNumber.from(getWei(0)), gasLimit: BigNumber.from(4000000) }
   })
   const { data: contractData, error, isError, write: mintNFT } = useContractWrite(config)
   const { isLoading, isSuccess } = useWaitForTransaction({

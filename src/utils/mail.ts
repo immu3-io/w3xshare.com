@@ -4,6 +4,7 @@ import { PollinationX } from '@4thtech-sdk/storage'
 import { MailReadyChain, NetworkType, Chain } from '@4thtech-sdk/types'
 import { IError } from '@/types'
 import { fetchSigner, Signer } from '@wagmi/core'
+import { sepolia } from 'wagmi/chains'
 
 export const aes = new AesEncryption()
 export let signer: Signer
@@ -41,7 +42,7 @@ export const initMail = async (secretKey: string, url: string, token: string): P
     })
     mail = new Mail({
       signer,
-      chain: polygonMumbai as MailReadyChain,
+      chain: sepolia as MailReadyChain,
       remoteStorageProvider,
       encryptionHandler
     })

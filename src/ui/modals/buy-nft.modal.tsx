@@ -7,8 +7,8 @@ import { BigNumber } from 'ethers'
 import { getWei } from '@/utils/helper'
 import { toastify } from '@/utils/toastify'
 import { doWriteContract } from '@/utils/contract'
-import { nftConfig } from '@/config'
 import { Card, Modal, Spinner, Tabs } from 'flowbite-react'
+import { useAccountContext } from '@/contexts/account/provider'
 
 interface IBuyNftModalProps {
   show: boolean
@@ -28,6 +28,7 @@ const BuyNftModal: FC<IBuyNftModalProps> = ({ show, onClose, tokenId, nftSize })
     { id: 3, size: 20, price: 0.02, disabled: false, processing: false, done: false },
     { id: 4, size: 100, price: 0.1, disabled: false, processing: false, done: false }
   ])
+  const { account } = useAccountContext()
 
   const handleUpgradeStorageOnClick = async (nftPackage: INftPackage): Promise<void> => {
     if (nftSize < nftPackage.size) {
@@ -43,8 +44,8 @@ const BuyNftModal: FC<IBuyNftModalProps> = ({ show, onClose, tokenId, nftSize })
       const upgradeTokenPackageRes = await doWriteContract(
         'upgradeTokenPackage',
         [parseInt(tokenId), nftPackage.id],
-        { value: BigNumber.from(getWei(nftPackage.price)), gasLimit: BigNumber.from(1000000) },
-        nftConfig.contract,
+        { value: BigNumber.from(getWei(nftPackage.price)), gasLimit: BigNumber.from(4000000) },
+          account.nfts[account.defaultNftIndex].contract.address,
         abi
       )
       if (!upgradeTokenPackageRes?.error) {
@@ -83,7 +84,7 @@ const BuyNftModal: FC<IBuyNftModalProps> = ({ show, onClose, tokenId, nftSize })
         processing: nftPackageObj.id === nftPackage.id
       }))
     )
-    const mintRes = await doWriteContract('mint', [nftPackage.id], { value: BigNumber.from(getWei(nftPackage.price)) }, nftConfig.contract, abi)
+    const mintRes = await doWriteContract('mint', [nftPackage.id], { value: BigNumber.from(getWei(nftPackage.price)) }, account.nfts[account.defaultNftIndex].contract.address, abi)
     if (!mintRes?.error) {
       setSyncBackdropText(t('waitingForBlockchainConfirmation'))
       await mintRes.wait(1)

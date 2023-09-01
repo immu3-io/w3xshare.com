@@ -1,8 +1,8 @@
 import { Network, Alchemy } from 'alchemy-sdk'
 
 const settings = {
-  apiKey: process.env.ALCHEMY_API_KEY,
-  network: Network.MATIC_MUMBAI
+  apiKey: process.env.ALCHEMY_API_KEY_SEPOLIA,
+  network: Network.ETH_SEPOLIA
 }
 
 const alchemy = new Alchemy(settings)
