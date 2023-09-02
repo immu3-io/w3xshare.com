@@ -17,7 +17,7 @@ import JSZip from 'jszip'
 import SyncBackdropSteps from '@/ui/backdrops/sync.backdropSteps'
 
 const MAX_SIZE = 100 * 1024 * 1024 // 100 MB in bytes
-let stepHistory = [];
+let stepHistory = []
 
 const Main: FC = () => {
   const { t } = useTranslation()
@@ -35,14 +35,12 @@ const Main: FC = () => {
   const [openSyncBackdrop, setOpenSyncBackdrop] = useState<boolean>(false)
   const [currentStep, setCurrentStep] = useState('')
 
-
   const updateStep = (stepText) => {
-    stepHistory.push(stepText);
-    setCurrentStep(stepText);
-  };
+    stepHistory.push(stepText)
+    setCurrentStep(stepText)
+  }
 
   const handleFileOnDrop = (acceptedFiles: any[]): void => {
-
     let size = totalSize
     const updatedFiles = [...files]
     acceptedFiles.forEach(file => {
@@ -111,10 +109,7 @@ const Main: FC = () => {
       setShowPercentage(false)
       setProgressLabel(t('uploadingFiles'))
       try {
-        console.log(1)
         await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
-        console.log("AFTER SINIT")
-        console.log(signer)
         const sender = await signer.getAddress()
         const envelope: Envelope = {
           content: {
@@ -125,7 +120,6 @@ const Main: FC = () => {
           receiver: formRef.current.recipientWallet.value,
           sender
         }
-        console.log(2)
 
         if (files.length > 1) {
           const zip = new JSZip()
@@ -148,18 +142,17 @@ const Main: FC = () => {
             })
           }
         }
-        console.log(3)
 
         // const response = await mail.send(envelope)
         const response = await mail.send({
           envelope,
-          onStateChange: (state) => {
+          onStateChange: state => {
             updateStep(state)
           },
-          onUploadProgress: (progressInfo) => {
+          onUploadProgress: progressInfo => {
             console.log(`Upload Progress (${progressInfo.fileName}): ${progressInfo.percent}%`)
-          },
-        });
+          }
+        })
 
         await response.wait(1)
         setTx(response.hash)
@@ -191,6 +184,7 @@ const Main: FC = () => {
             setCanTransfer(false)
             setSendSecretKey(false)
             setOpenSyncBackdrop(false)
+            stepHistory = []
             setSecretKey('')
             toastify(t('filesHaveBeenSuccessfullyTransferred'))
           })
@@ -202,6 +196,7 @@ const Main: FC = () => {
             // uploadProgress.classList.remove('active')
             setShowPercentage(false)
             setOpenSyncBackdrop(false)
+            stepHistory = []
             setTx('')
           })
       } catch (error) {
@@ -211,6 +206,7 @@ const Main: FC = () => {
         // uploadProgress.classList.remove('active')
         setShowPercentage(false)
         setOpenSyncBackdrop(false)
+        stepHistory = []
       }
     },
     [files, sendSecretKey]

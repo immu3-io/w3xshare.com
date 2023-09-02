@@ -7,9 +7,9 @@ const settings = {
 
 const alchemy = new Alchemy(settings)
 
-export const getNftMetadata = async (tokenId: number): Promise<any> => {
+export const getNftMetadata = async (tokenId: number, contractAddress: string): Promise<any> => {
   try {
-    return await alchemy.nft.getNftMetadata(process.env.NFT_COLLECTION_CONTRACT, tokenId, { refreshCache: true })
+    return await alchemy.nft.getNftMetadata(contractAddress, tokenId, { refreshCache: true })
   } catch (error) {
     return { error }
   }
