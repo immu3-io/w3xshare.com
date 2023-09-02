@@ -48,11 +48,11 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
           account.nfts[account.defaultNftIndex].media = nftMetadataRes.media
           account.nfts[account.defaultNftIndex].metadata.attributes = nftMetadataRes.rawMetadata.attributes
           account.nfts[account.defaultNftIndex].timeLastUpdated = nftMetadataRes.timeLastUpdated
-        }else {
+        } else {
           const extraContentRes = await doReadContract(
-              'tokenURI',
-              [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
-              account.nfts[account.defaultNftIndex].contract.address
+            'tokenURI',
+            [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
+            account.nfts[account.defaultNftIndex].contract.address
           )
           const json = Buffer.from(extraContentRes.substring(29), 'base64').toString()
           const result = JSON.parse(json)
@@ -73,11 +73,11 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
       account.nfts[account.defaultNftIndex].timeLastUpdated = nftMetadataRes.timeLastUpdated
       await indexedDB.put(account)
       setAccount(_.cloneDeep(account))
-    }else {
+    } else {
       const extraContentRes = await doReadContract(
-          'tokenURI',
-          [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
-          account.nfts[account.defaultNftIndex].contract.address
+        'tokenURI',
+        [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
+        account.nfts[account.defaultNftIndex].contract.address
       )
       const json = Buffer.from(extraContentRes.substring(29), 'base64').toString()
       const result = JSON.parse(json)

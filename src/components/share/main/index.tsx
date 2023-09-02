@@ -35,7 +35,7 @@ const Main: FC = () => {
   const [openSyncBackdrop, setOpenSyncBackdrop] = useState<boolean>(false)
   const [currentStep, setCurrentStep] = useState('')
 
-  const updateStep = (stepText) => {
+  const updateStep = stepText => {
     stepHistory.push(stepText)
     setCurrentStep(stepText)
   }
@@ -236,153 +236,153 @@ const Main: FC = () => {
   }, [])
 
   return (
-      <>
-        <div className='h-max pt-14 sm:ml-64 bg-neutral-50 dark:bg-neutral-800'>
-          <div className='py-3 mt-10 sm:py-5 mt-lg:col-span-2'>
-            {account?.nfts?.length > 0 && (
-                <>
-                  <div className='grid grid-cols-1 gap-1'>
-                    <div>
-                      <UploadFileDropzone onDrop={handleFileOnDrop} />
+    <>
+      <div className='h-max pt-14 sm:ml-64 bg-neutral-50 dark:bg-neutral-800'>
+        <div className='py-3 mt-10 sm:py-5 mt-lg:col-span-2'>
+          {account?.nfts?.length > 0 && (
+            <>
+              <div className='grid grid-cols-1 gap-1'>
+                <div>
+                  <UploadFileDropzone onDrop={handleFileOnDrop} />
+                </div>
+              </div>
+              {files.length > 0 && (
+                <form ref={formRef}>
+                  <div className='grid grid-cols-2 gap-2 p-16'>
+                    <div className='text-white'>
+                      {totalSize > 0 && (
+                        <p>
+                          {t('totalSizeOfDroppedFiles')}: {formatBytes(totalSize)} MB
+                        </p>
+                      )}
+                      <aside className='mt-4'>{handleNewFiles}</aside>
                     </div>
-                  </div>
-                  {files.length > 0 && (
-                      <form ref={formRef}>
-                        <div className='grid grid-cols-2 gap-2 p-16'>
-                          <div className='text-white'>
-                            {totalSize > 0 && (
-                                <p>
-                                  {t('totalSizeOfDroppedFiles')}: {formatBytes(totalSize)} MB
-                                </p>
-                            )}
-                            <aside className='mt-4'>{handleNewFiles}</aside>
+                    <div>
+                      <div className='grid grid-cols-2 gap-2'>
+                        <div className='mb-4'>
+                          <div className='mb-1 block'>
+                            <Label htmlFor='senderWallet' value={t('senderWallet')} />
+                          </div>
+                          <TextInput id='senderWallet' name='senderWallet' value={truncateAddress(account.address)} disabled={true} />
+                          <div className='mb-1 mt-4 block'>
+                            <Label htmlFor='senderEmail' value={t('senderEmail')} />
+                          </div>
+                          <TextInput id='senderEmail' name='senderEmail' />
+                        </div>
+                        <div className='mb-4'>
+                          <div className='mb-1 block'>
+                            <Label htmlFor='recipientWallet' value={t('recipientWallet')} />
+                          </div>
+                          <TextInput id='recipientWallet' name='recipientWallet' />
+                          <div className='mb-1 mt-4 block'>
+                            <Label htmlFor='recipientEmail' value={t('recipientEmail')} />
+                          </div>
+                          <TextInput id='recipientEmail' name='recipientEmail' />
+                        </div>
+                      </div>
+                      <div className='mb-4'>
+                        <div className='mb-1 block'>
+                          <Label htmlFor='title' value={t('title')} />
+                        </div>
+                        <TextInput id='title' name='title' />
+                      </div>
+                      <div className='mb-4'>
+                        <div className='mb-1 block'>
+                          <Label htmlFor='message' value={t('message')} />
+                        </div>
+                        <TextInput id='message' name='message' />
+                      </div>
+                      <div className='mb-4'>
+                        <div className='mb-1 block'>
+                          <Label htmlFor='secretKey' value={t('secretKey')} />
+                        </div>
+                        <TextInput id='secretKey' name='secretKey' value={secretKey} disabled={true} />
+                      </div>
+                      <div className='mb-4 text-center text-red-600'>
+                        <label>
+                          {t('note')}!
+                          <br />
+                          {t('secretKeyNote')}
+                        </label>
+                      </div>
+                      {canTransfer ? (
+                        <div className='text-center text-red-600'>{copy}</div>
+                      ) : (
+                        <div className='grid grid-cols-2 gap-2 text-center'>
+                          <div>
+                            <button
+                              type='button'
+                              onClick={() => handleCopyToClipBoard(secretKey)}
+                              className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                                          overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
+                                          from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
+                                          hover:text-white dark:text-white focus:outline-none focus:ring-0
+                                          dark:focus:ring-blue-800'
+                            >
+                              <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
+                                {t('copySecretKey')}
+                              </span>
+                            </button>
                           </div>
                           <div>
-                            <div className='grid grid-cols-2 gap-2'>
-                              <div className='mb-4'>
-                                <div className='mb-1 block'>
-                                  <Label htmlFor='senderWallet' value={t('senderWallet')} />
-                                </div>
-                                <TextInput id='senderWallet' name='senderWallet' value={truncateAddress(account.address)} disabled={true} />
-                                <div className='mb-1 mt-4 block'>
-                                  <Label htmlFor='senderEmail' value={t('senderEmail')} />
-                                </div>
-                                <TextInput id='senderEmail' name='senderEmail' />
-                              </div>
-                              <div className='mb-4'>
-                                <div className='mb-1 block'>
-                                  <Label htmlFor='recipientWallet' value={t('recipientWallet')} />
-                                </div>
-                                <TextInput id='recipientWallet' name='recipientWallet' />
-                                <div className='mb-1 mt-4 block'>
-                                  <Label htmlFor='recipientEmail' value={t('recipientEmail')} />
-                                </div>
-                                <TextInput id='recipientEmail' name='recipientEmail' />
-                              </div>
-                            </div>
-                            <div className='mb-4'>
-                              <div className='mb-1 block'>
-                                <Label htmlFor='title' value={t('title')} />
-                              </div>
-                              <TextInput id='title' name='title' />
-                            </div>
-                            <div className='mb-4'>
-                              <div className='mb-1 block'>
-                                <Label htmlFor='message' value={t('message')} />
-                              </div>
-                              <TextInput id='message' name='message' />
-                            </div>
-                            <div className='mb-4'>
-                              <div className='mb-1 block'>
-                                <Label htmlFor='secretKey' value={t('secretKey')} />
-                              </div>
-                              <TextInput id='secretKey' name='secretKey' value={secretKey} disabled={true} />
-                            </div>
-                            <div className='mb-4 text-center text-red-600'>
-                              <label>
-                                {t('note')}!
-                                <br />
-                                {t('secretKeyNote')}
-                              </label>
-                            </div>
-                            {canTransfer ? (
-                                <div className='text-center text-red-600'>{copy}</div>
-                            ) : (
-                                <div className='grid grid-cols-2 gap-2 text-center'>
-                                  <div>
-                                    <button
-                                        type='button'
-                                        onClick={() => handleCopyToClipBoard(secretKey)}
-                                        className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
-                                                    overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
-                                                    from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
-                                                    hover:text-white dark:text-white focus:outline-none focus:ring-0
-                                                    dark:focus:ring-blue-800'
-                                    >
-                            <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
-                              {t('copySecretKey')}
-                            </span>
-                                    </button>
-                                  </div>
-                                  <div>
-                                    <button
-                                        type='button'
-                                        onClick={() => handleCopyToClipBoard(secretKey, true)}
-                                        className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
-                                                    overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
-                                                    from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
-                                                    hover:text-white dark:text-white focus:outline-none focus:ring-0
-                                                    dark:focus:ring-blue-800'
-                                    >
-                            <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
-                              {t('sendToRecipient')}
-                            </span>
-                                    </button>
-                                  </div>
-                                </div>
-                            )}
-                            {canTransfer && !showPercentage && (
-                                <div className='text-center'>
-                                  <button
-                                      type='button'
-                                      onClick={handleUpload}
-                                      className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
-                                                    overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
-                                                    from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
-                                                    hover:text-white dark:text-white focus:outline-none focus:ring-0
-                                                    dark:focus:ring-blue-800'
-                                  >
-                          <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
-                            {t('transfer')}
-                          </span>
-                                  </button>
-                                </div>
-                            )}
-                            {showPercentage && (
-                                <div className='mt-8'>
-                                  <div className='w-full float-left'>
-                                    <p className='pt-1 text-white float-left'>{progressLabel}</p>
-                                    <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
-                                  </div>
-                                  {tx && (
-                                      <div className='text-white'>
-                                        <a target='_blank' href={`https://mumbai.polygonscan.com/tx/${tx}`} className='float-left'>
-                                          <u>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-right w-5 h-5 mt-1 ml-1' />
-                                        </a>
-                                      </div>
-                                  )}
-                                </div>
-                            )}
+                            <button
+                              type='button'
+                              onClick={() => handleCopyToClipBoard(secretKey, true)}
+                              className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                                          overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
+                                          from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
+                                          hover:text-white dark:text-white focus:outline-none focus:ring-0
+                                          dark:focus:ring-blue-800'
+                            >
+                              <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
+                                {t('sendToRecipient')}
+                              </span>
+                            </button>
                           </div>
                         </div>
-                      </form>
-                  )}
-                </>
-            )}
-          </div>
+                      )}
+                      {canTransfer && !showPercentage && (
+                        <div className='text-center'>
+                          <button
+                            type='button'
+                            onClick={handleUpload}
+                            className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                                          overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
+                                          from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
+                                          hover:text-white dark:text-white focus:outline-none focus:ring-0
+                                          dark:focus:ring-blue-800'
+                          >
+                            <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
+                              {t('transfer')}
+                            </span>
+                          </button>
+                        </div>
+                      )}
+                      {showPercentage && (
+                        <div className='mt-8'>
+                          <div className='w-full float-left'>
+                            <p className='pt-1 text-white float-left'>{progressLabel}</p>
+                            <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
+                          </div>
+                          {tx && (
+                            <div className='text-white'>
+                              <a target='_blank' href={`https://mumbai.polygonscan.com/tx/${tx}`} className='float-left'>
+                                <u>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-right w-5 h-5 mt-1 ml-1' />
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </form>
+              )}
+            </>
+          )}
         </div>
-        <SyncBackdropSteps open={openSyncBackdrop} currentStep={currentStep} history={stepHistory} />
-      </>
+      </div>
+      <SyncBackdropSteps open={openSyncBackdrop} currentStep={currentStep} history={stepHistory} />
+    </>
   )
 }
 
