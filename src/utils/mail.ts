@@ -1,10 +1,9 @@
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
-import { Mail } from '@4thtech-sdk/ethereum'
+import { Mail, sepolia } from '@4thtech-sdk/ethereum'
 import { PollinationX } from '@4thtech-sdk/storage'
-import { MailReadyChain, NetworkType, Chain } from '@4thtech-sdk/types'
+import { MailReadyChain, NetworkType, Chain, EncryptionType } from '@4thtech-sdk/types'
 import { IError } from '@/types'
 import { fetchSigner, Signer } from '@wagmi/core'
-import { sepolia } from 'wagmi/chains'
 
 export const aes = new AesEncryption()
 export let signer: Signer
@@ -35,10 +34,21 @@ export const setSigner = async (): Promise<void> => {
 
 export const initMail = async (secretKey: string, url: string, token: string): Promise<void | IError> => {
   try {
+    console.log("INIT MAILLLLLLL")
     await aes.importSecretKey(secretKey)
     const remoteStorageProvider = new PollinationX(url, token)
+
     const encryptionHandler = new EncryptionHandler({
-      defaultEncryption: aes
+      customEncryptionImplementations: new Map([
+        [aes.getType() as EncryptionType, aes],
+      ]),
+    })
+    console.log("INITTTT config")
+    console.log({
+      signer,
+      chain: [sepolia] as MailReadyChain,
+      remoteStorageProvider,
+      encryptionHandler
     })
     mail = new Mail({
       signer,
@@ -46,7 +56,11 @@ export const initMail = async (secretKey: string, url: string, token: string): P
       remoteStorageProvider,
       encryptionHandler
     })
+    console.log("MAIL INTITITITIT")
+    console.log(mail)
   } catch (error) {
+    console.log("erororororo")
+    console.log(error)
     return { error }
   }
 }

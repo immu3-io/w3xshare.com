@@ -14,8 +14,10 @@ import { aes, initMail, mail, signer } from '@/utils/mail'
 import * as _ from 'lodash'
 import { format } from 'date-fns'
 import JSZip from 'jszip'
+import SyncBackdropSteps from '@/ui/backdrops/sync.backdropSteps'
 
 const MAX_SIZE = 100 * 1024 * 1024 // 100 MB in bytes
+let stepHistory = [];
 
 const Main: FC = () => {
   const { t } = useTranslation()
@@ -30,8 +32,17 @@ const Main: FC = () => {
   const [canTransfer, setCanTransfer] = useState<boolean>(false)
   const [showPercentage, setShowPercentage] = useState<boolean>(false)
   const formRef = useRef(null)
+  const [openSyncBackdrop, setOpenSyncBackdrop] = useState<boolean>(false)
+  const [currentStep, setCurrentStep] = useState('')
+
+
+  const updateStep = (stepText) => {
+    stepHistory.push(stepText);
+    setCurrentStep(stepText);
+  };
 
   const handleFileOnDrop = (acceptedFiles: any[]): void => {
+
     let size = totalSize
     const updatedFiles = [...files]
     acceptedFiles.forEach(file => {
@@ -96,10 +107,14 @@ const Main: FC = () => {
       // uploadProgress.classList.add('active')
       // strokeSolid.style.strokeDashoffset = 300
       // setPercentage(0)
-      setShowPercentage(true)
+      setOpenSyncBackdrop(true)
+      setShowPercentage(false)
       setProgressLabel(t('uploadingFiles'))
       try {
+        console.log(1)
         await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+        console.log("AFTER SINIT")
+        console.log(signer)
         const sender = await signer.getAddress()
         const envelope: Envelope = {
           content: {
@@ -110,6 +125,7 @@ const Main: FC = () => {
           receiver: formRef.current.recipientWallet.value,
           sender
         }
+        console.log(2)
 
         if (files.length > 1) {
           const zip = new JSZip()
@@ -132,12 +148,24 @@ const Main: FC = () => {
             })
           }
         }
-        const response = await mail.send(envelope)
+        console.log(3)
+
+        // const response = await mail.send(envelope)
+        const response = await mail.send({
+          envelope,
+          onStateChange: (state) => {
+            updateStep(state)
+          },
+          onUploadProgress: (progressInfo) => {
+            console.log(`Upload Progress (${progressInfo.fileName}): ${progressInfo.percent}%`)
+          },
+        });
+
         await response.wait(1)
-        setProgressLabel(t('sending'))
         setTx(response.hash)
         // strokeSolid.style.strokeDashoffset = 300 - 300
         // setPercentage(100)
+        updateStep('SENDING_EMAIL')
 
         await axios({
           method: 'POST',
@@ -162,6 +190,7 @@ const Main: FC = () => {
             setFiles([])
             setCanTransfer(false)
             setSendSecretKey(false)
+            setOpenSyncBackdrop(false)
             setSecretKey('')
             toastify(t('filesHaveBeenSuccessfullyTransferred'))
           })
@@ -172,6 +201,7 @@ const Main: FC = () => {
             // strokeSolid.style.strokeDashoffset = 300
             // uploadProgress.classList.remove('active')
             setShowPercentage(false)
+            setOpenSyncBackdrop(false)
             setTx('')
           })
       } catch (error) {
@@ -180,6 +210,7 @@ const Main: FC = () => {
         // strokeSolid.style.strokeDashoffset = 300
         // uploadProgress.classList.remove('active')
         setShowPercentage(false)
+        setOpenSyncBackdrop(false)
       }
     },
     [files, sendSecretKey]
@@ -209,150 +240,153 @@ const Main: FC = () => {
   }, [])
 
   return (
-    <div className='h-max pt-14 sm:ml-64 bg-neutral-50 dark:bg-neutral-800'>
-      <div className='py-3 mt-10 sm:py-5 mt-lg:col-span-2'>
-        {account?.nfts?.length > 0 && (
-          <>
-            <div className='grid grid-cols-1 gap-1'>
-              <div>
-                <UploadFileDropzone onDrop={handleFileOnDrop} />
-              </div>
-            </div>
-            {files.length > 0 && (
-              <form ref={formRef}>
-                <div className='grid grid-cols-2 gap-2 p-16'>
-                  <div className='text-white'>
-                    {totalSize > 0 && (
-                      <p>
-                        {t('totalSizeOfDroppedFiles')}: {formatBytes(totalSize)} MB
-                      </p>
-                    )}
-                    <aside className='mt-4'>{handleNewFiles}</aside>
+      <>
+        <div className='h-max pt-14 sm:ml-64 bg-neutral-50 dark:bg-neutral-800'>
+          <div className='py-3 mt-10 sm:py-5 mt-lg:col-span-2'>
+            {account?.nfts?.length > 0 && (
+                <>
+                  <div className='grid grid-cols-1 gap-1'>
+                    <div>
+                      <UploadFileDropzone onDrop={handleFileOnDrop} />
+                    </div>
                   </div>
-                  <div>
-                    <div className='grid grid-cols-2 gap-2'>
-                      <div className='mb-4'>
-                        <div className='mb-1 block'>
-                          <Label htmlFor='senderWallet' value={t('senderWallet')} />
-                        </div>
-                        <TextInput id='senderWallet' name='senderWallet' value={truncateAddress(account.address)} disabled={true} />
-                        <div className='mb-1 mt-4 block'>
-                          <Label htmlFor='senderEmail' value={t('senderEmail')} />
-                        </div>
-                        <TextInput id='senderEmail' name='senderEmail' />
-                      </div>
-                      <div className='mb-4'>
-                        <div className='mb-1 block'>
-                          <Label htmlFor='recipientWallet' value={t('recipientWallet')} />
-                        </div>
-                        <TextInput id='recipientWallet' name='recipientWallet' />
-                        <div className='mb-1 mt-4 block'>
-                          <Label htmlFor='recipientEmail' value={t('recipientEmail')} />
-                        </div>
-                        <TextInput id='recipientEmail' name='recipientEmail' />
-                      </div>
-                    </div>
-                    <div className='mb-4'>
-                      <div className='mb-1 block'>
-                        <Label htmlFor='title' value={t('title')} />
-                      </div>
-                      <TextInput id='title' name='title' />
-                    </div>
-                    <div className='mb-4'>
-                      <div className='mb-1 block'>
-                        <Label htmlFor='message' value={t('message')} />
-                      </div>
-                      <TextInput id='message' name='message' />
-                    </div>
-                    <div className='mb-4'>
-                      <div className='mb-1 block'>
-                        <Label htmlFor='secretKey' value={t('secretKey')} />
-                      </div>
-                      <TextInput id='secretKey' name='secretKey' value={secretKey} disabled={true} />
-                    </div>
-                    <div className='mb-4 text-center text-red-600'>
-                      <label>
-                        {t('note')}!
-                        <br />
-                        {t('secretKeyNote')}
-                      </label>
-                    </div>
-                    {canTransfer ? (
-                      <div className='text-center text-red-600'>{copy}</div>
-                    ) : (
-                      <div className='grid grid-cols-2 gap-2 text-center'>
-                        <div>
-                          <button
-                            type='button'
-                            onClick={() => handleCopyToClipBoard(secretKey)}
-                            className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                  {files.length > 0 && (
+                      <form ref={formRef}>
+                        <div className='grid grid-cols-2 gap-2 p-16'>
+                          <div className='text-white'>
+                            {totalSize > 0 && (
+                                <p>
+                                  {t('totalSizeOfDroppedFiles')}: {formatBytes(totalSize)} MB
+                                </p>
+                            )}
+                            <aside className='mt-4'>{handleNewFiles}</aside>
+                          </div>
+                          <div>
+                            <div className='grid grid-cols-2 gap-2'>
+                              <div className='mb-4'>
+                                <div className='mb-1 block'>
+                                  <Label htmlFor='senderWallet' value={t('senderWallet')} />
+                                </div>
+                                <TextInput id='senderWallet' name='senderWallet' value={truncateAddress(account.address)} disabled={true} />
+                                <div className='mb-1 mt-4 block'>
+                                  <Label htmlFor='senderEmail' value={t('senderEmail')} />
+                                </div>
+                                <TextInput id='senderEmail' name='senderEmail' />
+                              </div>
+                              <div className='mb-4'>
+                                <div className='mb-1 block'>
+                                  <Label htmlFor='recipientWallet' value={t('recipientWallet')} />
+                                </div>
+                                <TextInput id='recipientWallet' name='recipientWallet' />
+                                <div className='mb-1 mt-4 block'>
+                                  <Label htmlFor='recipientEmail' value={t('recipientEmail')} />
+                                </div>
+                                <TextInput id='recipientEmail' name='recipientEmail' />
+                              </div>
+                            </div>
+                            <div className='mb-4'>
+                              <div className='mb-1 block'>
+                                <Label htmlFor='title' value={t('title')} />
+                              </div>
+                              <TextInput id='title' name='title' />
+                            </div>
+                            <div className='mb-4'>
+                              <div className='mb-1 block'>
+                                <Label htmlFor='message' value={t('message')} />
+                              </div>
+                              <TextInput id='message' name='message' />
+                            </div>
+                            <div className='mb-4'>
+                              <div className='mb-1 block'>
+                                <Label htmlFor='secretKey' value={t('secretKey')} />
+                              </div>
+                              <TextInput id='secretKey' name='secretKey' value={secretKey} disabled={true} />
+                            </div>
+                            <div className='mb-4 text-center text-red-600'>
+                              <label>
+                                {t('note')}!
+                                <br />
+                                {t('secretKeyNote')}
+                              </label>
+                            </div>
+                            {canTransfer ? (
+                                <div className='text-center text-red-600'>{copy}</div>
+                            ) : (
+                                <div className='grid grid-cols-2 gap-2 text-center'>
+                                  <div>
+                                    <button
+                                        type='button'
+                                        onClick={() => handleCopyToClipBoard(secretKey)}
+                                        className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
                                                     overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
                                                     from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
                                                     hover:text-white dark:text-white focus:outline-none focus:ring-0
                                                     dark:focus:ring-blue-800'
-                          >
+                                    >
                             <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
                               {t('copySecretKey')}
                             </span>
-                          </button>
-                        </div>
-                        <div>
-                          <button
-                            type='button'
-                            onClick={() => handleCopyToClipBoard(secretKey, true)}
-                            className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <button
+                                        type='button'
+                                        onClick={() => handleCopyToClipBoard(secretKey, true)}
+                                        className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
                                                     overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
                                                     from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
                                                     hover:text-white dark:text-white focus:outline-none focus:ring-0
                                                     dark:focus:ring-blue-800'
-                          >
+                                    >
                             <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
                               {t('sendToRecipient')}
                             </span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                    {canTransfer && !showPercentage && (
-                      <div className='text-center'>
-                        <button
-                          type='button'
-                          onClick={handleUpload}
-                          className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
+                                    </button>
+                                  </div>
+                                </div>
+                            )}
+                            {canTransfer && !showPercentage && (
+                                <div className='text-center'>
+                                  <button
+                                      type='button'
+                                      onClick={handleUpload}
+                                      className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 mt-4
                                                     overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br
                                                     from-pollinationx-honey to-pollinationx-purple group-hover:from-pollinationx-honey group-hover:to-pollinationx-purple
                                                     hover:text-white dark:text-white focus:outline-none focus:ring-0
                                                     dark:focus:ring-blue-800'
-                        >
+                                  >
                           <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-neutral-900 rounded-md group-hover:bg-opacity-0'>
                             {t('transfer')}
                           </span>
-                        </button>
-                      </div>
-                    )}
-                    {showPercentage && (
-                      <div className='mt-8'>
-                        <div className='w-full float-left'>
-                          <p className='pt-1 text-white float-left'>{progressLabel}</p>
-                          <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
-                        </div>
-                        {tx && (
-                          <div className='text-white'>
-                            <a target='_blank' href={`https://mumbai.polygonscan.com/tx/${tx}`} className='float-left'>
-                              <u>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-right w-5 h-5 mt-1 ml-1' />
-                            </a>
+                                  </button>
+                                </div>
+                            )}
+                            {showPercentage && (
+                                <div className='mt-8'>
+                                  <div className='w-full float-left'>
+                                    <p className='pt-1 text-white float-left'>{progressLabel}</p>
+                                    <BeatLoader size={5} className='float-left mt-1.5 mr-4' color='white' />
+                                  </div>
+                                  {tx && (
+                                      <div className='text-white'>
+                                        <a target='_blank' href={`https://mumbai.polygonscan.com/tx/${tx}`} className='float-left'>
+                                          <u>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-right w-5 h-5 mt-1 ml-1' />
+                                        </a>
+                                      </div>
+                                  )}
+                                </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </form>
+                        </div>
+                      </form>
+                  )}
+                </>
             )}
-          </>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+        <SyncBackdropSteps open={openSyncBackdrop} currentStep={currentStep} history={stepHistory} />
+      </>
   )
 }
 
