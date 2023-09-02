@@ -45,7 +45,7 @@ const BuyNftModal: FC<IBuyNftModalProps> = ({ show, onClose, tokenId, nftSize })
         'upgradeTokenPackage',
         [parseInt(tokenId), nftPackage.id],
         { value: BigNumber.from(getWei(nftPackage.price)), gasLimit: BigNumber.from(4000000) },
-          account.nfts[account.defaultNftIndex].contract.address,
+        account.nfts[account.defaultNftIndex].contract.address,
         abi
       )
       if (!upgradeTokenPackageRes?.error) {
@@ -84,7 +84,13 @@ const BuyNftModal: FC<IBuyNftModalProps> = ({ show, onClose, tokenId, nftSize })
         processing: nftPackageObj.id === nftPackage.id
       }))
     )
-    const mintRes = await doWriteContract('mint', [nftPackage.id], { value: BigNumber.from(getWei(nftPackage.price)) }, account.nfts[account.defaultNftIndex].contract.address, abi)
+    const mintRes = await doWriteContract(
+      'mint',
+      [nftPackage.id],
+      { value: BigNumber.from(getWei(nftPackage.price)) },
+      account.nfts[account.defaultNftIndex].contract.address,
+      abi
+    )
     if (!mintRes?.error) {
       setSyncBackdropText(t('waitingForBlockchainConfirmation'))
       await mintRes.wait(1)
