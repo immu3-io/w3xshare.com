@@ -34,6 +34,7 @@ const Main: FC = () => {
   const formRef = useRef(null)
   const [openSyncBackdrop, setOpenSyncBackdrop] = useState<boolean>(false)
   const [currentStep, setCurrentStep] = useState('')
+  const [fileUploadStatus, setFileUploadStatus] = useState<string>('')
 
   const updateStep = stepText => {
     stepHistory.push(stepText)
@@ -100,11 +101,6 @@ const Main: FC = () => {
         toastify(t('invalidRecipientEmail'), 'warning')
         return
       }
-      // const uploadProgress = document.querySelector('.upload_progress')
-      // const strokeSolid: any = uploadProgress.querySelector('.stroke-solid')
-      // uploadProgress.classList.add('active')
-      // strokeSolid.style.strokeDashoffset = 300
-      // setPercentage(0)
       setOpenSyncBackdrop(true)
       setShowPercentage(false)
       setProgressLabel(t('uploadingFiles'))
@@ -150,14 +146,13 @@ const Main: FC = () => {
             updateStep(state)
           },
           onUploadProgress: progressInfo => {
-            console.log(`Upload Progress (${progressInfo.fileName}): ${progressInfo.percent}%`)
+            setFileUploadStatus(`Uploading ${progressInfo.fileName}: ${Math.floor(progressInfo.percent)}%`)
+            // console.log(`Upload Progress (${progressInfo.fileName}): ${progressInfo.percent}%`)
           }
         })
 
         await response.wait(1)
         setTx(response.hash)
-        // strokeSolid.style.strokeDashoffset = 300 - 300
-        // setPercentage(100)
         updateStep('SENDING_EMAIL')
 
         await axios({
@@ -381,7 +376,7 @@ const Main: FC = () => {
           )}
         </div>
       </div>
-      <SyncBackdropSteps open={openSyncBackdrop} currentStep={currentStep} history={stepHistory} />
+      <SyncBackdropSteps open={openSyncBackdrop} currentStep={currentStep} history={stepHistory} fileUploadStatus={fileUploadStatus} />
     </>
   )
 }
