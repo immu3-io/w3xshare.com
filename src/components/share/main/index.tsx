@@ -144,6 +144,7 @@ const Main: FC = () => {
           envelope,
           onStateChange: state => {
             updateStep(state)
+            setFileUploadStatus('')
           },
           onUploadProgress: progressInfo => {
             setFileUploadStatus(`Uploading ${progressInfo.fileName}: ${Math.floor(progressInfo.percent)}%`)
