@@ -13,7 +13,7 @@ export const doSignMessage = async (message: string): Promise<ISignAuth> => ({
 export const doWriteContract = async (functionName: string, args: any[], overrides?: any, address?: string, abi?: any[]): Promise<IDoWriteContract> => {
   try {
     const config = await prepareWriteContract({
-      address: (address || process.env.NFT_COLLECTION_CONTRACT) as Address,
+      address: address as Address,
       abi: abi || abiPX,
       functionName,
       args: [...args],
@@ -28,7 +28,7 @@ export const doWriteContract = async (functionName: string, args: any[], overrid
 export const doReadContract = async (functionName: string, args: any[], address?: string, abi?: any[]): Promise<any> => {
   try {
     return await readContract({
-      address: (address || process.env.NFT_COLLECTION_CONTRACT) as Address,
+      address: address as Address,
       abi: abi || abiPX,
       functionName,
       args: [...args]

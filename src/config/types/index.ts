@@ -14,10 +14,6 @@ export interface INetworkOptions {
   explorerUrl: string
 }
 
-export interface INftConfig {
-  contract: string
-}
-
 interface IPollinationXAuthOptions {
   message: string
 }

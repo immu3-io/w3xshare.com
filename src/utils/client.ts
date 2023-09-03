@@ -1,18 +1,38 @@
 import axios, { AxiosInstance } from 'axios'
 import { btfsConfig } from '@/config'
-import { polygonMumbai } from 'wagmi/chains'
 import { configureChains, createClient } from 'wagmi'
-import { EthereumClient, w3mConnectors } from '@web3modal/ethereum'
-import { alchemyProvider } from '@wagmi/core/providers/alchemy'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Chain } from 'wagmi'
+
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
-const chains = [polygonMumbai]
-const { provider, webSocketProvider } = configureChains(chains, [alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY })])
+
+const sepolia = {
+  id: 11155111,
+  name: 'Sepolia',
+  network: 'sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Sepolia Ether',
+    symbol: 'SEP'
+  },
+  rpcUrls: {
+    public: { http: ['https://eth-sepolia.g.alchemy.com/v2/zZVxJK0XZZZIOH1SAOfS9Kz2Q6mqF2OA'] },
+    default: { http: ['https://eth-sepolia.g.alchemy.com/v2/zZVxJK0XZZZIOH1SAOfS9Kz2Q6mqF2OA'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Etherscan', url: 'https://sepolia.etherscan.io' },
+    default: { name: 'Etherscan', url: 'https://sepolia.etherscan.io' }
+  }
+} as const satisfies Chain
+
+const chains = [sepolia]
+
+const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
 export const client = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors: w3mConnectors({
     chains,
-    version: 2,
     projectId: projectId
   }),
   provider,

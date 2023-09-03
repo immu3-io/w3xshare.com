@@ -14,6 +14,7 @@ import { getNfts } from '@/utils/btfs'
 import { getNftMetadata } from '@/utils/alchemy'
 import { Dropdown, Spinner, Tooltip } from 'flowbite-react'
 import * as _ from 'lodash'
+import { doReadContract } from '@/utils/contract'
 
 interface ISidebarProps {
   nfts?: INft[]
@@ -42,11 +43,20 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
       const nftsRes = await getNfts(address)
       if (!nftsRes?.error) {
         account.nfts = nftsRes.nfts
-        const nftMetadataRes = await getNftMetadata(Number(account.nfts[account.defaultNftIndex].id.tokenId))
-        if (!nftMetadataRes?.error) {
+        const nftMetadataRes = await getNftMetadata(Number(account.nfts[account.defaultNftIndex].id.tokenId), account.contractAddress)
+        if (!nftMetadataRes?.error && nftMetadataRes?.media.length > 0) {
           account.nfts[account.defaultNftIndex].media = nftMetadataRes.media
           account.nfts[account.defaultNftIndex].metadata.attributes = nftMetadataRes.rawMetadata.attributes
           account.nfts[account.defaultNftIndex].timeLastUpdated = nftMetadataRes.timeLastUpdated
+        } else {
+          const extraContentRes = await doReadContract(
+            'tokenURI',
+            [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
+            account.nfts[account.defaultNftIndex].contract.address
+          )
+          const json = Buffer.from(extraContentRes.substring(29), 'base64').toString()
+          const result = JSON.parse(json)
+          account.nfts[account.defaultNftIndex].media[0].raw = result.image
         }
         await indexedDB.put(account)
         setAccount(_.cloneDeep(account))
@@ -56,13 +66,22 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
 
   const handleRefreshNftMetadataOnClick = async (): Promise<void> => {
     setRefreshMetadataProgress(true)
-    const nftMetadataRes = await getNftMetadata(Number(account.nfts[account.defaultNftIndex].id.tokenId))
-    if (!nftMetadataRes?.error) {
+    const nftMetadataRes = await getNftMetadata(Number(account.nfts[account.defaultNftIndex].id.tokenId), account.contractAddress)
+    if (!nftMetadataRes?.error && nftMetadataRes?.media.length > 0) {
       account.nfts[account.defaultNftIndex].media = nftMetadataRes.media
       account.nfts[account.defaultNftIndex].metadata.attributes = nftMetadataRes.rawMetadata.attributes
       account.nfts[account.defaultNftIndex].timeLastUpdated = nftMetadataRes.timeLastUpdated
       await indexedDB.put(account)
       setAccount(_.cloneDeep(account))
+    } else {
+      const extraContentRes = await doReadContract(
+        'tokenURI',
+        [Number(account.nfts[account.defaultNftIndex].id.tokenId)],
+        account.nfts[account.defaultNftIndex].contract.address
+      )
+      const json = Buffer.from(extraContentRes.substring(29), 'base64').toString()
+      const result = JSON.parse(json)
+      account.nfts[account.defaultNftIndex].media[0].raw = result.image
     }
     setRefreshMetadataProgress(false)
   }

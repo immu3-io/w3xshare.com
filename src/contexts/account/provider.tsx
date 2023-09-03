@@ -18,6 +18,8 @@ const AccountProvider: FC<IAccountProviderProps> = ({ children }) => {
     loggedIn: false,
     locale: appConfig.locale,
     defaultNftIndex: 0,
+    contractAddress: null,
+    symbol: null,
     nfts: []
   })
 
