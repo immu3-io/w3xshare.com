@@ -14,7 +14,7 @@ interface ISyncBackdropProps {
 const SyncBackdropSteps: FC<ISyncBackdropProps> = ({ open, currentStep, history, fileUploadStatus }) => {
   return (
     <Backdrop sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }} open={open}>
-      <Box sx={{ width: '300px' }}>
+      <Box sx={{ width: '360px' }}>
         <ul className='space-y-2 font-medium text-left w-auto'>
           {history.slice(0, -1).map((step, index) => (
             <li key={index} className='flex items-center text-gray-900 rounded-lg dark:text-white'>
