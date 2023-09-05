@@ -37,7 +37,9 @@ const Main: FC = () => {
   const [fileUploadStatus, setFileUploadStatus] = useState<string>('')
 
   const updateStep = stepText => {
-    stepHistory.push(stepText)
+    if (!stepHistory.includes(stepText)) {
+      stepHistory.push(stepText)
+    }
     setCurrentStep(stepText)
   }
 
@@ -118,13 +120,14 @@ const Main: FC = () => {
         }
 
         if (files.length > 1) {
+          updateStep('COMPRESSING_FILES')
           const zip = new JSZip()
           for (const file of files) {
             zip.file(file.name, file)
           }
           const currentDateTime = format(new Date(), 'yyyy-MM-dd_HH-mm-ss')
-          const randomId = files.length
-          const zipFileName = `w3xshare_${currentDateTime}_${randomId}.zip`
+          const filesCount = files.length
+          const zipFileName = `w3xshare_${currentDateTime}_${filesCount}.zip`
           const zipBlob = await zip.generateAsync({ type: 'blob' })
           envelope.content.attachments.push({
             name: zipFileName,
@@ -142,12 +145,14 @@ const Main: FC = () => {
         // const response = await mail.send(envelope)
         const response = await mail.send({
           envelope,
+          encryption: aes,
           onStateChange: state => {
             updateStep(state)
             setFileUploadStatus('')
           },
           onUploadProgress: progressInfo => {
             setFileUploadStatus(`Uploading ${progressInfo.fileName}: ${Math.floor(progressInfo.percent)}%`)
+            updateStep('UPLOADING_FILES')
             // console.log(`Upload Progress (${progressInfo.fileName}): ${progressInfo.percent}%`)
           }
         })
