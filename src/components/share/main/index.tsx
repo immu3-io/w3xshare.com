@@ -186,7 +186,7 @@ const Main: FC = () => {
             setSendSecretKey(false)
             setOpenSyncBackdrop(false)
             stepHistory = []
-            setSecretKey('')
+            _handleGenerateSecretKey()
             toastify(t('filesHaveBeenSuccessfullyTransferred'))
           })
           .catch(() => {
