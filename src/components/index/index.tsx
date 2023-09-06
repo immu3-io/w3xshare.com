@@ -95,23 +95,23 @@ const Index: FC = () => {
                             </svg>
                             {t('multiChainSupport')}
                           </li>
-                          <li className='flex items-center'>
-                            <svg
-                              className='w-4 h-4 mr-1.5 text-pollinationx-honey flex-shrink-0'
-                              fill='currentColor'
-                              viewBox='0 0 20 20'
-                              xmlns='http://www.w3.org/2000/svg'
-                            >
-                              <path
-                                fillRule='evenodd'
-                                d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                                clipRule='evenodd'
-                              ></path>
-                            </svg>
-                            <a target='_blank' href='https://wiki.pollinationx.io/overview/px-storage-nfts/protocol-audit'>
-                              <u>{t('auditedSmartContract')}</u>
-                            </a>
-                          </li>
+                          {/*<li className='flex items-center'>*/}
+                          {/*  <svg*/}
+                          {/*    className='w-4 h-4 mr-1.5 text-pollinationx-honey flex-shrink-0'*/}
+                          {/*    fill='currentColor'*/}
+                          {/*    viewBox='0 0 20 20'*/}
+                          {/*    xmlns='http://www.w3.org/2000/svg'*/}
+                          {/*  >*/}
+                          {/*    <path*/}
+                          {/*      fillRule='evenodd'*/}
+                          {/*      d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'*/}
+                          {/*      clipRule='evenodd'*/}
+                          {/*    ></path>*/}
+                          {/*  </svg>*/}
+                          {/*  <a target='_blank' href='https://wiki.pollinationx.io/overview/px-storage-nfts/protocol-audit'>*/}
+                          {/*    <u>{t('auditedSmartContract')}</u>*/}
+                          {/*  </a>*/}
+                          {/*</li>*/}
                         </ul>
                         <div className='mb-12 pt-1 pb-1 text-center'>
                           <button
