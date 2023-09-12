@@ -2,7 +2,7 @@ import useTranslation from 'next-translate/useTranslation'
 import ReceivedFilesModal from '@/ui/modals/received-files.modal'
 import { FC, useEffect, useState } from 'react'
 import { useWeb3Modal } from '@web3modal/react'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
 import { useAccountContext } from '@/contexts/account/provider'
 import { getNfts } from '@/utils/btfs'
@@ -22,6 +22,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
   const { isConnected, address } = useAccount()
   const { indexedDB } = useIndexedDBContext()
   const { account } = useAccountContext()
+  const { chain } = useNetwork()
   const [agreeState, setAgreeState] = useState<boolean>(false)
   const [showReceivedFiles, setShowReceivedFiles] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
@@ -31,18 +32,20 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
     if (isConnected) {
       if (agreeState) {
         setAgreeState(false)
-        const currentAccount = await indexedDB.get(address)
+        const currentAccount = await indexedDB.get(chain.id + '_' + address)
         if (!currentAccount) {
           account.address = address
           account.locale = appConfig.locale
           account.defaultNftIndex = 0
           account.contractAddress = null
+          account.chainAddress = chain.id + '_' + address
           account.symbol = null
         } else {
           account.address = currentAccount.address
           account.locale = currentAccount.locale
           account.defaultNftIndex = currentAccount.defaultNftIndex
           account.contractAddress = currentAccount.contractAddress
+          account.chainAddress = chain.id + '_' + currentAccount.address
           account.symbol = currentAccount.symbol
           account.nfts = currentAccount.nfts
         }

@@ -97,5 +97,6 @@ export interface IAccount {
   defaultNftIndex?: number
   symbol?: string
   contractAddress?: string
+  chainAddress?: string
   nfts?: INft[]
 }
