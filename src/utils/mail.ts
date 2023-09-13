@@ -32,20 +32,18 @@ const artheraTestnet: Chain = {
   }
 }
 
-const getChainConfig = (chainId: string): MailReadyChain => {
-  console.log('chainId')
-  console.log(chainId)
+const getChainConfig = (chainId: number): MailReadyChain => {
   switch (chainId) {
     case 80001:
-      return polygonMumbai
+      return polygonMumbai as MailReadyChain
     case 10243:
-      return artheraTestnet
+      return artheraTestnet as MailReadyChain
     default:
-      return sepolia
+      return sepolia as MailReadyChain
   }
 }
 
-export const initMail = async (secretKey: string, url: string, token: string, chainId: string): Promise<void | IError> => {
+export const initMail = async (secretKey: string, url: string, token: string, chainId: number): Promise<void | IError> => {
   try {
     await aes.importSecretKey(secretKey)
     const remoteStorageProvider = new PollinationX(url, token)
