@@ -6,6 +6,7 @@ import { BeatLoader } from 'react-spinners'
 import { useAccountContext } from '@/contexts/account/provider'
 import { initMail, mail } from '@/utils/mail'
 import { Label, Modal, Textarea } from 'flowbite-react'
+import { useNetwork } from 'wagmi'
 
 interface IReceivedFilesModalProps {
   show: boolean
@@ -17,6 +18,7 @@ interface IReceivedFilesModalProps {
 const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHash, secretKey }) => {
   const { t } = useTranslation()
   const { account } = useAccountContext()
+  const { chain } = useNetwork()
   const [receivedEnvelope, setReceivedEnvelope] = useState<ReceivedEnvelope>(null)
   const [fetching, setFetching] = useState<boolean>(true)
   const [fetchingText, setFetchingText] = useState<string>('fetchingFiles')
@@ -34,7 +36,12 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
     setShowSecretKeyInput(false)
 
     try {
-      await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+      await initMail(
+        formRef.current.secretKey.value.trim(),
+        account.nfts[account.defaultNftIndex].endpoint,
+        account.nfts[account.defaultNftIndex].jwt,
+        chain.id
+      )
       const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
 
       setFetching(false)

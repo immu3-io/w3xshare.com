@@ -1,5 +1,5 @@
 import { AesEncryption, EncryptionHandler } from '@4thtech-sdk/encryption'
-import { Mail, sepolia } from '@4thtech-sdk/ethereum'
+import { Mail, sepolia, polygonMumbai } from '@4thtech-sdk/ethereum'
 import { PollinationX } from '@4thtech-sdk/storage'
 import { MailReadyChain, EncryptionType, NetworkType, Chain } from '@4thtech-sdk/types'
 import { IError } from '@/types'
@@ -12,6 +12,7 @@ export let mail: Mail
 export const setSigner = async (): Promise<void> => {
   signer = await fetchSigner()
 }
+
 const artheraTestnet: Chain = {
   id: 10243,
   name: 'Arthera Testnet',
@@ -31,7 +32,20 @@ const artheraTestnet: Chain = {
   }
 }
 
-export const initMail = async (secretKey: string, url: string, token: string): Promise<void | IError> => {
+const getChainConfig = (chainId: string): MailReadyChain => {
+  console.log('chainId')
+  console.log(chainId)
+  switch (chainId) {
+    case 80001:
+      return polygonMumbai
+    case 10243:
+      return artheraTestnet
+    default:
+      return sepolia
+  }
+}
+
+export const initMail = async (secretKey: string, url: string, token: string, chainId: string): Promise<void | IError> => {
   try {
     await aes.importSecretKey(secretKey)
     const remoteStorageProvider = new PollinationX(url, token)
@@ -41,7 +55,7 @@ export const initMail = async (secretKey: string, url: string, token: string): P
     })
     mail = new Mail({
       signer,
-      chain: sepolia as MailReadyChain,
+      chain: getChainConfig(chainId),
       remoteStorageProvider,
       encryptionHandler
     })

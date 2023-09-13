@@ -15,6 +15,7 @@ import * as _ from 'lodash'
 import { format } from 'date-fns'
 import JSZip from 'jszip'
 import SyncBackdropSteps from '@/ui/backdrops/sync.backdropSteps'
+import { useNetwork } from 'wagmi'
 
 const MAX_SIZE = 100 * 1024 * 1024 // 100 MB in bytes
 let stepHistory = []
@@ -22,6 +23,7 @@ let stepHistory = []
 const Main: FC = () => {
   const { t } = useTranslation()
   const { account } = useAccountContext()
+  const { chain } = useNetwork()
   const [files, setFiles] = useState<any[]>([])
   const [totalSize, setTotalSize] = useState<number>(0)
   const [secretKey, setSecretKey] = useState<string>('')
@@ -107,7 +109,12 @@ const Main: FC = () => {
       setShowPercentage(false)
       setProgressLabel(t('uploadingFiles'))
       try {
-        await initMail(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt)
+        await initMail(
+          formRef.current.secretKey.value.trim(),
+          account.nfts[account.defaultNftIndex].endpoint,
+          account.nfts[account.defaultNftIndex].jwt,
+          chain.id
+        )
         const sender = await signer.getAddress()
         const envelope: Envelope = {
           content: {

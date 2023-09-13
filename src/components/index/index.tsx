@@ -25,6 +25,75 @@ const Index: FC = () => {
     }
   }
 
+  async function addPolygonMumbaiNetwork() {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: '0x13881',
+            rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+            chainName: 'Mumbai',
+            nativeCurrency: {
+              name: 'MATIC',
+              symbol: 'MATIC',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://mumbai.polygonscan.com/']
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function addEthSepoliaNetwork() {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: '0xaa36a7',
+            rpcUrls: ['https://rpc2.sepolia.org'],
+            chainName: 'Sepolia',
+            nativeCurrency: {
+              name: 'SepoliaETH',
+              symbol: 'sETH',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://sepolia.etherscan.io/']
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function addArtheraTestnetNetwork() {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: '0x2803',
+            rpcUrls: ['https://rpc-test.arthera.net'],
+            chainName: 'Arthera Testnet',
+            nativeCurrency: {
+              name: 'AA',
+              symbol: 'AA',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://explorer-test.arthera.net/']
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-neutral-800 border-0 px-4 lg:px-6 py-2.5'>
@@ -163,10 +232,56 @@ const Index: FC = () => {
                   </div>
                 </div>
               </div>
+              <section>
+                <div className='py-12'>
+                  <h2 className='mb-8 lg:mb-16 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900 md:mb-8 lg:mb-16 dark:text-white md:text-3xl'>
+                    {t('supportedChains')}
+                  </h2>
+                  <div className='space-y-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 xl:gap-8 sm:space-y-0 md:mb-8 md:mt-12'>
+                    <div className='block py-12 px-8 pb-0 text-left bg-gray-50 rounded dark:bg-neutral-800 text-center'>
+                      <img className='fill-white mx-auto h-10 text-gray-600 dark:text-gray-400' src='/img/chains/ethereum.svg' />
+                      <p className='font-light text-gray-500 mt-3.5 mb-4'>Network: Sepolia [Testnet]</p>
+                      <button
+                        type='button'
+                        onClick={() => addEthSepoliaNetwork()}
+                        className='text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-neutral-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2'
+                      >
+                        <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 mr-4' src='/img/chains/metamaskIcon.svg' />
+                        {t('addToMetamask')}
+                      </button>
+                    </div>
+                    <div className='block py-12 px-8 text-left bg-gray-50 rounded dark:bg-neutral-800 text-center'>
+                      <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 text-white' src='/img/chains/arthera.svg' />
+                      <p className='font-light text-gray-500 mt-3.5 mb-4'>Network: Arthera [Testnet]</p>
+                      <button
+                        type='button'
+                        onClick={() => addArtheraTestnetNetwork()}
+                        className='text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-neutral-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2'
+                      >
+                        <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 mr-4' src='/img/chains/metamaskIcon.svg' />
+                        {t('addToMetamask')}
+                      </button>
+                    </div>
+                    <div className='block py-12 px-8 text-left bg-gray-50 rounded dark:bg-neutral-800 text-center'>
+                      <img className='mx-auto h-10 text-gray-600 dark:text-gray-400' src='/img/chains/polygon.svg' />
+                      <p className='font-light text-gray-500 mt-3.5 mb-4'>Network: Mumbai [Testnet]</p>
+                      <button
+                        type='button'
+                        onClick={() => addPolygonMumbaiNetwork()}
+                        className='text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-neutral-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2'
+                      >
+                        <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 mr-4' src='/img/chains/metamaskIcon.svg' />
+                        {t('addToMetamask')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
         </div>
       </section>
+
       <ConnectWallet show={showConnectWallet} onClose={handleRedirect} />
     </>
   )
