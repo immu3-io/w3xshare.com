@@ -7,8 +7,8 @@ import { ReceivedEnvelope } from '@4thtech-sdk/types/src/lib/mail.types'
 import { useCollapse } from 'react-collapsed'
 import { HiCheck, HiDownload, HiExternalLink, HiMail } from 'react-icons/hi'
 import { Box, CircularProgress, Tooltip } from '@mui/material'
-import { networkOptions } from '@/config'
 import { mail } from '@/utils/mail'
+import { useNetwork } from 'wagmi'
 
 interface ICollapseProps {
   receivedEnvelope: ReceivedEnvelope
@@ -21,6 +21,7 @@ interface IDownloadingFileState {
 
 const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) => {
   const { t } = useTranslation()
+  const { chain } = useNetwork()
   const [isExpanded, setExpanded] = useState<boolean>(true)
   const [downloading, setDownloading] = useState<boolean>(false)
   const [downloadingFileState, setDownloadingFileState] = useState<IDownloadingFileState[]>([])
@@ -79,7 +80,7 @@ const ReceivedFilesCollapse: React.FC<ICollapseProps> = ({ receivedEnvelope }) =
             className='ml-3.5 mt-1.5 mr-1.5 text-xs cursor-pointer float-right'
             style={blueColor}
             target='_blank'
-            href={networkOptions.explorerUrl + receivedEnvelope.metadata.transactionHash}
+            href={chain.blockExplorers.default.url + '/tx/' + receivedEnvelope.metadata.transactionHash}
           >
             <u className='float-left text-white'>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-left mt-0.5 ml-0.5' size={15} />
           </a>

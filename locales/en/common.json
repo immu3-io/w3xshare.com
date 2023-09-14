@@ -131,5 +131,7 @@
   "receivedFilesSecretKeyNote": "Please enter secret key received by the sender. Only with secret key you will be able to download files.",
   "fetchFiles": "Fetch files",
   "files": "Files",
-  "sender": "Sender"
+  "sender": "Sender",
+  "supportedChains": "SUPPORTED CHAINS",
+  "addToMetamask": "Add to Metamask"
 }
