@@ -374,7 +374,7 @@ const Main: FC = () => {
                           </div>
                           {tx && (
                             <div className='text-white'>
-                              <a target='_blank' href={`https://sepolia.etherscan.com/tx/${tx}`} className='float-left'>
+                              <a target='_blank' href={`${chain.blockExplorers.default.url}/tx/${tx}`} className='float-left'>
                                 <u>{t('viewTransactionOnBlockExplorer')}</u> <HiExternalLink className='float-right w-5 h-5 mt-1 ml-1' />
                               </a>
                             </div>
