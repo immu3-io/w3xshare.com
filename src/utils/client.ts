@@ -25,7 +25,26 @@ const sepolia = {
   }
 } as const satisfies Chain
 
-const chains = [sepolia]
+const artheraTestnet = {
+  id: 10243,
+  name: 'Arthera Testnet',
+  network: 'Arthera Testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Arthera Testnet',
+    symbol: 'AA'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc-test.arthera.net/'] },
+    default: { http: ['https://rpc-test.arthera.net/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Arthera Testnet', url: 'https://explorer-test.arthera.net' },
+    default: { name: 'Arthera Testnet', url: 'https://explorer-test.arthera.net' }
+  }
+} as const satisfies Chain
+
+const chains = [sepolia, artheraTestnet]
 
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
