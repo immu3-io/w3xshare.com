@@ -13,7 +13,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel='icon' href='/img/favicon.png' />
         </Head>
-        <body>
+        <body className='bg-neutral-200 dark:bg-neutral-700'>
           <Main />
           <NextScript />
         </body>
