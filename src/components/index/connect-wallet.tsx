@@ -116,7 +116,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
                   id='agree-checkbox'
                   type='checkbox'
                   value=''
-                  className='w-4 h-4 text-pollinationx-honey bg-neutral-100 border-gray-300 rounded ring-offset-0 dark:focus:ring-0 dark:ring-offset-0 focus:ring-0 dark:bg-neutral-700 dark:border-gray-600'
+                  className='w-4 h-4 text-pollinationx-honey bg-neutral-100 border-gray-400 rounded ring-offset-0 dark:focus:ring-0 dark:ring-offset-0 focus:ring-0 dark:bg-neutral-700 dark:border-gray-400'
                 />
                 <label htmlFor='agree-checkbox' className='text-sm font-normal text-gray-500 dark:text-gray-400 ml-2'>
                   {t('iAgreeTo')}{' '}
