@@ -93,6 +93,28 @@ const Index: FC = () => {
       console.log(error)
     }
   }
+  async function addImmu3TestnetNetwork() {
+    try {
+      const result = await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: '0xC1C',
+            rpcUrls: ['https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network'],
+            chainName: 'Immu3 EVM TestNet',
+            nativeCurrency: {
+              name: 'IMMU',
+              symbol: 'IMMU',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://polkadot.js.org/apps/?rpc=wss://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network#/explorer/']
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -256,6 +278,18 @@ const Index: FC = () => {
                       <button
                         type='button'
                         onClick={() => addArtheraTestnetNetwork()}
+                        className='text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-neutral-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2'
+                      >
+                        <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 mr-4' src='/img/chains/metamaskIcon.svg' />
+                        {t('addToMetamask')}
+                      </button>
+                    </div>
+                    <div className='block py-12 px-8 text-left bg-gray-50 rounded dark:bg-neutral-800 text-center'>
+                      <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 text-white' src='/img/chains/immu3.svg' />
+                      <p className='font-light text-gray-500 mt-3.5 mb-4'>Network: Immu3 [Testnet]</p>
+                      <button
+                        type='button'
+                        onClick={() => addImmu3TestnetNetwork()}
                         className='text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-neutral-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2'
                       >
                         <img className='mx-auto h-10 text-gray-600 dark:text-gray-400 mr-4' src='/img/chains/metamaskIcon.svg' />
