@@ -31,6 +31,24 @@ const artheraTestnet: Chain = {
     }
   }
 }
+const immu3Testnet: Chain = {
+  id: 3100,
+  name: 'Immu3 EVM TestNet',
+  network: 'Immu3 EVM TestNet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+}
 
 const getChainConfig = (chainId: number): MailReadyChain => {
   switch (chainId) {
@@ -38,6 +56,8 @@ const getChainConfig = (chainId: number): MailReadyChain => {
       return polygonMumbai as MailReadyChain
     case 10243:
       return artheraTestnet as MailReadyChain
+    case 3100:
+      return immu3Testnet as MailReadyChain
     default:
       return sepolia as MailReadyChain
   }

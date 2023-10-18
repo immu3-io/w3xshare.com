@@ -44,7 +44,26 @@ const artheraTestnet = {
   }
 } as const satisfies Chain
 
-const chains = [sepolia, artheraTestnet]
+const immu3Testnet = {
+  id: 3100,
+  name: 'Immu3 EVM TestNet',
+  network: 'Immu3 EVM TestNet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'IMMU',
+    symbol: 'IMMU'
+  },
+  rpcUrls: {
+    public: { http: ['https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/'] },
+    default: { http: ['https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Immu3 EVM TestNet', url: 'https://polkadot.js.org/apps/?rpc=wss://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network#/explorer' },
+    default: { name: 'Immu3 EVM TestNet', url: 'https://polkadot.js.org/apps/?rpc=wss://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network#/explorer' }
+  }
+} as const satisfies Chain
+
+const chains = [sepolia, artheraTestnet, immu3Testnet]
 
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
