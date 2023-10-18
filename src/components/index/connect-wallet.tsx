@@ -29,8 +29,6 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
   const [secretKey, setSecretKey] = useState<string>('')
 
   const handleConnectedAccount = async (): Promise<void> => {
-    console.log('chain')
-    console.log(chain.blockExplorers.default.url)
     if (isConnected) {
       if (agreeState) {
         setAgreeState(false)
