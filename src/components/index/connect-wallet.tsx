@@ -9,7 +9,7 @@ import { getNfts } from '@/utils/btfs'
 import { setSigner } from '@/utils/mail'
 import { useRouter } from 'next/router'
 import { appConfig } from '@/config'
-
+import { client } from '@/utils/client'
 interface IConnectWalletProps {
   show: boolean
   onClose: any
@@ -18,7 +18,7 @@ interface IConnectWalletProps {
 const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { open } = useWeb3Modal()
+  const { open, setDefaultChain } = useWeb3Modal()
   const { isConnected, address } = useAccount()
   const { indexedDB } = useIndexedDBContext()
   const { account } = useAccountContext()
@@ -27,6 +27,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
   const [showReceivedFiles, setShowReceivedFiles] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
   const [secretKey, setSecretKey] = useState<string>('')
+  const [selectedNetwork, setSelectedNetwork] = useState(client.connectors[0].chains[0].id)
 
   const handleConnectedAccount = async (): Promise<void> => {
     if (isConnected) {
@@ -61,7 +62,12 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
       }
     } else await open()
   }
-
+  const handleNetworkChange = event => {
+    const selectedNetworkId = event.target.value
+    const foundNetwork = client.connectors[0].chains.find(chain => chain.id === parseInt(selectedNetworkId))
+    setDefaultChain(foundNetwork)
+    setSelectedNetwork(selectedNetworkId)
+  }
   const _handleUrlParams = (): void => {
     const { tx, s } = router.query
     if (tx) {
@@ -137,6 +143,16 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
                 </label>
               </p>
               <ul className='my-4 space-y-3'>
+                <li>
+                  <p className='text-sm font-normal text-gray-500 dark:text-gray-400 mb-2'>{t('selectChain')}</p>
+                  <select className='bg-transparent text-pollinationx-honey' value={selectedNetwork} onChange={handleNetworkChange}>
+                    {client.connectors[0].chains.map(x => (
+                      <option key={x.id} value={x.id}>
+                        {x.name}
+                      </option>
+                    ))}
+                  </select>
+                </li>
                 <li>
                   <button
                     disabled={!agreeState}

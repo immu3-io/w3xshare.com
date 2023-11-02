@@ -133,5 +133,6 @@
   "files": "Files",
   "sender": "Sender",
   "supportedChains": "SUPPORTED CHAINS",
-  "addToMetamask": "Add to Metamask"
+  "addToMetamask": "Add to Metamask",
+  "selectChain": "Select chain"
 }
