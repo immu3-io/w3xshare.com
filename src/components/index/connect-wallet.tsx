@@ -28,6 +28,7 @@ const ConnectWallet: FC<IConnectWalletProps> = ({ show, onClose }) => {
   const [txHash, setTxHash] = useState<string>('')
   const [secretKey, setSecretKey] = useState<string>('')
   const [selectedNetwork, setSelectedNetwork] = useState(client.connectors[0].chains[0].id)
+  setDefaultChain(client.connectors[0].chains[0])
 
   const handleConnectedAccount = async (): Promise<void> => {
     if (isConnected) {
