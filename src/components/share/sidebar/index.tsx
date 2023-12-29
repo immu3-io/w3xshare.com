@@ -8,13 +8,14 @@ import { HiHome, HiRefresh } from 'react-icons/hi'
 import { Web3Button } from '@web3modal/react'
 import { useAccountContext } from '@/contexts/account/provider'
 import { useIndexedDBContext } from '@/contexts/indexed-db/provider'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { getNumbersFromString } from '@/utils/helper'
 import { getNfts } from '@/utils/btfs'
 import { getNftMetadata } from '@/utils/alchemy'
 import { Dropdown, Spinner, Tooltip } from 'flowbite-react'
 import * as _ from 'lodash'
 import { doReadContract } from '@/utils/contract'
+import ChainsModal from '@/ui/modals/chains.modal'
 
 interface ISidebarProps {
   nfts?: INft[]
@@ -29,6 +30,21 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
   const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0)
   const [nftSize, setNftSize] = useState<number>(0)
   const [refreshMetadataProgress, setRefreshMetadataProgress] = useState<boolean>(false)
+
+  const [showChainsModal, setShowChainsModal] = useState<boolean>(false)
+
+  const { chain: currentChain } = useNetwork()
+  const { chains } = useSwitchNetwork()
+
+  useEffect(() => {
+    const isCurrentChainSupported = chains.some(chain => chain.id === (currentChain?.id || 0))
+    setShowChainsModal(!isCurrentChainSupported)
+  }, [currentChain])
+
+  const handleChainsModalOnClose = (): void => {
+    const checkIfChainSupported = chains.some(chain => chain.id === (currentChain?.id || 0))
+    setShowChainsModal(!checkIfChainSupported)
+  }
 
   const handleSelectedNftOnClick = async (index: number): Promise<void> => {
     setSelectedNftIndex(index)
@@ -146,6 +162,18 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
                 </div>
               )}
               <Web3Button />
+              <div className='relative my-1 flex items-center justify-center ml-4'>
+                <div className='relative'>
+                  <button
+                    type='button'
+                    name='language_selection'
+                    className='flex h-9 w-9 items-center justify-center rounded-full border border-muted-200 bg-white ring-1 ring-transparent transition-all duration-300 hover:ring-muted-200 hover:ring-offset-4 dark:border-muted-700 dark:bg-pollinationx-purple dark:ring-offset-pollinationx-purple dark:hover:ring-pollinationx-purple'
+                    onClick={() => setShowChainsModal(true)}
+                  >
+                    <img className='h-8 w-8 rounded-full' src={`/img/chains/${currentChain?.id}.svg`} alt={`${currentChain?.name} icon`} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -232,6 +260,7 @@ const Sidebar: FC<ISidebarProps> = ({ nfts }) => {
         tokenId={_.get(account?.nfts, `[${account.defaultNftIndex}].id.tokenId`, '')}
         nftSize={nftSize}
       />
+      <ChainsModal show={showChainsModal} onClose={handleChainsModalOnClose} />
     </>
   )
 }
