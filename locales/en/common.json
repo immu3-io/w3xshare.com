@@ -134,5 +134,12 @@
   "sender": "Sender",
   "supportedChains": "SUPPORTED CHAINS",
   "addToMetamask": "Add to Metamask",
-  "selectChain": "Select chain"
+  "selectChain": "Select chain",
+  "selectNetwork": "Select Network",
+  "testnet": "Testnet",
+  "mainnet": "Mainnet (coming soon)",
+  "selectSupportedNetwork": "Select supported network",
+  "connecting": "Connecting",
+  "unsupported": "Unsupported",
+  "goToApp": "Go To App"
 }
