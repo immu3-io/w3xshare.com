@@ -152,7 +152,6 @@ export const client = createClient({
   autoConnect: true,
   connectors: w3mConnectors({
     chains,
-    version: 2,
     projectId: projectId
   }),
   provider,
