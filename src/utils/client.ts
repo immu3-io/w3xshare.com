@@ -145,7 +145,7 @@ const beresheetEVM = {
 // } as const satisfies Chain
 
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
-const chains = [sepolia, artheraTestnet, immu3Testnet, polygonMumbai /*, oasisSapphireTestnet, metisGoerliTestnet, beresheetEVM*/]
+const chains = [sepolia, artheraTestnet, immu3Testnet, polygonMumbai, oasisSapphireTestnet, metisGoerliTestnet, beresheetEVM]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
 export const client = createClient({
