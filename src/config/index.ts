@@ -4,8 +4,8 @@ import { ThemeCtrlState } from '@web3modal/core/dist/_types/src/types/controller
 export const themeConfig: ThemeCtrlState = {
   themeMode: 'dark',
   themeVariables: {
-    '--w3m-accent-color': '#888888',
-    '--w3m-background-color': 'black'
+    '--w3m-accent-color': '#484848',
+    '--w3m-background-color': '#286FA4'
   }
 }
 
