@@ -16,12 +16,12 @@ const artheraTestnet = {
     symbol: 'AA'
   },
   rpcUrls: {
-    public: { http: ['https://rpc-test.arthera.net/'] },
-    default: { http: ['https://rpc-test.arthera.net/'] }
+    public: { http: ['https://rpc-test2.arthera.net/'] },
+    default: { http: ['https://rpc-test2.arthera.net/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Arthera Testnet', url: 'https://explorer-test.arthera.net' },
-    default: { name: 'Arthera Testnet', url: 'https://explorer-test.arthera.net' }
+    etherscan: { name: 'Arthera Testnet', url: 'https://explorer-test2.arthera.net' },
+    default: { name: 'Arthera Testnet', url: 'https://explorer-test2.arthera.net' }
   }
 } as const satisfies Chain
 
@@ -120,10 +120,51 @@ const beresheetEVM = {
     default: { http: ['https://beresheet-evm.jelliedowl.net/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Arthera Testnet', url: 'https://testnet.edgscan.live' },
-    default: { name: 'Arthera Testnet', url: 'https://testnet.edgscan.live' }
+    etherscan: { name: 'BeresheetEVM Testnet', url: 'https://testnet.edgscan.live' },
+    default: { name: 'BeresheetEVM Testnet', url: 'https://testnet.edgscan.live' }
   }
 } as const satisfies Chain
+
+const mantleTestnet = {
+  id: 5001,
+  testnet: true,
+  name: 'MantleTestnet',
+  network: 'MantleTestnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'MNT',
+    symbol: 'MNT'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.testnet.mantle.xyz/'] },
+    default: { http: ['https://rpc.testnet.mantle.xyz/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Mantle Testnet', url: 'https://explorer.testnet.mantle.xyz' },
+    default: { name: 'Mantle Testnet', url: 'https://explorer.testnet.mantle.xyz' }
+  }
+} as const satisfies Chain
+
+const zetachainTestnet = {
+  id: 7001,
+  testnet: true,
+  name: 'ZetachainTestnet',
+  network: 'ZetachainTestnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'ZETA',
+    symbol: 'ZETA'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] },
+    default: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Zetachain Testnet', url: 'https://explorer.zetachain.com' },
+    default: { name: 'Zetachain Testnet', url: 'https://explorer.zetachain.com' }
+  }
+} as const satisfies Chain
+
 //
 // const edgeEVM = {
 //   id: 2021,
@@ -145,7 +186,7 @@ const beresheetEVM = {
 // } as const satisfies Chain
 
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
-const chains = [sepolia, artheraTestnet, immu3Testnet, polygonMumbai, oasisSapphireTestnet, metisGoerliTestnet, beresheetEVM]
+const chains = [sepolia, artheraTestnet, immu3Testnet, polygonMumbai, oasisSapphireTestnet, metisGoerliTestnet, beresheetEVM, mantleTestnet, zetachainTestnet]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
 export const client = createClient({
