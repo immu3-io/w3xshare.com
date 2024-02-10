@@ -156,8 +156,8 @@ const zetachainTestnet = {
     symbol: 'ZETA'
   },
   rpcUrls: {
-    public: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] },
-    default: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] }
+    public: { http: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public/'] },
+    default: { http: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public/'] }
   },
   blockExplorers: {
     etherscan: { name: 'Zetachain Testnet', url: 'https://explorer.zetachain.com' },
