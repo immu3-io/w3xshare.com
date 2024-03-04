@@ -85,23 +85,23 @@ const oasisSapphireTestnet = {
   }
 } as const satisfies Chain
 
-const metisGoerliTestnet = {
-  id: 599,
+const metisSepoliaTestnet = {
+  id: 59901,
   testnet: true,
-  name: 'Metis Goerli Testnet',
-  network: 'Metis Goerli Testnet',
+  name: 'Metis Sepolia Testnet',
+  network: 'Metis Sepolia Testnet',
   nativeCurrency: {
     decimals: 18,
     name: 'tMETIS',
     symbol: 'tMETIS'
   },
   rpcUrls: {
-    public: { http: ['https://goerli.gateway.metisdevops.link/'] },
-    default: { http: ['https://goerli.gateway.metisdevops.link/'] }
+    public: { http: ['https://sepolia.rpc.metisdevops.link/'] },
+    default: { http: ['https://sepolia.rpc.metisdevops.link/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Metis Goerli Testnet', url: 'https://goerli.explorer.metisdevops.link' },
-    default: { name: 'Metis Goerli Testnet', url: 'https://goerli.explorer.metisdevops.link' }
+    etherscan: { name: 'Metis Sepolia Testnet', url: 'https://sepolia.explorer.metisdevops.link/' },
+    default: { name: 'Metis Sepolia Testnet', url: 'https://sepolia.explorer.metisdevops.link/' }
   }
 } as const satisfies Chain
 
@@ -126,22 +126,22 @@ const beresheetEVM = {
 } as const satisfies Chain
 
 const mantleTestnet = {
-  id: 5001,
+  id: 5003,
   testnet: true,
-  name: 'MantleTestnet',
-  network: 'MantleTestnet',
+  name: 'MantleSepoliaTestnet',
+  network: 'MantleSepoliaTestnet',
   nativeCurrency: {
     decimals: 18,
     name: 'MNT',
     symbol: 'MNT'
   },
   rpcUrls: {
-    public: { http: ['https://rpc.testnet.mantle.xyz/'] },
-    default: { http: ['https://rpc.testnet.mantle.xyz/'] }
+    public: { http: ['https://rpc.sepolia.mantle.xyz/'] },
+    default: { http: ['https://rpc.sepolia.mantle.xyz/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Mantle Testnet', url: 'https://explorer.testnet.mantle.xyz' },
-    default: { name: 'Mantle Testnet', url: 'https://explorer.testnet.mantle.xyz' }
+    etherscan: { name: 'Mantle Sepolia Testnet', url: 'https://explorer.sepolia.mantle.xyz' },
+    default: { name: 'Mantle Sepolia Testnet', url: 'https://explorer.sepolia.mantle.xyz' }
   }
 } as const satisfies Chain
 
@@ -156,12 +156,52 @@ const zetachainTestnet = {
     symbol: 'ZETA'
   },
   rpcUrls: {
-    public: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] },
-    default: { http: ['https://rpc.ankr.com/zetachain_evm_athens_testnet/'] }
+    public: { http: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public/'] },
+    default: { http: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public/'] }
   },
   blockExplorers: {
     etherscan: { name: 'Zetachain Testnet', url: 'https://explorer.zetachain.com' },
     default: { name: 'Zetachain Testnet', url: 'https://explorer.zetachain.com' }
+  }
+} as const satisfies Chain
+
+const fantomTestnet = {
+  id: 4002,
+  testnet: true,
+  name: 'FantomTestnet',
+  network: 'FantomTestnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'FTM',
+    symbol: 'FTM'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.testnet.fantom.network/'] },
+    default: { http: ['https://rpc.testnet.fantom.network/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Fantom Testnet', url: 'https://faucet.fantom.network' },
+    default: { name: 'Fantom Testnet', url: 'https://faucet.fantom.network' }
+  }
+} as const satisfies Chain
+//
+const gnosisTestnet = {
+  id: 10200,
+  testnet: true,
+  name: 'GnosisTestnet',
+  network: 'GnosisTestnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'xDAI',
+    symbol: 'xDAI'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.chiadochain.net/'] },
+    default: { http: ['https://rpc.chiadochain.net/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Gnosis Testnet', url: 'https://blockscout.chiadochain.net' },
+    default: { name: 'Gnosis Testnet', url: 'https://blockscout.chiadochain.net' }
   }
 } as const satisfies Chain
 
@@ -186,7 +226,19 @@ const zetachainTestnet = {
 // } as const satisfies Chain
 
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
-const chains = [sepolia, artheraTestnet, immu3Testnet, polygonMumbai, oasisSapphireTestnet, metisGoerliTestnet, beresheetEVM, mantleTestnet, zetachainTestnet]
+const chains = [
+  sepolia,
+  artheraTestnet,
+  immu3Testnet,
+  polygonMumbai,
+  oasisSapphireTestnet,
+  metisSepoliaTestnet,
+  beresheetEVM,
+  mantleTestnet,
+  zetachainTestnet,
+  fantomTestnet,
+  gnosisTestnet
+]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
 export const client = createClient({
