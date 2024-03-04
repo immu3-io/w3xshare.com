@@ -85,23 +85,23 @@ const oasisSapphireTestnet = {
   }
 } as const satisfies Chain
 
-const metisGoerliTestnet = {
-  id: 599,
+const metisSepoliaTestnet = {
+  id: 59901,
   testnet: true,
-  name: 'Metis Goerli Testnet',
-  network: 'Metis Goerli Testnet',
+  name: 'Metis Sepolia Testnet',
+  network: 'Metis Sepolia Testnet',
   nativeCurrency: {
     decimals: 18,
     name: 'tMETIS',
     symbol: 'tMETIS'
   },
   rpcUrls: {
-    public: { http: ['https://goerli.gateway.metisdevops.link/'] },
-    default: { http: ['https://goerli.gateway.metisdevops.link/'] }
+    public: { http: ['https://sepolia.rpc.metisdevops.link/'] },
+    default: { http: ['https://sepolia.rpc.metisdevops.link/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Metis Goerli Testnet', url: 'https://goerli.explorer.metisdevops.link' },
-    default: { name: 'Metis Goerli Testnet', url: 'https://goerli.explorer.metisdevops.link' }
+    etherscan: { name: 'Metis Sepolia Testnet', url: 'https://sepolia.explorer.metisdevops.link/' },
+    default: { name: 'Metis Sepolia Testnet', url: 'https://sepolia.explorer.metisdevops.link/' }
   }
 } as const satisfies Chain
 
@@ -232,7 +232,7 @@ const chains = [
   immu3Testnet,
   polygonMumbai,
   oasisSapphireTestnet,
-  metisGoerliTestnet,
+  metisSepoliaTestnet,
   beresheetEVM,
   mantleTestnet,
   zetachainTestnet,
