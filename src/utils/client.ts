@@ -225,6 +225,26 @@ const gnosisTestnet = {
 //   }
 // } as const satisfies Chain
 
+const fantomSonicBuildersTestnet = {
+  id: 64165,
+  testnet: true,
+  name: 'FantomSonicBuildersTestnet',
+  network: 'FantomSonicBuildersTestnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'FTM',
+    symbol: 'FTM'
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.sonic.fantom.network/'] },
+    default: { http: ['https://rpc.sonic.fantom.network/'] }
+  },
+  blockExplorers: {
+    etherscan: { name: 'Fantom Sonic Builders Testnet', url: 'https://public-sonic.fantom.network/' },
+    default: { name: 'Fantom Sonic Builders Testnet', url: 'https://public-sonic.fantom.network/' }
+  }
+} as const satisfies Chain
+
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
 const chains = [
   sepolia,
@@ -237,7 +257,8 @@ const chains = [
   mantleTestnet,
   zetachainTestnet,
   fantomTestnet,
-  gnosisTestnet
+  gnosisTestnet,
+  fantomSonicBuildersTestnet
 ]
 const { provider, webSocketProvider } = configureChains(chains, [w3mProvider({ projectId: process.env.WALLET_CONNECT_PROJECT_ID })])
 
