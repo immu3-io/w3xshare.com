@@ -28,20 +28,11 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
   const handleFetchFilesOnClick = async (event): Promise<void> => {
     event.preventDefault()
 
-    if (!formRef.current.checkValidity()) {
-      formRef.current.reportValidity()
-      return
-    }
-
     setShowSecretKeyInput(false)
 
     try {
-      await initMail(
-        formRef.current.secretKey.value.trim(),
-        account.nfts[account.defaultNftIndex].endpoint,
-        account.nfts[account.defaultNftIndex].jwt,
-        chain.id
-      )
+      const sKey = formRef.current.secretKey.value.trim() || secretKey.trim()
+      await initMail(sKey, account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt, chain.id)
       const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
 
       setFetching(false)
