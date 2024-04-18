@@ -27,7 +27,7 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
 
   const handleFetchFilesOnClick = async (event): Promise<void> => {
     event.preventDefault()
-
+    console.log('tu')
     if (!formRef.current.checkValidity()) {
       formRef.current.reportValidity()
       return
@@ -42,7 +42,10 @@ const ReceivedFilesModal: FC<IReceivedFilesModalProps> = ({ show, onClose, txHas
         account.nfts[account.defaultNftIndex].jwt,
         chain.id
       )
+      console.log(formRef.current.secretKey.value.trim(), account.nfts[account.defaultNftIndex].endpoint, account.nfts[account.defaultNftIndex].jwt, chain.id)
       const receivedEnvelope = await mail.fetchByTransactionHash(txHash)
+      console.log(receivedEnvelope)
+      console.log(receivedEnvelope)
 
       setFetching(false)
       setFetchingText('noFiles')

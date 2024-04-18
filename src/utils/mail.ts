@@ -50,6 +50,158 @@ const immu3Testnet: Chain = {
   }
 }
 
+const fantomSonicBuildersTestnetChain: Chain = {
+  id: 64165,
+  name: 'FantomSonicBuildersTestnet',
+  network: 'FantomSonicBuildersTestnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://rpc.sonic.fantom.network/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const oasisSapphireTestnet: Chain = {
+  id: 23295,
+  name: 'Oasis Sapphire Testnet',
+  network: 'Oasis Sapphire Testnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://testnet.sapphire.oasis.dev/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const metisSepoliaTestnet: Chain = {
+  id: 59901,
+  name: 'Metis Sepolia Testnet',
+  network: 'Metis Sepolia Testnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://sepolia.rpc.metisdevops.link/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const beresheetEVM: Chain = {
+  id: 2022,
+  name: 'BeresheetEVM',
+  network: 'BeresheetEVM',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://beresheet-evm.jelliedowl.net/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const mantleTestnet: Chain = {
+  id: 5003,
+  name: 'MantleSepoliaTestnet',
+  network: 'MantleSepoliaTestnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://rpc.sepolia.mantle.xyz/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const zetachainTestnet: Chain = {
+  id: 7001,
+  name: 'ZetachainTestnet',
+  network: 'ZetachainTestnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://zetachain-athens-evm.blockpi.network/v1/rpc/public/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const fantomTestnet: Chain = {
+  id: 4002,
+  name: 'FantomTestnet',
+  network: 'FantomTestnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://rpc.testnet.fantom.network/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
+const gnosisTestnet: Chain = {
+  id: 10200,
+  name: 'GnosisTestnet',
+  network: 'GnosisTestnet',
+  type: NetworkType.TEST_NET,
+  networkEndpoint: `https://rpc.chiadochain.net/`,
+  contracts: {
+    appFeeManager: {
+      address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'
+    },
+    mail: {
+      address: '0xa6199D54df4c904976DC1741eE75A9570c7A3308'
+    },
+    user: {
+      address: '0x5aCeed5372E91C1EB2C09E0F5C46B29A282b2C2D'
+    }
+  }
+} as const satisfies Chain
+
 const getChainConfig = (chainId: number): MailReadyChain => {
   switch (chainId) {
     case 80001:
@@ -58,6 +210,22 @@ const getChainConfig = (chainId: number): MailReadyChain => {
       return artheraTestnet as MailReadyChain
     case 3100:
       return immu3Testnet as MailReadyChain
+    case 64165:
+      return fantomSonicBuildersTestnetChain as MailReadyChain
+    case 23295:
+      return oasisSapphireTestnet as MailReadyChain
+    case 59901:
+      return metisSepoliaTestnet as MailReadyChain
+    case 2022:
+      return beresheetEVM as MailReadyChain
+    case 5003:
+      return mantleTestnet as MailReadyChain
+    case 7001:
+      return zetachainTestnet as MailReadyChain
+    case 4002:
+      return fantomTestnet as MailReadyChain
+    case 10200:
+      return gnosisTestnet as MailReadyChain
     default:
       return sepolia as MailReadyChain
   }
