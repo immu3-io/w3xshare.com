@@ -36,7 +36,7 @@ const immu3Testnet: Chain = {
   name: 'Immu3 EVM TestNet',
   network: 'Immu3 EVM TestNet',
   type: NetworkType.TEST_NET,
-  networkEndpoint: `https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/`,
+  networkEndpoint: `https://fraa-flashbox-2800-rpc.a.stagenet.tanssi.network/`,
   contracts: {
     appFeeManager: {
       address: '0xE459E555f0CCd996F03A601158eEAe6deC4633bC'

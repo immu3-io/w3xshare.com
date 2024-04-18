@@ -56,12 +56,18 @@ const immu3Testnet = {
     symbol: 'IMMU'
   },
   rpcUrls: {
-    public: { http: ['https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/'] },
-    default: { http: ['https://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network/'] }
+    public: { http: ['https://fraa-flashbox-2800-rpc.a.stagenet.tanssi.network/'] },
+    default: { http: ['https://fraa-flashbox-2800-rpc.a.stagenet.tanssi.network/'] }
   },
   blockExplorers: {
-    etherscan: { name: 'Immu3 EVM TestNet', url: 'https://polkadot.js.org/apps/?rpc=wss://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network#/explorer' },
-    default: { name: 'Immu3 EVM TestNet', url: 'https://polkadot.js.org/apps/?rpc=wss://fraa-dancebox-3043-rpc.a.dancebox.tanssi.network#/explorer' }
+    etherscan: {
+      name: 'Immu3 EVM TestNet',
+      url: 'https://evmexplorer.tanssi-chains.network/?rpcUrl=https%3A%2F%2Ffraa-flashbox-2800-rpc.a.stagenet.tanssi.network'
+    },
+    default: {
+      name: 'Immu3 EVM TestNet',
+      url: 'https://evmexplorer.tanssi-chains.network/?rpcUrl=https%3A%2F%2Ffraa-flashbox-2800-rpc.a.stagenet.tanssi.network'
+    }
   }
 } as const satisfies Chain
 
